@@ -1,2 +1,2 @@
-# EggNetwork
-Welcome to the EggNetwork repository! This repository is for the EggNetwork on Minehut!
+# EggNet
+Welcome to the EggNet repository! This repository is for the EggNet on Minehut!
