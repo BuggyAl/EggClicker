@@ -1,4 +1,4 @@
-command /settings:
+command /options:
 	trigger:
 		set metadata tag "settingsGUI" of player to chest inventory with 6 rows named "Settings"
 		loop integers between 0 and 9:
