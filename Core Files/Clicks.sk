@@ -1,0 +1,95 @@
+
+
+
+# IMPORTANT: NUMBERS ARE NOT CURRENTLY ROUNDED!!!!
+
+
+
+on rightclick: # region registering
+
+	if {_clickComplete::%player's uuid%} is true:
+		set {_clickComplete::%player's uuid%} to false
+
+	broadcast "%region at player%"
+
+	if "%region at player%" contains "ship":
+		click(player, 12)
+	else if "%region at player%" contains "island":
+		click(player, 11) 
+	else if "%region at player%" contains "deserttemple":
+		click(player, 10)
+	else if "%region at player%" contains "deserthouse":
+		click(player, 9)
+	else if "%region at player%" contains "desert":
+		click(player, 8)
+	else if "%region at player%" contains "dojo":
+		click(player, 7)
+	else if "%region at player%" contains "sumo":
+		click(player, 6)
+	else if "%region at player%" contains "vault":
+		click(player, 5)
+	else if "%region at player%" contains "abandonedhouse":
+		click(player, 4)
+	else if "%region at player%" contains "library":
+		click(player, 3)
+	else if "%region at player%" contains "townhall":
+		click(player, 2)
+	else if "%region at player%" contains "village":
+		click(player, 1)
+
+
+function gainEggs(p: player, areaID: number) :: number: # EGG CALCULATION
+    set {_n} to {_areaID}
+    while {_n} > 3:
+        remove 3 from {_n} 
+    if {_n} is 3: 
+        return 5 * (10 ^ ({_areaID} / 3) / 10)
+    else if {_n} is 2:
+        return 2 * (10 ^ ({_areaID} / 3) / 10)
+    else: 
+        return 1 * (10 ^ ({_areaID} / 3)) 
+
+
+function click(p: player, region: number): # triggers egg calculation, adds to eggs, and displays actionbar
+	set {_uuid} to {_p}'s uuid
+	if {_clickComplete::%{_uuid}%} is not true: 
+		if {unlocked::%{_region}%::%{_uuid}%} is true:
+			set {_gained} to gainEggs({_p}, {_region})
+			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
+			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
+				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+			else:
+				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+			set {_clickComplete::%{_uuid}%} to true
+
+		else if {_region} is 1:
+			set {_gained} to gainEggs({_p}, {_region})
+			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
+			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
+				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+			else:
+				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
+			set {_clickComplete::%{_uuid}%} to true
+
+command /setmulti <integer>:
+	permission: op
+	trigger:
+		set {multiplier::%player's uuid%} to arg-1
+		send "&aSet your multiplier to &e%{multiplier::%player's uuid%}%&a!"
+
+command /devtoggleunlock <number>:
+	permission: op
+	permission message: &cThis command is forbidden!
+	trigger:
+		if {unlocked::%arg-1%::%player's uuid%} is true:
+			set {unlocked::%arg-1%::%player's uuid%} to false
+			send "&aRegion ID &e%arg-1% &ahas been locked for you! &7&o(region ID list in discord)"
+		else:
+			set {unlocked::%arg-1%::%player's uuid%} to true
+			send "&aRegion ID &e%arg-1% &ahas been unlocked for you! &7&o(region ID list in discord)"
+
+command /seteggs <number>:
+	permission: op
+	trigger:
+		set {eggs::%player's uuid%} to arg-1
+		send "&aYou now have %{eggs::%player's uuid%}% &aeggs!"

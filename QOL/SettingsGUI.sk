@@ -1,0 +1,86 @@
+command /options [<text>]:
+	trigger:
+		if arg-1 is set:
+			if arg-1 is "staff":
+				if player has permission "staff":
+
+					set metadata tag "staffSettingsGUI" of player to chest inventory with 6 rows named "Staff Settings"
+					loop integers between 0 and 9:
+						set slot loop-value of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 17 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 18 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 26 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 27 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 35 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 36 of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					loop integers between 44 and 52:
+						set slot loop-value of metadata tag "staffSettingsGUI" of player to black stained glass pane named " "
+					set slot 53 of metadata tag "staffSettingsGUI" of player to arrow named "&7Toggle Normal Settings"
+					set slot 22 of metadata tag "staffSettingsGUI" of player to eye of ender named "&aMod Mode" with lore "&7Toggles Mod Mode!", " ", and "&c&lCURRENTLY UNAVAILABLE"
+					if {staffsettings::%player's uuid%::modmode} is true:
+						set slot 31 of metadata tag "staffSettingsGUI" of player to lime dye named "&aMod Mode" with lore "&7Click to toggle &cOFF" 
+					else:
+						set slot 31 of metadata tag "staffSettingsGUI" of player to gray dye named "&aMod Mode" with lore "&7Click to toggle &aON" 
+
+					open (metadata tag "staffSettingsGUI" of player) to player
+				else:
+					send "&cYou don't have permission to use this command!"
+
+		else:
+
+			set metadata tag "settingsGUI" of player to chest inventory with 6 rows named "Settings"
+			loop integers between 0 and 9:
+				set slot loop-value of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 17 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 18 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 26 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 27 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 35 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			set slot 36 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+			loop integers between 44 and 52:
+				set slot loop-value of metadata tag "settingsGUI" of player to black stained glass pane named " "
+
+			if player has permission "staff":
+				set slot 53 of metadata tag "settingsGUI" of player to arrow named "&7Toggle Staff Settings"
+			else:
+				set slot 53 of metadata tag "settingsGUI" of player to black stained glass pane named " "
+
+			set slot 22 of metadata tag "settingsGUI" of player to bell named "&aMention Pings" with lore "&7Toggles mention pings!"
+			if {settings::%player's uuid%::chatpings} is true:
+				set slot 31 of metadata tag "settingsGUI" of player to lime dye named "&aMention Pings" with lore "&7Click to toggle &cOFF" 
+			else:
+				set slot 31 of metadata tag "settingsGUI" of player to gray dye named "&aMention Pings" with lore "&7Click to toggle &aON" 
+
+			open (metadata tag "settingsGUI" of player) to player
+
+on inventory click:
+	if event-inventory = (metadata tag "settingsGUI" of player): 
+		cancel event
+		if index of event-slot is 31:
+			if {settings::%player's uuid%::chatpings} is true:
+				set {settings::%player's uuid%::chatpings} to false
+				execute player command "/options"
+				play sound "block.metal_pressure_plate.click_on" with volume 3 to the player
+			else:
+				set {settings::%player's uuid%::chatpings} to true 
+				execute player command "/options"
+				play sound "block.metal_pressure_plate.click_on" with volume 3 to the player
+		else if index of event-slot is 53:
+			if player has permission "staff":
+				execute player command "/options staff"	
+
+on inventory click:
+	if event-inventory = (metadata tag "staffSettingsGUI" of player): 
+		cancel event
+		if index of event-slot is 31:
+			if {staffsettings::%player's uuid%::modmode} is true:
+				set {staffsettings::%player's uuid%::modmode} to false
+				execute player command "/options staff"
+				play sound "block.metal_pressure_plate.click_on" with volume 3 to the player
+			else:
+				set {staffsettings::%player's uuid%::modmode} to true 
+				execute player command "/options staff"
+				play sound "block.metal_pressure_plate.click_on" with volume 3 to the player
+		else if index of event-slot is 53:
+			if player has permission "staff":
+				execute player command "/options"
