@@ -1,0 +1,9 @@
+function getNumberFormatted(n: number) :: text:
+    set {_symbols::*} to "","K", "M", "B", "T", "QD", "QN", "SX", "SP", "OC", "N", "D", "UN","DD","TR" and "QN"
+    set {_i} to 1
+    set {_v} to {_n}
+    while ({_v} / 1000) > 1:
+        set {_v} to {_v} / 1000
+        add 1 to {_i}
+    set {_s} to {_symbols::%{_i}%} ? ""
+    return "%{_v}%%{_s}%"

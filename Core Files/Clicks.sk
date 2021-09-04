@@ -57,18 +57,18 @@ function click(p: player, region: number): # triggers egg calculation, adds to e
 			set {_gained} to gainEggs({_p}, {_region})
 			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
 			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
-				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+				send action bar "&e+%getNumberFormatted(round({_gained} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
 			else:
-				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+				send action bar "&e+%round({_gained} * {multiplier::%{_uuid}%})% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
 			set {_clickComplete::%{_uuid}%} to true
 
 		else if {_region} is 1:
 			set {_gained} to gainEggs({_p}, {_region})
 			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
 			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
-				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+				send action bar "&e+%getNumberFormatted(round({_gained} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
 			else:
-				send action bar "&e+%{_gained} * {multiplier::%{_uuid}%}% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
+				send action bar "&e+%round({_gained} * {multiplier::%{_uuid}%})% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
 			set {_clickComplete::%{_uuid}%} to true
 
 command /setmulti <integer>:
