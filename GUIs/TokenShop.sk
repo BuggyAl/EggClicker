@@ -1,0 +1,238 @@
+command /tokenshop:
+	permission: op
+	trigger:
+		set metadata tag "tokenShop" of player to chest inventory with 5 rows named "Token Shop"
+
+		if {tokenshop::1::%player's uuid%} is true:
+			set slot 11 of metadata tag "tokenShop" of player to chicken named "&7[&eChicken&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 11 of metadata tag "tokenShop" of player to chicken named "&7[&eChicken&7] &eSuffix" with lore " ", "&a&lCost: &e300 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::2::%player's uuid%} is true:
+			set slot 12 of metadata tag "tokenShop" of player to emerald block named "&7[&6Clicker&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 12 of metadata tag "tokenShop" of player to emerald block named "&7[&6Clicker&7] &eSuffix" with lore " ", "&a&lCost: &e400 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::3::%player's uuid%} is true:
+			set slot 13 of metadata tag "tokenShop" of player to diamond named "&7[&bPro&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 13 of metadata tag "tokenShop" of player to diamond named "&7[&bPro&7] &eSuffix" with lore " ", "&a&lCost: &e500 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::4::%player's uuid%} is true:
+			set slot 14 of metadata tag "tokenShop" of player to egg named "&7[&eEgg&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 14 of metadata tag "tokenShop" of player to egg named "&7[&eEgg&7] &eSuffix" with lore " ", "&a&lCost: &e1,000 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::5::%player's uuid%} is true:
+			set slot 15 of metadata tag "tokenShop" of player to dead bush named "&7[&cNoob&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 15 of metadata tag "tokenShop" of player to dead bush named "&7[&cNoob&7] &eSuffix" with lore " ", "&a&lCost: &e1,500 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::6::%player's uuid%} is true:
+			set slot 21 of metadata tag "tokenShop" of player to totem of undying named "&7[&9Nerd&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 21 of metadata tag "tokenShop" of player to totem of undying named "&7[&9Nerd&7] &eSuffix" with lore " ", "&a&lCost: &e2,000 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::7::%player's uuid%} is true:
+			set slot 22 of metadata tag "tokenShop" of player to water bucket named "&7[&aDrip&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 22 of metadata tag "tokenShop" of player to water bucket named "&7[&aDrip&7] &eSuffix" with lore " ", "&a&lCost: &e2,500 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::8::%player's uuid%} is true:
+			set slot 23 of metadata tag "tokenShop" of player to lava bucket named "&7[&2Overlord&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 23 of metadata tag "tokenShop" of player to lava bucket named "&7[&2Overlord&7] &eSuffix" with lore " ", "&a&lCost: &e5,000 Tokens", "&aClick to Purchase!", and " "
+
+		if {tokenshop::9::%player's uuid%} is true:
+			set slot 31 of metadata tag "tokenShop" of player to gold block named "&7[&e&lGod&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
+		else:
+			set slot 31 of metadata tag "tokenShop" of player to gold block named "&7[&e&lGod&7] &eSuffix" with lore " ", "&a&lCost: &e10,000 Tokens", "&aClick to Purchase!", and " "
+
+		set slot 44 of metadata tag "tokenShop" of player to arrow named "&7Switch to Shop"
+
+
+		if {tokenshop::1::%player's uuid%} is true:
+			if {tokenshop::2::%player's uuid%} is true:
+				if {tokenshop::3::%player's uuid%} is true:
+					if {tokenshop::4::%player's uuid%} is true:
+						if {tokenshop::5::%player's uuid%} is true:
+							if {tokenshop::6::%player's uuid%} is true:
+								if {tokenshop::7::%player's uuid%} is true:
+									if {tokenshop::8::%player's uuid%} is true:
+										if {tokenshop::9::%player's uuid%} is true:
+
+											if {tokenshop::10::%player's uuid%} is true:
+												set slot 36 of metadata tag "tokenShop" of player to skeleton skull named "&c&l? ? ?" with lore "&7&oI wonder what this could be..."
+											else:
+												set slot 36 of metadata tag "tokenShop" of player to skeleton skull named "&c&l? ? ?" with lore " ", "&a&lCost: &e100,000 Tokens", "&aClick to Purchase!", and " "
+
+
+		open (metadata tag "tokenShop" of player) to player
+
+on inventory click:
+	if event-inventory = (metadata tag "tokenShop" of player):
+		cancel event
+
+		if index of event-slot is 11:
+			if {tokenshop::1::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&eChicken&7]"
+				send "&aYour suffix has been set to &7[&eChicken&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 300:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/300)"
+				else:
+					set {tokenshop::1::%player's uuid%} to true		
+					remove 300 from {tokens::%player's uuid%}	
+					send "&aYou have purchased the &7[&eChicken&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&eChicken&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 12:
+			if {tokenshop::2::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&6Clicker&7]"
+				send "&aYour suffix has been set to &7[&6Clicker&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 400:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/400)"
+				else:
+					set {tokenshop::2::%player's uuid%} to true				
+					remove 400 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&6Clicker&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&6Clicker&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 13:
+			if {tokenshop::3::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&bPro&7]"
+				send "&aYour suffix has been set to &7[&bPro&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 500:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/500)"
+				else:
+					set {tokenshop::3::%player's uuid%} to true				
+					remove 500 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&bPro&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&bPro&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 14:
+			if {tokenshop::4::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&eEgg&7]"
+				send "&aYour suffix has been set to &7[&eEgg&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 1000:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/1K)"
+				else:
+					set {tokenshop::4::%player's uuid%} to true				
+					remove 1000 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&eEgg&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&eEgg&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 15:
+			if {tokenshop::5::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&cNoob&7]"
+				send "&aYour suffix has been set to &7[&cNoob&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 1500:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/1.5K)"
+				else:
+					set {tokenshop::5::%player's uuid%} to true				
+					remove 1500 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&cNoob&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&cNoob&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 21:
+			if {tokenshop::6::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&9Nerd&7]"
+				send "&aYour suffix has been set to &7[&9Nerd&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 2000:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/2K)"
+				else:
+					set {tokenshop::6::%player's uuid%} to true				
+					remove 2000 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&9Nerd&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&9Nerd&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 22:
+			if {tokenshop::7::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&aDrip&7]"
+				send "&aYour suffix has been set to &7[&aDrip&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 2500:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/2.5K)"
+				else:
+					set {tokenshop::7::%player's uuid%} to true				
+					remove 2500 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&aDrip&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&aDrip&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 23:
+			if {tokenshop::8::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&2Overlord&7]"
+				send "&aYour suffix has been set to &7[&2Overlord&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 5000:
+					send "&cYou do not have enough tokens to purchase this! &7&o%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/5K)"
+				else:
+					set {tokenshop::8::%player's uuid%} to true				
+					remove 5000 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7[&2Overlord&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7[&2Overlord&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 31:
+			if {tokenshop::9::%player's uuid%} is true:
+				set {suffix::%player's uuid%} to "&7[&e&lGod&7]"
+				send "&aYour suffix has been set to &7[&e&lGod&7]&a!"
+			else:
+				if {tokens::%player's uuid%} is less than 10000:
+					send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/10K)"
+				else:
+					set {tokenshop::9::%player's uuid%} to true				
+					remove 10000 from {tokens::%player's uuid%}
+					send "&aYou have purchased the &7&7[&e&lGod&7] &asuffix!"
+					set {suffix::%player's uuid%} to "&7&7[&e&lGod&7]"
+					execute player command "/tokenshop"
+			play sound "block.lever.click" to player
+
+		if index of event-slot is 36:
+			if {tokenshop::1::%player's uuid%} is true:
+				if {tokenshop::2::%player's uuid%} is true:
+					if {tokenshop::3::%player's uuid%} is true:
+						if {tokenshop::4::%player's uuid%} is true:
+							if {tokenshop::5::%player's uuid%} is true:
+								if {tokenshop::6::%player's uuid%} is true:
+									if {tokenshop::7::%player's uuid%} is true:
+										if {tokenshop::8::%player's uuid%} is true:
+											if {tokenshop::9::%player's uuid%} is true:
+
+												if {tokenshop::10::%player's uuid%} is true:
+													send "&aYour suffix has been set to &7[&d&lNoLife&7]&a!"
+													set {suffix::%player's uuid%} to "&7[&d&lNoLife&7]"
+													play sound "entity.ender_dragon.ambient" to player
+												else:
+													if {tokens::%player's uuid%} is less than 100000:
+														send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/100K)"
+													else:
+														set {tokenshop::9::%player's uuid%} to true				
+														remove 100000 from {tokens::%player's uuid%}
+														send "&aYou have purchased the &7[&d&lNoLife&7]] &asuffix!"
+														set {suffix::%player's uuid%} to "&7[&d&lNoLife&7]"
+														execute player command "/tokenshop"		
+														play sound "entity.ender_dragon.ambient" to player																						
+												
+		else if index of event-slot is 44:
+			execute player command "/shop"

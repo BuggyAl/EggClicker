@@ -1,0 +1,8 @@
+command /playerinfo [<offline player>]:
+	permission: staff
+	permission message: &cYou do not have permission to view information of other players!
+	trigger:
+		if arg-1 is set:
+			message centered " ", "&6Data of &e%arg-1%", "&7---", "&aEggs: &e%{eggs::%arg-1's uuid%}%", "&aTokens: &e%{tokens::%arg-1's uuid%}%", "&aPrestige: &e%{prestiges::%arg-1's uuid%}%", "&aMultiplier: &ex%{multiplier::%arg-1's uuid%}%", " ", "&aFirst Joined: &e%arg-1's first login%", "&7&o(%difference between arg-1's first login and now% ago)", " ", "&aToken Eligible: &e%{tokeneligible::%arg-1's uuid%}%", "&aSensei Bob: &e%{sensei::%arg-1's uuid%}%", "&7---", and " " to player
+		else:
+			send "&cPlease enter a valid username!"

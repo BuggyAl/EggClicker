@@ -26,6 +26,8 @@ command /addbetatester [<offline player>]:
 			if {betatesters::*} does not contain arg-1:
 				add arg-1 to {betatesters::*}
 				send "&aAdded &e%arg-1% &ato the beta testing list!"
+				if {tester.whitelist} is true:
+					execute console command "/whitelist add %arg-1%"
 			else:
 				send "&cThis player is already on the beta testing list!"
 
@@ -38,6 +40,8 @@ command /removebetatester [<offline player>]:
 			if {betatesters::*} contains arg-1: 
 				remove arg-1 from {betatesters::*}
 				send "&aRemoved &e%arg-1% &afrom the beta testing list!"
+				if {tester.whitelist} is false:
+					execute console command "/whitelist remove %arg-1%"
 			else:
 				send "&cThis player is not on the beta testing list!"
 
