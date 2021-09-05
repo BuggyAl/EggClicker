@@ -1,0 +1,41 @@
+
+# Extender ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# In order to gather the names of citizens npc we need to
+# use a name fetcher, this sends the npc's actual name.
+# The name above the npc is not it's actual name.
+
+command thenamefetcher:
+	permission: op
+	trigger:
+		give player blaze rod named "&6The name fetcher"
+		
+
+on right click on entity:
+	if player's tool is blaze rod named "&6The name fetcher":
+		set {_b} to event-entity's name
+		send "%{_b}%" to player #
+
+# Joey The Traveler
+
+on join:
+	set {joeylastused::%player's uuid%} to now 
+
+on right click on entity:
+	name of entity is "CIT-24c9000c6cb4":
+		if difference between now and {joeylastused::%player's uuid%} is more than 3 seconds:
+			set {joeylastused::%player's uuid%} to now
+			play sound "block.note_block.bell" to player
+			if {firsttime23::%player's uuid%} is not set:
+				send "" to player
+				send "&7-------------------------------------------------" to player
+				send "&fHello, &e%player%&f! Welcome to &eEggClicker&f, Here are some good things to know and the basics. &fFirst off, simply &eright click &fon the floor to gain &eeggs&f. Once you've made enough eggs you should go to &ethe shop &8(&e/shop&8)&f. &fThere you can &eUnlock new areas&f. In these areas you will &egain more eggs&f when you click. After a while, you will reach &ethe pirate ship&f, the final place. Reach it and &eprestige &8(&e/prestige&8)&f for a &ebonus multiplier&f." to player
+				send "&7-------------------------------------------------" to player
+				send "" to player
+				set {firsttime23::%player's uuid%} to false
+			else:
+				send "" to player
+				send "&7-------------------------------------------------" to player
+				send "&fNeed a reminder? Simply &eright click &fon the floor to gain &eeggs&f. Once you've made enough eggs you should go to &ethe shop &8(&e/shop&8)&f. &fThere you can &eUnlock new areas&f. In these areas you will &egain more eggs&f when you click. After a while, you will reach &ethe pirate ship&f, the final place. Reach it and &eprestige &8(&e/prestige&8)&f for a &ebonus multiplier&f." to player
+				send "&7-------------------------------------------------" to player
+				send "" to player
