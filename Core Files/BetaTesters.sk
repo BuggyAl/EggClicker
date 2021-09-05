@@ -75,5 +75,6 @@ command /cleartesters:
 
 on skript stop:
 	if {tester.whitelist} is true:
+		set {tester.whitelist} to false
 		loop {betatesters::*}:
 			execute console command "/whitelist remove %loop-value%"
