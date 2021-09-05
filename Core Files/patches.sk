@@ -1,0 +1,46 @@
+on damage:
+	victim's world = "eggnet-clicker":
+		damage cause is not fire:
+			if "%region at victim%" does not contain "sumo":
+				cancel event
+			else:
+				set health of victim to 10
+		else:
+			cancel event
+			extinguish the victim
+
+on death:
+	if "%region at player%" contains "sumo":
+		set health of player to 10
+		set {_loc} to location of player
+		wait 1 tick
+		teleport player to {_loc}
+		extinguish the victim
+		
+command /setprestige [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {prestiges::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour prestige have been modified by an staff member!" to arg-2
+			else:
+				set {prestiges::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a prestige amount!"
+
+command /settokens [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {tokens::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour tokens have been modified by an staff member!" to arg-2
+			else:
+				set {tokens::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a token amount!"
