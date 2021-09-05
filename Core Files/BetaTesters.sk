@@ -1,0 +1,75 @@
+on skript load:
+	if {tester.whitelist} is not set:
+		set {tester.whitelist} to false
+
+
+command /togglebetawhitelist:
+	permission: op
+	trigger:
+		if {tester.whitelist} is false:
+			set {tester.whitelist} to true
+			loop {betatesters::*}:
+				execute console command "/whitelist add %loop-value%"
+			send "&aBeta testers will now be able to join!"
+		else:
+			set {tester.whitelist} to false
+			loop {betatesters::*}:
+				execute console command "/whitelist remove %loop-value%"
+			send "&aBeta testers will no longer be able to join!"
+
+command /addbetatester [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is not set:
+			send "&cPlease enter a player to add to the tester whitelist!"
+		else:
+			if {betatesters::*} does not contain arg-1:
+				add arg-1 to {betatesters::*}
+				send "&aAdded &e%arg-1% &ato the beta testing list!"
+			else:
+				send "&cThis player is already on the beta testing list!"
+
+command /removebetatester [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is not set:
+			send "&cPlease enter a player to remove from the tester whitelist!"
+		else:
+			if {betatesters::*} contains arg-1: 
+				remove arg-1 from {betatesters::*}
+				send "&aRemoved &e%arg-1% &afrom the beta testing list!"
+			else:
+				send "&cThis player is not on the beta testing list!"
+
+command /viewbetatesters:
+	permission: op
+	trigger:
+		message centered " ", "&6&lBETA TESTERS", and "&7---" to player
+		loop {betatesters::*}:
+			if loop-value is online:
+				message centered "&e%loop-value% &7- &aOnline" to player
+			else:
+				message centered "&e%loop-value% &7- &cOffline" to player
+		send "" to player
+ 
+command /kickbetatesters:
+	permission: op
+	trigger:
+		loop {betatesters::*}:
+			if loop-value is online:
+				if loop-value is not op:
+					if loop-value does not have permission "staff":
+						send "" to loop-value
+						kick loop-value due to "&cYou have been kicked from the server for maintenance. Make sure to watch our discord for updates!"
+		send "&aBeta testers have been kicked!"
+
+command /cleartesters:
+	permission: op
+	trigger:
+		clear {betatesters::*}
+		send "&aBeta testers cleared!"
+
+on skript stop:
+	if {tester.whitelist} is true:
+		loop {betatesters::*}:
+			execute console command "/whitelist remove %loop-value%"
