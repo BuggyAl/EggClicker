@@ -1,5 +1,4 @@
 command /tokenshop:
-	permission: op
 	trigger:
 		set metadata tag "tokenShop" of player to chest inventory with 5 rows named "Token Shop"
 
@@ -27,6 +26,8 @@ command /tokenshop:
 			set slot 15 of metadata tag "tokenShop" of player to dead bush named "&7[&cNoob&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
 		else:
 			set slot 15 of metadata tag "tokenShop" of player to dead bush named "&7[&cNoob&7] &eSuffix" with lore " ", "&a&lCost: &e1,500 Tokens", "&aClick to Purchase!", and " "
+
+		set slot 18 of metadata tag "tokenShop" of player to barrier named  "&cReset Suffix" with lore "&7Click to clear your suffix!"
 
 		if {tokenshop::6::%player's uuid%} is true:
 			set slot 21 of metadata tag "tokenShop" of player to totem of undying named "&7[&9Nerd&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
@@ -88,7 +89,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 12:
+		else if index of event-slot is 12:
 			if {tokenshop::2::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&6Clicker&7]"
 				send "&aYour suffix has been set to &7[&6Clicker&7]&a!"
@@ -103,7 +104,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 13:
+		else if index of event-slot is 13:
 			if {tokenshop::3::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&bPro&7]"
 				send "&aYour suffix has been set to &7[&bPro&7]&a!"
@@ -118,7 +119,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 14:
+		else if index of event-slot is 14:
 			if {tokenshop::4::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&eEgg&7]"
 				send "&aYour suffix has been set to &7[&eEgg&7]&a!"
@@ -133,7 +134,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 15:
+		else if index of event-slot is 15:
 			if {tokenshop::5::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&cNoob&7]"
 				send "&aYour suffix has been set to &7[&cNoob&7]&a!"
@@ -148,7 +149,15 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 21:
+		else if index of event-slot is 18:
+			if {suffix::%player's uuid%} is set:
+				clear {suffix::%player's uuid%}
+				send "&aYour suffix has been reset!" to player
+			else:
+				send "&cYou do not have an active suffix!"
+			play sound "block.lever.click" to player
+
+		else if index of event-slot is 21:
 			if {tokenshop::6::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&9Nerd&7]"
 				send "&aYour suffix has been set to &7[&9Nerd&7]&a!"
@@ -163,7 +172,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 22:
+		else if index of event-slot is 22:
 			if {tokenshop::7::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&aDrip&7]"
 				send "&aYour suffix has been set to &7[&aDrip&7]&a!"
@@ -178,7 +187,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 23:
+		else if index of event-slot is 23:
 			if {tokenshop::8::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&2Overlord&7]"
 				send "&aYour suffix has been set to &7[&2Overlord&7]&a!"
@@ -193,7 +202,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 31:
+		else if index of event-slot is 31:
 			if {tokenshop::9::%player's uuid%} is true:
 				set {suffix::%player's uuid%} to "&7[&e&lGod&7]"
 				send "&aYour suffix has been set to &7[&e&lGod&7]&a!"
@@ -208,7 +217,7 @@ on inventory click:
 					execute player command "/tokenshop"
 			play sound "block.lever.click" to player
 
-		if index of event-slot is 36:
+		else if index of event-slot is 36:
 			if {tokenshop::1::%player's uuid%} is true:
 				if {tokenshop::2::%player's uuid%} is true:
 					if {tokenshop::3::%player's uuid%} is true:
@@ -227,12 +236,22 @@ on inventory click:
 													if {tokens::%player's uuid%} is less than 100000:
 														send "&cYou do not have enough tokens to purchase this! &7&o(%getNumberFormatted(round({tokens::%player's uuid%}))%&7&o/100K)"
 													else:
-														set {tokenshop::9::%player's uuid%} to true				
+														set {tokenshop::10::%player's uuid%} to true				
 														remove 100000 from {tokens::%player's uuid%}
-														send "&aYou have purchased the &7[&d&lNoLife&7]] &asuffix!"
+														send "&aYou have purchased the &7[&d&lNoLife&7] &asuffix!"
 														set {suffix::%player's uuid%} to "&7[&d&lNoLife&7]"
 														execute player command "/tokenshop"		
 														play sound "entity.ender_dragon.ambient" to player																						
 												
 		else if index of event-slot is 44:
 			execute player command "/shop"
+
+command /setsuffix <offline player> [<text>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			set {suffix::%arg-1's uuid%} to "&f%colored arg-2%"
+			send "&e%arg-1%&e's &asuffix has been set to %{suffix::%arg-1's uuid%}%&a!"			
+		else:
+			set {suffix::%player's uuid%} to "&f%colored arg-2%"
+			send "&aYour suffix has been set to %{suffix::%player's uuid%}%&a!"
