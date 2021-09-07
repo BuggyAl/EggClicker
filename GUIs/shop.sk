@@ -22,7 +22,7 @@ function price(p: player, n: number) :: number:
     if {_n} = 9:
         set {_n} to 2730000
     else if {_n} = 10:
-        set {_n} to 8201250
+        set {_n} to 8200000
         set {_n} to {_n} * {multiplier::%{_uuid}%}
     return {_n}
 
