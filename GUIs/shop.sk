@@ -1,0 +1,170 @@
+options:
+    priceBump: 2.5
+
+function price(p: player, n: number) :: number:
+    set {_uuid} to {_p}'s uuid
+    if {_n} = 1:
+        set {_n} to 500 #250 * {@priceBump}
+    if {_n} = 2:
+        set {_n} to 1250
+    if {_n} = 3:
+        set {_n} to 3750
+    if {_n} = 4:
+        set {_n} to 11250
+    if {_n} = 5:
+        set {_n} to 33750
+    if {_n} = 6:
+        set {_n} to 101250
+    if {_n} = 7:
+        set {_n} to 303750
+    if {_n} = 8:
+        set {_n} to 911250
+    if {_n} = 9:
+        set {_n} to 2730000
+    else if {_n} = 10:
+        set {_n} to 8201250
+        set {_n} to {_n} * {multiplier::%{_uuid}%}
+    return {_n}
+
+
+function tprice(p: player, n: number) :: text:
+    return getNumberFormatted(price({_p}, {_n}))
+	
+	
+#function upgradeArea(p: player):
+#	open chest with 3 rows named "Area Shop" to player
+
+command getId:
+	permission: op
+	trigger:
+		getId(player)
+
+function getId(p: player):
+	set {_id} to 1
+	set {_uuid} to {_p}'s uuid
+	loop 10 times:
+		if {unlocked::%{_id}%::%{_uuid}%} is true:
+			add 1 to {_id}
+	
+	send "%{_id}%" to {_p}
+
+
+command /shop:
+	trigger:
+		set metadata tag "Shop" of player to chest inventory with 6 rows named "Upgrade Shop"
+#		loop integers between 0 and 9:
+#			set slot loop-value of metadata tag "Shop" of player to black stained glass pane named " "
+#		loop integers between 44 and 53:
+#			set slot loop-value of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 17 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 18 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 26 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 27 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 35 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 36 of metadata tag "Shop" of player to black stained glass pane named " "
+#		set slot 31 of metadata tag "Shop" of player to barrier named "&c&kUPGRADE AREA" with lore "&cvariables unloaded/nothing unlocked :("
+		if {unlocked::1::%player's uuid%} is true:
+			{unlocked::2::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 1))%"
+			set slot 22 of metadata tag "Shop" of player to bookshelf named "&eThis will unlock: &f&lThe Library"
+		if {unlocked::2::%player's uuid%} is true:
+			{unlocked::3::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 2))%"
+			set slot 22 of metadata tag "Shop" of player to mossy cobblestone named "&eThis will unlock: &f&lAbandoned House"
+		if {unlocked::3::%player's uuid%} is true:
+			{unlocked::4::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 3))%"
+			set slot 22 of metadata tag "Shop" of player to iron block named "&eThis will unlock: &f&lThe Vault"
+		if {unlocked::4::%player's uuid%} is true:
+			{unlocked::5::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 4))%"
+			set slot 22 of metadata tag "Shop" of player to glowing stick named "&eThis will unlock: &6&lSumo &7&o(PvP Enabled)"
+		if {unlocked::5::%player's uuid%} is true:
+			{unlocked::6::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 5))%"
+			set slot 22 of metadata tag "Shop" of player to white wool named "&eThis will unlock: &f&lThe Dojo"
+		if {unlocked::6::%player's uuid%} is true:
+			{unlocked::7::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 6))%"
+			set slot 22 of metadata tag "Shop" of player to acacia log named "&eThis will unlock: &f&lDesert House"
+		if {unlocked::7::%player's uuid%} is true:
+			{unlocked::8::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 7))%"
+			set slot 22 of metadata tag "Shop" of player to chiseled sandstone named "&eThis will unlock: &f&lDesert Temple"
+		if {unlocked::8::%player's uuid%} is true:
+			{unlocked::9::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 8))%"
+			set slot 22 of metadata tag "Shop" of player to jungle leaves named "&eThis will unlock: &f&lThe Island"
+		if {unlocked::9::%player's uuid%} is true:
+			{unlocked::10::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 9))%"
+			set slot 22 of metadata tag "Shop" of player to skeleton skull named "&eThis will unlock: &6&lThe Pirate Ship"
+		if {unlocked::10::%player's uuid%} is true:
+			{unlocked::11::%player's uuid%} is not true
+			set slot 31 of metadata tag "Shop" of player to emerald block named "&a&lPRESTIGE" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 10) * {multiplier::%player's uuid%})%"
+			set slot 22 of metadata tag "Shop" of player to chiseled sandstone named "&eThis will reset your progress" with lore "&ebut give you a multiplier."
+			
+		set slot 53 of metadata tag "Shop" of player to arrow named "&7Switch to Token Shop"
+
+		open (metadata tag "Shop" of player) to player
+		
+function bajsKorv(p: player, n: number, d: number):
+	set {_uuid} to {_p}'s uuid
+	set {_temp} to price({_p}, {_n})
+	set {_cost} to round({_temp})
+	if {eggs::%{_uuid}%} is more than or equal to {_cost}:
+		set {unlocked::%{_d}%::%{_uuid}%} to true
+#		send "%{unlocked::%{_d}%::%{_uuid}%}%" to {_p}
+		remove {_cost} from {eggs::%{_uuid}%}
+		send title "&a&lArea Upgraded" to {_p}
+		play sound "block.amethyst_block.hit" to {_p}
+		make {_p} execute command "/shop"
+		stop
+	else:
+		send "&cYou do not have enough eggs to buy this! &7&o(%getNumberFormatted(round({eggs::%{_uuid}%}))%&7&o/%getNumberFormatted({_cost})%&7&o)" to {_p}
+		play sound "entity.villager.no" to {_p}
+		stop
+
+on inventory click:
+	if event-inventory = (metadata tag "Shop" of player): 
+		cancel event
+		if index of event-slot is 31:
+			if {unlocked::10::%player's uuid%} is true:
+				make player say "/prestige"
+				stop
+			if {unlocked::9::%player's uuid%} is true:
+				bajsKorv(player, 9, 10)
+				stop
+			if {unlocked::8::%player's uuid%} is true:
+				bajsKorv(player, 8, 9)
+				stop
+			if {unlocked::7::%player's uuid%} is true:
+				bajsKorv(player, 7, 8)
+				stop
+			if {unlocked::6::%player's uuid%} is true:
+				bajsKorv(player, 6, 7)
+				stop
+			if {unlocked::5::%player's uuid%} is true:
+				bajsKorv(player, 5, 6)
+				stop
+			if {unlocked::4::%player's uuid%} is true:
+				bajsKorv(player, 4, 5)
+				stop
+			if {unlocked::3::%player's uuid%} is true:
+				bajsKorv(player, 3, 4)
+				stop
+			if {unlocked::2::%player's uuid%} is true:
+				bajsKorv(player, 2, 3)
+				stop
+			if {unlocked::1::%player's uuid%} is true:
+				bajsKorv(player, 1, 2)
+				stop
+			wait 1 second
+			if player is not op:
+				if gamemode of player is not creative:
+					if player does not have permission "staff":
+						clear player's inventory
+		
+		else if index of event-slot is 53:
+			execute player command "/tokenshop"
+			
