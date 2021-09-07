@@ -18,7 +18,7 @@ function click(p: player, b: block, r: text, n: number, id: number):
 			if {unlocked::%{_id}%::%{_uuid}%} is true:
 				add round({_n} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
 				tokenChance({_p})
-				if round({_n} * {multiplier::%{_uuid}%}) is more than 1:
+				if round({_n} * {multiplier::%{_uuid}%}) is not 1:
 					send action bar "&e+%getNumberFormatted(round({_n} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%getNumberFormatted({eggs::%{_uuid}%})%&8)" to {_p}
 				else:
 					send action bar "&e+%round({_n} * {multiplier::%{_uuid}%})% Egg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
