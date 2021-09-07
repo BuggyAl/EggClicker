@@ -1,0 +1,35 @@
+command /wipeserver:
+	permission: op
+	trigger:
+#		clear {unlocked::*}
+		set {unlocked::1::*} to true
+		set {unlocked::2::*} to false
+		set {unlocked::3::*} to false
+		set {unlocked::4::*} to false
+		set {unlocked::5::*} to false
+		set {unlocked::6::*} to false
+		set {unlocked::7::*} to false
+		set {unlocked::8::*} to false
+		set {unlocked::9::*} to false
+		set {unlocked::10::*} to false
+		set {multiplier::*} to 1
+		set {prestiges::*} to 0
+		set {tokens::*} to 0
+		set {eggs::*} to 0
+		clear {tokeneligible::*}
+		clear {sensei::*}
+		clear {nameless::*}
+		clear {pharaohn::*}
+		set {questmode.%{_uuid}%} to false
+		set {tokenshop::1::*} to false
+		set {tokenshop::2::*} to false
+		set {tokenshop::3::*} to false
+		set {tokenshop::4::*} to false
+		set {tokenshop::5::*} to false
+		set {tokenshop::6::*} to false
+		set {tokenshop::7::*} to false
+		set {tokenshop::8::*} to false
+		set {tokenshop::9::*} to false
+		set {tokenshop::10::*} to false
+		execute console command "effect clear @a"
+		broadcast "&aALL player stats have been wiped by &e%player%&a!"
