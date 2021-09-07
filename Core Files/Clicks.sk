@@ -1,75 +1,77 @@
-on rightclick: # region registering
+function clickmoney(p: player, n: number) :: number:
+	set {_a} to {_n}
+	while {_a} > 3:
+		remove 3 from {_a} 
+	if {_a} is 3: 
+		return 5 * ((10 ^ round(({_n} / 3))) / 10)
+	else if {_a} is 2:
+		return 2 * ((10 ^ round(({_n} / 3))) / 10)
+	else: 
+		return 1 * (10 ^ round(({_n} / 3))) 
 
-	if {_clickComplete::%player's uuid%} is true:
-		set {_clickComplete::%player's uuid%} to false
-
-	broadcast "%region at player%"
-
-	if "%region at player%" contains "ship":
-		click(player, 12)
-	else if "%region at player%" contains "island":
-		click(player, 11) 
-	else if "%region at player%" contains "deserttemple":
-		click(player, 10)
-	else if "%region at player%" contains "deserthouse":
-		click(player, 9)
-	else if "%region at player%" contains "desert":
-		click(player, 8)
-	else if "%region at player%" contains "dojo":
-		click(player, 7)
-	else if "%region at player%" contains "sumo":
-		click(player, 6)
-	else if "%region at player%" contains "vault":
-		click(player, 5)
-	else if "%region at player%" contains "abandonedhouse":
-		click(player, 4)
-	else if "%region at player%" contains "library":
-		click(player, 3)
-	else if "%region at player%" contains "townhall":
-		click(player, 2)
-	else if "%region at player%" contains "village":
-		click(player, 1)
-
-
-function gainEggs(p: player, areaID: number) :: number: # EGG CALCULATION
-    set {_n} to {_areaID}
-    while {_n} > 3:
-        remove 3 from {_n} 
-    if {_n} is 3: 
-        return 5 * (10 ^ ({_areaID} / 3) / 10)
-    else if {_n} is 2:
-        return 2 * (10 ^ ({_areaID} / 3) / 10)
-    else: 
-        return 1 * (10 ^ ({_areaID} / 3)) 
-
-
-function click(p: player, region: number): # triggers egg calculation, adds to eggs, and displays actionbar
+function click(p: player, b: block, r: text, n: number, id: number):
 	set {_uuid} to {_p}'s uuid
-	if {_clickComplete::%{_uuid}%} is not true: 
-		if {unlocked::%{_region}%::%{_uuid}%} is true:
-			set {_gained} to gainEggs({_p}, {_region})
-			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
-			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
-				send action bar "&e+%getNumberFormatted(round({_gained} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
-			else:
-				send action bar "&e+%round({_gained} * {multiplier::%{_uuid}%})% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
-			set {_clickComplete::%{_uuid}%} to true
+	wait 1 tick
+	if {gotmoney::%{_uuid}%} is false:
+		if {_b} is in region ("%{_r}%" parsed as region):
+# Debug			send "%{multiplier::%{_uuid}%}% %{_id}% %{unlocked::%{_id}%::%{_uuid}%}%" to {_p}
+			if {unlocked::%{_id}%::%{_uuid}%} is true:
+				add round({_n} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
+				tokenChance({_p})
+				if round({_n} * {multiplier::%{_uuid}%}) is more than 1:
+					send action bar "&e+%getNumberFormatted(round({_n} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%getNumberFormatted({eggs::%{_uuid}%})%&8)" to {_p}
+				else:
+					send action bar "&e+%round({_n} * {multiplier::%{_uuid}%})% Egg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+				set {gotmoney::%{_uuid}%} to true
+#			else if {_r} is "village":
+#				add round({_n} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
+#				if round({_n} * {multiplier::%{_uuid}%}) is more than 1:
+#					send action bar "&e+%getNumberFormatted(round({_n} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%getNumberFormatted({eggs::%{_uuid}%})%&8)" to {_p}
+#				else:
+#					send action bar "&e+%round({_n} * {multiplier::%{_uuid}%})% Egg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
+#				set {gotmoney::%{_uuid}%} to true
 
-		else if {_region} is 1:
-			set {_gained} to gainEggs({_p}, {_region})
-			add round({_gained} * {multiplier::%{_uuid}%}) to {eggs::%{_uuid}%}
-			if round({_gained} * {multiplier::%{_uuid}%}) is not 1:
-				send action bar "&e+%getNumberFormatted(round({_gained} * {multiplier::%{_uuid}%}))% &fEggs &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
-			else:
-				send action bar "&e+%round({_gained} * {multiplier::%{_uuid}%})% &fEgg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}		
-			set {_clickComplete::%{_uuid}%} to true
 
 command /setmulti <integer>:
 	permission: op
 	trigger:
 		set {multiplier::%player's uuid%} to arg-1
 		send "&aSet your multiplier to &e%{multiplier::%player's uuid%}%&a!"
-
+		
+command /resetuservariables [<player>]:
+	permission: op
+	trigger:
+#		clear {unlocked::*}
+		set {unlocked::1::%player's uuid%} to true
+		set {unlocked::2::%player's uuid%} to false
+		set {unlocked::3::%player's uuid%} to false
+		set {unlocked::4::%player's uuid%} to false
+		set {unlocked::5::%player's uuid%} to false
+		set {unlocked::6::%player's uuid%} to false
+		set {unlocked::7::%player's uuid%} to false
+		set {unlocked::8::%player's uuid%} to false
+		set {unlocked::9::%player's uuid%} to false
+		set {unlocked::10::%player's uuid%} to false
+		set {multiplier::%player's uuid%} to 1
+		set {prestiges::%player's uuid%} to 0
+		set {tokens::%player's uuid%} to 0
+		set {eggs::%player's uuid%} to 0
+		clear {tokeneligible::%player's uuid%}
+		clear {sensei::%player's uuid%}
+		clear {nameless::%player's uuid%}
+		clear {pharaohn::%player's uuid%}
+		set {questmode.%{_uuid}%} to false
+		set {tokenshop::1::%player's uuid%} to false
+		set {tokenshop::2::%player's uuid%} to false
+		set {tokenshop::3::%player's uuid%} to false
+		set {tokenshop::4::%player's uuid%} to false
+		set {tokenshop::5::%player's uuid%} to false
+		set {tokenshop::6::%player's uuid%} to false
+		set {tokenshop::7::%player's uuid%} to false
+		set {tokenshop::8::%player's uuid%} to false
+		set {tokenshop::9::%player's uuid%} to false
+		set {tokenshop::10::%player's uuid%} to false
+		execute console command "effect clear %player%"
 command /devtoggleunlock <number>:
 	permission: op
 	permission message: &cThis command is forbidden!
@@ -80,9 +82,30 @@ command /devtoggleunlock <number>:
 		else:
 			set {unlocked::%arg-1%::%player's uuid%} to true
 			send "&aRegion ID &e%arg-1% &ahas been unlocked for you! &7&o(region ID list in discord)"
-
 command /seteggs <number>:
 	permission: op
+	permission message: &cThis command is forbidden! dwiuhduwdhuidh
 	trigger:
 		set {eggs::%player's uuid%} to arg-1
 		send "&aYou now have %{eggs::%player's uuid%}% &aeggs!"
+
+on right-click:
+#	click(player, event-block, "village", clickmoney(player, 1))
+	click(player, event-block, "townhall", clickmoney(player, 1), 1)
+	click(player, event-block, "library", clickmoney(player, 2), 2)
+	click(player, event-block, "abandonedhouse", clickmoney(player, 3), 3)
+	click(player, event-block, "vault", clickmoney(player, 4), 4)
+	click(player, event-block, "sumo", clickmoney(player, 5), 5)
+	click(player, event-block, "dojo", clickmoney(player, 6), 6)
+	
+	click(player, event-block, "deserthouse", clickmoney(player, 7), 7)
+	click(player, event-block, "deserttemple", clickmoney(player, 8), 8)
+	
+	click(player, event-block, "island", clickmoney(player, 9), 9)
+	click(player, event-block, "ship", clickmoney(player, 10), 10)
+	
+
+	set {gotmoney::%player's uuid%} to false
+	
+
+	
