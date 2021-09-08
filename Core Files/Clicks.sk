@@ -30,13 +30,6 @@ function click(p: player, b: block, r: text, n: number, id: number):
 #				else:
 #					send action bar "&e+%round({_n} * {multiplier::%{_uuid}%})% Egg &8(&7%{eggs::%{_uuid}%}%&8)" to {_p}
 #				set {gotmoney::%{_uuid}%} to true
-
-
-command /setmulti <integer>:
-	permission: op
-	trigger:
-		set {multiplier::%player's uuid%} to arg-1
-		send "&aSet your multiplier to &e%{multiplier::%player's uuid%}%&a!"
 		
 command /resetuservariables [<player>]:
 	permission: op
@@ -82,12 +75,6 @@ command /devtoggleunlock <number>:
 		else:
 			set {unlocked::%arg-1%::%player's uuid%} to true
 			send "&aRegion ID &e%arg-1% &ahas been unlocked for you! &7&o(region ID list in discord)"
-command /seteggs <number>:
-	permission: op
-	permission message: &cThis command is forbidden! dwiuhduwdhuidh
-	trigger:
-		set {eggs::%player's uuid%} to arg-1
-		send "&aYou now have %{eggs::%player's uuid%}% &aeggs!"
 
 on right-click:
 #	click(player, event-block, "village", clickmoney(player, 1))
