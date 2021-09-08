@@ -2,6 +2,15 @@ command /tokenshop:
 	trigger:
 		set metadata tag "tokenShop" of player to chest inventory with 5 rows named "Token Shop"
 
+		set slot 0 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		set slot 9 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		set slot 27 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		
+		set slot 8 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		set slot 17 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		set slot 26 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		set slot 35 of metadata tag "tokenShop" of player to black stained glass pane named " "
+
 		if {tokenshop::1::%player's uuid%} is true:
 			set slot 11 of metadata tag "tokenShop" of player to chicken named "&7[&eChicken&7] &eSuffix" with lore " ", "&a&lUNLOCKED", "&eClick to select!", and " "
 		else:
@@ -49,7 +58,7 @@ command /tokenshop:
 		else:
 			set slot 31 of metadata tag "tokenShop" of player to gold block named "&7[&e&lGod&7] &eSuffix" with lore " ", "&a&lCost: &e10,000 Tokens", "&aClick to Purchase!", and " "
 
-		set slot 44 of metadata tag "tokenShop" of player to arrow named "&7Switch to Shop"
+		set slot 44 of metadata tag "tokenShop" of player to nether star named "&eGo to &6&lUpgrade Shop"
 
 
 		if {tokenshop::1::%player's uuid%} is true:
@@ -66,7 +75,25 @@ command /tokenshop:
 												set slot 36 of metadata tag "tokenShop" of player to skeleton skull named "&c&l? ? ?" with lore "&7&oI wonder what this could be..."
 											else:
 												set slot 36 of metadata tag "tokenShop" of player to skeleton skull named "&c&l? ? ?" with lore " ", "&a&lCost: &e100,000 Tokens", "&aClick to Purchase!", and " "
-
+										else:
+											set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+									else:
+										set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+								else:
+									set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+							else:
+								set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+						else:
+							set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+					else:
+						set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+				else:
+					set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+			else:
+				set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		else:
+			set slot 36 of metadata tag "tokenShop" of player to black stained glass pane named " "
+		
 
 		open (metadata tag "tokenShop" of player) to player
 
