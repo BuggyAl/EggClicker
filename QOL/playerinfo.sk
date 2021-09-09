@@ -1,8 +1,13 @@
-command /playerinfo [<offline player>]:
+command /playerinfo [<offline player>] [<text>]:
 	permission: staff
 	permission message: &cYou do not have permission to view information of other players!
 	trigger:
 		if arg-1 is set:
-			message centered " ", "&6Data of &e%arg-1%", "&7---", "&aEggs: &e%{eggs::%arg-1's uuid%}%", "&aTokens: &e%{tokens::%arg-1's uuid%}%", "&aPrestige: &e%{prestiges::%arg-1's uuid%}%", "&aMultiplier: &ex%{multiplier::%arg-1's uuid%}%", " ", "&aFirst Joined: &e%arg-1's first login%", "&7&o(%difference between arg-1's first login and now% ago)", " ", "&aToken Eligible: &e%{tokeneligible::%arg-1's uuid%}%", "&aSensei Bob: &e%{sensei::%arg-1's uuid%}%", "&7---", and " " to player
+			if arg-2 is not set:
+				message centered " ", "&6Data of &e%arg-1%", "&7---", "&aEggs: &e%{eggs::%arg-1's uuid%}%", "&aTokens: &e%{tokens::%arg-1's uuid%}%", "&aPrestige: &e%{prestiges::%arg-1's uuid%}%", "&aMultiplier: &ex%{multiplier::%arg-1's uuid%}%", " ", "&aFirst Joined: &e%arg-1's first login%", "&7&o(%difference between arg-1's first login and now% ago)", " ", "&aToken Eligible: &e%{tokeneligible::%arg-1's uuid%}%", "&aSensei Bob: &e%{sensei::%arg-1's uuid%}%", "&7---", and " " to player
+			else if arg-2 is "tokenshop": 
+				message centered " ", "&6Data of &e%arg-1% &e(Token Shop)", "&7---", "&aChicken Suffix: &e%{tokenshop::1::%arg-1's uuid%}%", "&aClicker Suffix: &e%{tokenshop::2::%arg-1's uuid%}%", "&aPro Suffix: &e%{tokenshop::3::%arg-1's uuid%}%", "&aEgg Suffix: &e%{tokenshop::4::%arg-1's uuid%}%", "&aNoob Suffix: &e%{tokenshop::5::%arg-1's uuid%}%", "&aNerd Suffix: &e%{tokenshop::6::%arg-1's uuid%}%", "&aDrip Suffix: &e%{tokenshop::7::%arg-1's uuid%}%", "&aOverlord Suffix: &e%{tokenshop::8::%arg-1's uuid%}%", "&aOverlord Suffix: &e%{tokenshop::9::%arg-1's uuid%}%", "", "&aNoLife Suffix: &e%{tokenshop::10::%arg-1's uuid%}%", "&7---", and "" to player    
+			else:
+				send "&cInvalid info type! &7&o<tokenshop/areas>"
 		else:
 			send "&cPlease enter a valid username!"

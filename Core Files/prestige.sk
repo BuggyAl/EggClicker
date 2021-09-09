@@ -1,7 +1,7 @@
 command /prestige:
     trigger:
         if {unlocked::10::%player's uuid%} is true:
-            if {eggs::%player's uuid%} >= price(player, 10) * {multiplier::%player's uuid%}:
+            if {eggs::%player's uuid%} >= price(player, 10):
                 play "block_note_block_pling" to player at volume 1
                 set {unlocked::1::%player's uuid%} to true
                 set {_a} to 2
@@ -15,7 +15,7 @@ command /prestige:
                 teleport player to spawn
             else:
                 play sound "block_note_block_pling" with volume 1 and pitch -1 at player for player
-                send "&cYou don't have enough eggs &7&o(%getNumberFormatted({eggs::%player's uuid%})%&7&o/%getNumberFormatted(price(player, 10) * {multiplier::%player's uuid%})%&7&o)"
+                send "&cYou don't have enough eggs &7&o(%getNumberFormatted({eggs::%player's uuid%})%&7&o/%getNumberFormatted(price(player, 10))%&7&o)"
         else:
             play sound "block_note_block_pling" with volume 1 and pitch -1 at player for player
-            send "&cYou can't prestige yet, you need to reach the pirate ship. It will cost %getNumberFormatted(price(player, 10) * {multiplier::%player's uuid%})% &ceggs"
+            send "&cYou can't prestige yet, you need to reach the pirate ship. It will cost %getNumberFormatted(price(player, 10))% &ceggs."

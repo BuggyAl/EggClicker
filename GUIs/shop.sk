@@ -64,43 +64,43 @@ command /shop:
 
 		if {unlocked::1::%player's uuid%} is true:
 			{unlocked::2::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Town Hall » Library)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 1))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Town Hall » Library)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 1))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to bookshelf named "&eThis will unlock: &6&lThe Library"
 		if {unlocked::2::%player's uuid%} is true:
 			{unlocked::3::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Library » Abandoned House)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 2))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Library » Abandoned House)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 2))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to mossy cobblestone named "&eThis will unlock: &6&lAbandoned House"
 		if {unlocked::3::%player's uuid%} is true:
 			{unlocked::4::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Abandoned House » Vault)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 3))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Abandoned House » Vault)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 3))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to iron block named "&eThis will unlock: &6&lThe Vault"
 		if {unlocked::4::%player's uuid%} is true:
 			{unlocked::5::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Vault » Sumo)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 4))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Vault » Sumo)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 4))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to glowing stick named "&eThis will unlock: &6&lSumo &7&o(PvP Enabled)"
 		if {unlocked::5::%player's uuid%} is true:
 			{unlocked::6::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Sumo » Dojo)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 5))%"
-			set slot 13 of metadata tag "Shop" of player to white wool named "&eThis will unlock: &6&l"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Sumo » Dojo)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 5))% &fEggs"
+			set slot 13 of metadata tag "Shop" of player to white wool named "&eThis will unlock: &6&lThe Dojo"
 		if {unlocked::6::%player's uuid%} is true:
 			{unlocked::7::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Dojo » Desert House)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 6))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Dojo » Desert House)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 6))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to acacia log named "&eThis will unlock: &6&lDesert House"
 		if {unlocked::7::%player's uuid%} is true:
 			{unlocked::8::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Desert House » Desert Temple)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 7))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Desert House » Desert Temple)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 7))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to chiseled sandstone named "&eThis will unlock: &6&lDesert Temple"
 		if {unlocked::8::%player's uuid%} is true:
 			{unlocked::9::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Desert Temple » Island)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 8))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Desert Temple » Island)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 8))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to jungle leaves named "&eThis will unlock: &6&lThe Island"
 		if {unlocked::9::%player's uuid%} is true:
 			{unlocked::10::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Island » Pirate Ship)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 9))%"
+			set slot 22 of metadata tag "Shop" of player to egg named "&a&lUPGRADE AREA &7&o(Island » Pirate Ship)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 9))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to skeleton skull named "&eThis will unlock: &6&lThe Pirate Ship"
 		if {unlocked::10::%player's uuid%} is true:
 			{unlocked::11::%player's uuid%} is not true
-			set slot 22 of metadata tag "Shop" of player to emerald block named "&a&lPRESTIGE &7&o(Pirate Ship » +1 Prestige)" with lore "&e&lPRICE: &f$%getNumberFormatted(price(player, 10) * {multiplier::%player's uuid%})%"
+			set slot 22 of metadata tag "Shop" of player to emerald block named "&a&lPRESTIGE &7&o(Pirate Ship » +1 Prestige)" with lore "&e&lPRICE: &f%getNumberFormatted(price(player, 10))% &fEggs"
 			set slot 13 of metadata tag "Shop" of player to chiseled sandstone named "&eThis will reset your progress" with lore "&ebut give you a multiplier."
 			
 		set slot 35 of metadata tag "Shop" of player to sunflower named "&eGo to &6&lToken Shop"
