@@ -1,0 +1,5 @@
+command /research:
+	permission: op
+	trigger:
+		set metadata tag "researchGUI" of player to chest inventory with 5 rows named "Your Research"
+		open metadata tag "researchGUI" of player to player
