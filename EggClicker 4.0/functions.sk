@@ -60,37 +60,18 @@ function capitalize(text: text) :: text:
 	set {_remaining} to the last (length of {_text} - 1) characters of {_text}
  
 	return "%{_char}%%{_remaining}%"
-
-#function getNumberFormatted(n: number) :: text:
-#    set {_symbols::*} to "", "K", "M", "B", "T", "QD", "QN", "SX", "SP", "OC", "N", "D", "UN","DD","TR" and "QN"
-#    set {_i} to 1
-#    set {_v} to {_n}
-#    while ({_v} / 1000) > 1:
-#        set {_v} to {_v} / 1000
-#        add 1 to {_i}
-#    set {_s} to {_symbols::%{_i}%} ? ""
-#    broadcast "{_s}: %{_s}%"
-#    return "%{_v}%%{_s}%"
    
-function getNumberFormatted(n: number) :: text:
-	set {_data} to "QT,18|Q,15|T,12|B,9|M,6|k,3"
-	loop split {_data} at "|":
-		set {_s::*} to split loop-value at ","
-		{_n} >= 10 ^ {_s::2} parsed as number
-		return "%{_n} / 10 ^ {_s::2} parsed as number%%{_s::1}%"
-	return "%{_n}%"
-   
-function newFormatNum(n: number) :: string:
-	set {_l::*} to split "k,M,B,T,Qn,Qi,Sx" at ","
+function getNumberFormatted(n: number) :: string:
+	set {_l::*} to split "K,M,B,T,Qa,Qi,Sx,Sp,Oc,No,Dc,Ud,Dd,Td,Qad,Qid,Sxd,Spd,Ocd,Nod,Vg,Uvg,Dvg,Tvg,Qavg,Qivg,Sxvg,Spvg,Ocvg,Novg,Tg,Ut,Dt" at ","
 	set {_i} to min(floor(log({_n})/3), size of {_l::*})
 	return "%{_n}%" if {_i} <= 0
 	set {_i2} to 1000^{_i}
 	return "%{_n}/{_i2}%%{_l::%{_i}%}%"
 
-command /testnewformatter <number>:
+command /testformatter <number>:
 	permission: op
 	trigger:
-		send newFormatNum(arg-1) to player
+		send getNumberFormatted(arg-1) to player
 
 function contains(list: objects, check: object) :: boolean:
 	loop {%{_list}%::*}:
@@ -102,3 +83,9 @@ function contains(list: objects, check: object) :: boolean:
   
 function print(t: text):
 	send "%{_t}%" to all players
+	
+command /viewregions:
+	permission: op
+	trigger:
+		send "%{areas::clicker::*}%" to player
+		send "Done!" to player

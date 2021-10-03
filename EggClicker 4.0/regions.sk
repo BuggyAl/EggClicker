@@ -1,0 +1,44 @@
+command /reloadregions:
+	permission: op
+	trigger:
+		reloadRegions()
+		send "&aRegions have been re-registered in the reigon list!"
+
+on skript start:
+	reloadRegions()
+
+function reloadRegions():
+	clear {areas::*}
+	set {areas::eggclicker_spawn} to 1
+	set {areas::eggclicker_library} to 2
+	set {areas::eggclicker_bedroom} to 3
+	set {areas::eggclicker_kitchen} to 4
+	set {areas::eggclicker_cellar} to 5
+	set {areas::eggclicker_backyard} to 6
+	set {areas::eggclicker_mine} to 7
+	set {areas::eggclicker_stronghold} to 8
+	set {areas::eggclicker_end} to 9
+	set {areas::eggclicker_nether} to 10
+	set {areas::eggclicker_eggstreet} to 11
+	set {areas::eggclicker_mcdonalds} to 12
+	set {areas::eggclicker_hut} to 13
+	set {areas::eggclicker_abandoned} to 14
+
+command /regioninfo:
+	permission: op
+	trigger:
+		send "Size of area list: %size of {areas::*}%"
+		send "Entry Values: %{areas::*}%"
+		loop {areas::*}:
+			send loop-index to player
+
+command /sortregiontest:
+	permission: op
+	trigger:
+		set {_sorted::*} to sorted {areas::*}
+		send {_sorted::*} to player
+		send " " to player
+		send "Size of area list: %size of {_sortedregions::*}%"
+		send "Entry Values: %{_sortedregions::*}%"
+		loop {_sortedregions::*}:
+			send loop-index to player

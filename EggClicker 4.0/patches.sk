@@ -1,0 +1,27 @@
+on join:
+	if {eggs::%player's uuid%} is not set:
+		set {eggs::%player's uuid%} to 0
+	if {tokens::%player's uuid%} is not set:
+		set {tokens::%player's uuid%} to 0
+	if {prestiges::%player's uuid%} is not set:
+		set {prestiges::%player's uuid%} to 0
+	if {multiplier::%player's uuid%} is not set:
+		set {multiplier::%player's uuid%} to 0
+		
+function checkClick(type: block, p: player) :: boolean:
+
+	if {_type} is any bed:
+		if {_p} is not op:
+			return false
+			stop
+			
+	if {_type} is cake:
+		if {_p} is not op:
+			return false
+			stop
+			
+	return true
+
+on command "minecraft:me":
+	cancel event
+
