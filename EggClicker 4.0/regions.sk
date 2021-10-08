@@ -2,7 +2,7 @@ command /reloadregions:
 	permission: op
 	trigger:
 		reloadRegions()
-		send "&aRegions have been re-registered in the reigon list!"
+		send "&aRegion data has been reloaded!"
 
 on skript start:
 	reloadRegions()
@@ -23,6 +23,23 @@ function reloadRegions():
 	set {areas::eggclicker_mcdonalds} to 12
 	set {areas::eggclicker_hut} to 13
 	set {areas::eggclicker_abandoned} to 14
+#	set {areas::eggclicker_hotel} to 15
+
+	set {areas::eggclicker_spawn::eggs} to 1
+	set {areas::eggclicker_library::eggs} to 2
+	set {areas::eggclicker_bedroom::eggs} to 5
+	set {areas::eggclicker_kitchen::eggs} to 10
+	set {areas::eggclicker_cellar::eggs} to 20
+	set {areas::eggclicker_backyard::eggs} to 50
+	set {areas::eggclicker_mine::eggs} to 100
+	set {areas::eggclicker_stronghold::eggs} to 200
+	set {areas::eggclicker_end::eggs} to 500
+	set {areas::eggclicker_nether::eggs} to 1000
+	set {areas::eggclicker_eggstreet::eggs} to 2000
+	set {areas::eggclicker_mcdonalds::eggs} to 5000
+	set {areas::eggclicker_hut::eggs} to 10000
+	set {areas::eggclicker_abandoned::eggs} to 20000	
+#	set {areas::eggclicker_hotel::eggs} to 50000	
 
 command /regioninfo:
 	permission: op
