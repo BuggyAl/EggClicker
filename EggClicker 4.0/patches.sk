@@ -6,7 +6,7 @@ on join:
 	if {prestiges::%player's uuid%} is not set:
 		set {prestiges::%player's uuid%} to 0
 	if {multiplier::%player's uuid%} is not set:
-		set {multiplier::%player's uuid%} to 0
+		set {multiplier::%player's uuid%} to 1
 		
 function checkClick(type: block, p: player) :: boolean:
 
@@ -25,3 +25,58 @@ function checkClick(type: block, p: player) :: boolean:
 on command "minecraft:me":
 	cancel event
 
+command /setprestige [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {prestiges::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour prestige has been modified by an staff member!" to arg-2
+			else:
+				set {prestiges::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a prestige amount!"
+
+command /settokens [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {tokens::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour tokens have been modified by an staff member!" to arg-2
+			else:
+				set {tokens::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a token amount!"
+
+command /seteggs [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {eggs::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour eggs have been modified by an staff member!" to arg-2
+			else:
+				set {eggs::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter an egg amount!"
+
+command /setmulti [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {multiplier::%arg-2's uuid%} to arg-1
+				send "&aDone!" to player
+				send "&aYour multiplier has been modified by an staff member!" to arg-2
+			else:
+				set {multiplier::%player's uuid%} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter an egg amount!"
