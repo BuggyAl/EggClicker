@@ -1,22 +1,18 @@
 on join:
 	while player is online:
-		displayScoreboard(player)
-
-function displayScoreboard(p: player):
-	set {_uuid} to uuid of {_p}
-	set title of {_p}'s scoreboard to "&e&lEggClicker &8〡&7[v4.0]"
-	set line 13 of {_p}'s scoreboard to "&7"
-	set line 12 of {_p}'s scoreboard to "&6&l%{_p}%"
-	set line 11 of {_p}'s scoreboard to "&8✦ &eEggs: &f%getNumberFormatted({eggs::%{_uuid}%})%"
-	set line 10 of {_p}'s scoreboard to "&8✦ &eTokens: &f⛁%getNumberFormatted({tokens::%{_uuid}%})%"
-	set line 9 of {_p}'s scoreboard to "&8✦ &ePrestige: &f✫%getNumberFormatted({prestiges::%{_uuid}%})%"
-	set line 8 of {_p}'s scoreboard to "&8✦ &eMultiplier: &fx%{multiplier::%{_uuid}%}%"
-	set line 7 of {_p}'s scoreboard to "&7"
-	set line 6 of {_p}'s scoreboard to "&6&lServer"
-	set line 5 of {_p}'s scoreboard to "&8✦ &ePlayers: &f%number of all players%&f/%maximum amount of players%"
-	set line 4 of {_p}'s scoreboard to "&8✦ &ePlayer Record: &f%getNumberFormatted({playerrecord})%"
-	set line 3 of {_p}'s scoreboard to "&8✦ &eUnique Joins: &f%getNumberFormatted(number of all offline players)%"
-	set line 2 of {_p}'s scoreboard to "&7"
-	set line 1 of {_p}'s scoreboard to "&eThanks for playing <3"
-	wait 1 tick
-	toggle {_p}'s scoreboard to on
+		set title of player's scoreboard to "&e&lEggClicker &8〡&7[v4.0]"
+		set line 13 of player's scoreboard to "&7"
+		set line 12 of player's scoreboard to "&6&l%player%"
+		set line 11 of player's scoreboard to "&8✦ &eEggs: &f%getNumberFormatted({eggs::%player's uuid%%})%"
+		set line 10 of player's scoreboard to "&8✦ &eTokens: &f⛁%getNumberFormatted({tokens::%player's uuid%})%"
+		set line 9 of player's scoreboard to "&8✦ &ePrestige: &f✫%getNumberFormatted({prestiges::%player's uuid%})%"
+		set line 8 of player's scoreboard to "&8✦ &eMultiplier: &fx%{multiplier::%player's uuid%}%"
+		set line 7 of player's scoreboard to "&7"
+		set line 6 of player's scoreboard to "&6&lServer"
+		set line 5 of player's scoreboard to "&8✦ &ePlayers: &f%number of all players%&f/%maximum amount of players%"
+		set line 4 of player's scoreboard to "&8✦ &ePlayer Record: &f%getNumberFormatted({playerrecord})%"
+		set line 3 of player's scoreboard to "&8✦ &eUnique Joins: &f%getNumberFormatted(number of all offline players)%"
+		set line 2 of player's scoreboard to "&7"
+		set line 1 of player's scoreboard to "&eThanks for playing <3"
+		wait 1 tick
+		toggle player's scoreboard to on
