@@ -1,0 +1,33 @@
+on skript load:
+	login to "ODU5MzczNTg2ODE3MjIwNjM4.YNrwBQ.KQWL1QV-zzRsILcjw0SlAxQRPpA" with name "EggServers Bot"
+	
+	set {id::*} to "A", "E", "Z", "O", "F", "P" and "L"
+
+command /loginbot:
+	permission: op
+	trigger:
+		login to "ODU5MzczNTg2ODE3MjIwNjM4.YNrwBQ.KQWL1QV-zzRsILcjw0SlAxQRPpA" with name "EggServers Bot"
+
+command /logoutbot:
+	permission: op
+	trigger:
+		shutdown "EggServers Bot"
+
+discord command !stats [<text>]:
+	trigger:
+		if event-member has role named "Bot Manager":
+			if arg-1 is not set:
+				reply with "Please enter an username!"
+			else:
+				arg-1 parsed as an offline player has played before:
+					create embed and send it to event-channel:
+						set title of the embed to "Stats of %arg-1%"
+						set color of the embed to red
+						set the thumbnail of the embed to "https://crafatar.com/avatars/%uuid of arg-1 parsed as an offline player%?overlay"
+						add field named "🥚 Eggs - %{eggs::%uuid of arg-1 parsed as an offline player%}%" to embed
+				else:
+					create embed and send it to event-channel:
+						set the thumbnail of the embed to "https://crafatar.com/avatars/%uuid of arg-1 parsed as an offline player%?overlay"
+						add field named "Stats of %arg-1%" with value "This player has never played before!" to embed
+		else:
+			reply with "This feature is currently unavailable!"
