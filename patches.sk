@@ -113,7 +113,7 @@ command /seteggs [<integer>] [<offline player>]:
 		else:
 			send "&cPlease enter an egg amount!"
 
-command /setmulti [<number>] [<offline player>]:
+command /setmulti [<integer>] [<offline player>]:
 	permission: op
 	trigger:
 		if arg-1 is set:
@@ -125,7 +125,7 @@ command /setmulti [<number>] [<offline player>]:
 				set {%player's uuid%::multiplier} to arg-1
 				send "&aDone!"
 		else:
-			send "&cPlease enter a multiplier amount!"
+			send "&cPlease enter an egg amount!"
 
 command /setvar [<text>] [<text>]:
 	permission: op
