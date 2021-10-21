@@ -16,9 +16,10 @@ function click(p: player, loc: location):
 	set {_uuid} to uuid of {_p}
 	loop {areas::*}:
 		if {_loc} is in region (loop-index parsed as region):
-			add {areas::%loop-index%::eggs} to {%{_uuid}%::eggs}
-			if {areas::%loop-index%::eggs} is 1:
-				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEgg &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
+			set {_gainedEggs} to {areas::%loop-index%::eggs} * {%{_uuid}%::multiplier}
+			add {_gainedEggs} to {%{_uuid}%::eggs}
+			if {_gainedEggs} is 1:
+				send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEgg &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
 			else:
-				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEggs &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
+				send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEggs &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
 			stop
