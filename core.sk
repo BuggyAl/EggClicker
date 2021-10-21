@@ -3,11 +3,12 @@ on rightclick:
 		if event-block is set:
 			loop {areas::*}:
 				if location of event-block is in region (loop-index parsed as region):
-					if checkClick(event-block, player) is true:
+					if checkClick(event-block, player, location of event-block) is true:
 						click(player, location of event-block)
 						stop
 					else:
 						cancel event
+						click(player, location of event-block)
 						stop
 			send action bar "&cRegion at click location not found!" to player
 
@@ -15,9 +16,9 @@ function click(p: player, loc: location):
 	set {_uuid} to uuid of {_p}
 	loop {areas::*}:
 		if {_loc} is in region (loop-index parsed as region):
-			add {areas::%loop-index%::eggs} to {eggs::%{_uuid}%}
+			add {areas::%loop-index%::eggs} to {%{_uuid}%::eggs}
 			if {areas::%loop-index%::eggs} is 1:
-				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEgg &8(&f%getNumberFormatted({eggs::%{_uuid}%})%&8)" to {_p}
+				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEgg &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
 			else:
-				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEggs &8(&f%getNumberFormatted({eggs::%{_uuid}%})%&8)" to {_p}
+				send action bar "&e+%getNumberFormatted({areas::%loop-index%::eggs})% &eEggs &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
 			stop
