@@ -1,0 +1,31 @@
+on load:
+	clear {rooms::*}
+	
+	create new room named "library" at slot 11 on page 1 with epc 2 and is displayed with "bookshelf" parsed as itemtype with name "Library" and the previous region is "none"
+	
+	create new room named "bedroom" at slot 12 on page 1 with epc 5 and is displayed with "red bed" parsed as itemtype with name "The Bedroom" and the previous region is "library"
+	
+	create new room named "kitchen" at slot 13 on page 1 with epc 10 and is displayed with "furnace" parsed as itemtype with name "The Kitchen" and the previous region is "bedroom"
+	
+	create new room named "cellar" at slot 14 on page 1 with epc 20 and is displayed with "stone" parsed as itemtype with name "The Cellar" and the previous region is "kitchen"
+	
+	create new room named "backyard" at slot 15 on page 1 with epc 50 and is displayed with "oak sapling" parsed as itemtype with name "The Backyard" and the previous region is "cellar"
+	
+	create new room named "mine" at slot 16 on page 1 with epc 100 and is displayed with "diamond pickaxe" parsed as itemtype with name "The Mine" and the previous region is "backyard"
+	
+	create new room named "nether" at slot 19 on page 1 with epc 200 and is displayed with "netherrack" parsed as itemtype with name "The Nether" and the previous region is "mine"
+	
+	create new room named "stronghold" at slot 20 on page 1 with epc 500 and is displayed with "end portal frame" parsed as itemtype with name "The Stronghold" and the previous region is "nether"
+	
+	create new room named "end" at slot 21 on page 1 with epc 1000 and is displayed with "end stone" parsed as itemtype with name "The End" and the previous region is "stronghold"
+	
+	create new room named "eggstreet" at slot 22 on page 1 with epc 2000 and is displayed with "sunflower" parsed as itemtype with name "Egg Street" and the previous region is "end"
+	
+	create new room named "mcdonalds" at slot 23 on page 1 with epc 5000 and is displayed with "red concrete" parsed as itemtype with name "McDonalds" and the previous region is "eggstreet"
+	
+	
+	create new room named "hut" at slot 24 on page 1 with epc 10000 and is displayed with "fern" parsed as itemtype with name "The Hut" and the previous region is "mcdonalds"
+	
+	create new room named "abandoned" at slot 25 on page 1 with epc 20000 and is displayed with "mossy cobblestone" parsed as itemtype with name "Abandoned House" and the previous region is "hut"
+	
+	create new room named "skyscraper" at slot 28 on page 1 with epc 50000 and is displayed with "white stained glass pane" parsed as itemtype with name "Skyscraper" and the previous region is "abandoned"

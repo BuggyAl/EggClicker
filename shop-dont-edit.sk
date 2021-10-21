@@ -1,0 +1,240 @@
+function price(p: player, n: number) :: number:
+	set {_a} to {_n}
+	set {_b} to {_n}
+	set {_c} to {_n}
+	set {_e} to {_n}
+	set {_d} to 0
+	set {_check} to true
+
+	set {_l} to (length of "%{_a}%") - 1 #l = 0
+
+	loop {_l} times:
+		set {_a} to {_a} / 10 
+
+	#if {_a} is 5:
+		#set {_e} to {_n} / 2.5 
+	#else if {_a} is 2:
+		#set {_e} to {_n} / 2 #e = 0.5
+	#else: 
+		#set {_e} to {_n}
+
+	while {_check} is true:
+		set {_l} to (length of "%{_c}%") - 1 #l = 0
+		if {_l} is 0:
+			set {_l} to 1 #l = 1
+		loop {_l} times: #1 times
+			if {_c} is 1:
+				set {_check} to false #check = false
+			else:
+				set {_f} to {_c} #1:f = 500
+				if {_c} is more than 5:
+					set {_b} to {_c} / 10 #1:b = 50
+				else: 
+					set {_b} to {_c}
+
+				if "%{_b}%" contains "5":
+					set {_c} to {_c} / 2.5 #c = 200
+				else:
+					set {_c} to {_f} / 2  #c = 500
+				add 1 to {_d}
+
+	set {_uuid} to {_p}'s uuid 
+	return (({_e} * 250 + {_e} * {_d} * 50) * 1.5) 
+
+on offhand switch:
+	make player say "/shop"
+
+effect format room of %players% named %text%:
+	trigger:
+		set {_uuid} to expr-1's uuid
+		set {_p} to "%expr-1%" parsed as player
+		set {_t} to expr-2
+		if {%{_uuid}%::area::eggclicker_%{rooms::%expr-2%::previous}%} is true:
+			if {%{_uuid}%::area::eggclicker_%expr-2%} is false:
+				if first character of "%{rooms::%expr-2%::epc}%" is "1":
+					set {_c} to {rooms::%expr-2%::epc} / 2
+				else if first character of "%{rooms::%expr-2%::epc}%" is "2":
+					set {_c} to {rooms::%expr-2%::epc} / 2
+				else if first character of "%{rooms::%expr-2%::epc}%" is "5":
+					set {_c} to ({rooms::%expr-2%::epc} / 5) * 2
+				format gui slot {rooms::%expr-2%::slot} of expr-1 with {rooms::%expr-2%::itemtype} named "&b%{rooms::%{_t}%::name}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted(round({rooms::%{_t}%::epc}))%" and "&dCost &7- &5%getNumberFormatted(price({_p}, {_c}))% Eggs" and "&aClick to buy!" to run:
+					set {_co} to price({_p}, {_c})
+					if {%{_uuid}%::eggs} is more than or equal to {_co}:
+						close {_p}'s inventory
+						remove {_co} from {%{_uuid}%::eggs}
+						send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! Next room costs &9%getNumberFormatted(price({_p}, {rooms::%{_t}%::epc}))%&b." to {_p}
+						set {%{_uuid}%::%{_t}%} to {rooms::%{_t}%::name}
+						execute console command "rg addmember %{_t}% %{_p}%"
+						set {%{_uuid}%::area::eggclicker_%{_t}%} to true
+						if {_t} is "mine":
+							set {%{_uuid}%::area::eggclicker_mine2} to true
+						roomPageOne({_p})
+					else:
+						send "&cYou can't afford!" to {_p} 
+			else:
+				format gui slot {rooms::%expr-2%::slot} of {_p} with {rooms::%expr-2%::itemtype} named "&b%{rooms::%expr-2%::name}%" with lore "&aUnlocked" to do nothing
+		else if "%{rooms::%expr-2%::previous}%" is "none":
+			if {%{_uuid}%::area::eggclicker_%expr-2%} is false:
+				if first character of "%{rooms::%expr-2%::epc}%" is "1":
+					set {_c} to {rooms::%expr-2%::epc} / 2
+				else if first character of "%{rooms::%expr-2%::epc}%" is "2":
+					set {_c} to {rooms::%expr-2%::epc} / 2
+				else if first character of "%{rooms::%expr-2%::epc}%" is "5":
+					set {_c} to ({rooms::%expr-2%::epc} / 5) * 2
+				format gui slot {rooms::%expr-2%::slot} of expr-1 with {rooms::%expr-2%::itemtype} named "&b%{rooms::%{_t}%::name}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted(round({rooms::%{_t}%::epc}))%" and "&dCost &7- &5%getNumberFormatted(price({_p}, {_c}))% Eggs" and "&aClick to buy!" to run:
+					set {_co} to price({_p}, {_c})
+					if {%{_uuid}%::eggs} is more than or equal to {_co}:
+						close {_p}'s inventory
+						remove {_co} from {%{_uuid}%::eggs}
+						send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! Next room costs &9%getNumberFormatted(price({_p}, {rooms::%{_t}%::epc}))%&b." to {_p}
+						set {%{_uuid}%::%{_t}%} to {rooms::%{_t}%::name}
+						execute console command "rg addmember %{_t}% %{_p}%"
+						set {%{_uuid}%::area::eggclicker_%{_t}%} to true
+						roomPageOne({_p})
+					else:
+						send "&cYou can't afford!" to {_p} 
+			else:
+				format gui slot {rooms::%expr-2%::slot} of {_p} with {rooms::%expr-2%::itemtype} named "&b%{rooms::%expr-2%::name}%" with lore "&aUnlocked" to do nothing
+		else:
+			format gui slot {rooms::%expr-2%::slot} of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+		
+
+effect create new room named %text% at slot %number% on page %number% with epc %number% and is displayed with %itemtype% with name %text% and the previous region is %text%:
+	trigger:
+		add "%expr-1%" to {rooms::*}
+		add "epc" to {rooms::%expr-1%::*}
+		add "itemtype" to {rooms::%expr-1%::*}
+		add "page" to {rooms::%expr-1%::*}
+		add "slot" to {rooms::%expr-1%::*}
+		add "name" to {rooms::%expr-1%::*}
+		add "previous" to {rooms::%expr-1%::*}
+		set {rooms::%expr-1%::slot} to expr-2
+		set {rooms::%expr-1%::page} to expr-3
+		set {rooms::%expr-1%::epc} to expr-4
+		set {rooms::%expr-1%::itemtype} to expr-5
+		set {rooms::%expr-1%::name} to expr-6
+		set {rooms::%expr-1%::previous} to expr-7
+		
+		
+	
+		
+		#if first character in "%expr-2%" is "1"
+		#	set {_c} to expr-2 / 2
+		#else if first character in "%expr-2%" is "2"
+		#	set {_c} to expr-2 / 2
+		#else if first character in "%expr-2%" is "5"
+		#	set {_c} to (expr-2 / 5) * 2
+
+	
+function room(p: player, s: number, r: text, ru: text, epc: number, c: number, i: itemtype, n: number):
+	set {_uuid} to {_p}'s uuid
+#	broadcast "%{%{_uuid}%::area::eggclicker_library}%"
+	if {%{_uuid}%::area::%{_r}%} is false:
+		format gui slot {_s} of {_p} with {_i} named "&b%{_ru}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted(round({_epc} * {%{_uuid}%::multiplier}))%" and "&dCost &7- &5%getNumberFormatted({_c})% Eggs" and "&aClick to buy!" to run:
+			if {%{_uuid}%::eggs} is more than or equal to {_c}:
+				close {_p}'s inventory
+				remove {_c} from {%{_uuid}%::eggs}
+				if {_n} is 0:
+					send "&bYou unlocked &9%{_ru}%&b!" to {_p}
+					set {%{_uuid}%::%{_r}%} to {_ru}
+				else:
+					send "&bYou unlocked &9%{_ru}%&b! Next room costs &9%getNumberFormatted({_n})%&b." to {_p} 
+					set {%{_uuid}%::%{_r}%} to {_ru}
+				execute console command "rg addmember %{_r}% %{_p}%"
+				set {%{_uuid}%::area::%{_r}%} to true
+				roomPageOne({_p})
+			else:
+				send "&cYou can't afford!" to {_p} 
+	else:
+		format gui slot {_s} of {_p} with {_i} named "&b%{_ru}%" with lore "&aUnlocked" to do nothing
+
+
+
+
+			
+function tprice(p: player, n: number) :: text:
+	return getNumberFormatted(price({_p}, {_n}))
+
+command /shop:
+	aliases: sh
+	trigger:
+		open virtual chest inventory with size 3 named "&eShop" to player
+		format gui slot 0,2,4,6,8,18,20,22,24 and 26 of player with green stained glass pane named " " to nothing
+		format gui slot 1,3,5,7,9,17,19,21,23 and 25 of player with lime stained glass pane named " " to nothing
+
+		format gui slot 11 of player with door named "&eRoom Shop" to run:
+			roomPageOne(player)
+		format gui slot 13 of player with sunflower named "&eToken Shop" to run:
+			tokenShop(player)
+		format gui slot 15 of player with emerald named "&aStore" to run:
+			send "&alink" to player
+#		broadcast "%{%player's uuid%::area::eggclicker_library}%"
+			
+
+
+function roomPageOne(p: player):
+	set {_uuid} to {_p}'s uuid
+#	send "%{%{_uuid}%::area::eggclicker_library}%" to all players
+	open virtual chest inventory with size 4 named "&eRoom Shop" to {_p} 
+	format gui slot 0,2,4,6,8,18,20,22,26 and 24 of {_p} with green stained glass pane named " " to nothing
+	format gui slot 1,3,5,7,9,17,19,21,23,35 and 25 of {_p} with lime stained glass pane named " " to nothing
+	format gui slot 27,29,31,33,35,37 and 39 of {_p} with lime stained glass pane named " " to nothing
+	format gui slot 28,30,32,34,36 and 38 of {_p} with green stained glass pane named " " to nothing
+#	format gui slot 35 of {_p} with arrow named "&fNext Page" to run:
+#		roomPageTwo({_p})
+#	broadcast "%{%{_uuid}%::area::eggclicker_library}%"
+	format gui slot 10 of {_p} with egg named "&bEgg (Spawn)" with lore "&aUnlocked" to do nothing
+	loop {rooms::*}:
+		format room of {_p} named "%loop-value%"
+		
+	#room({_p}, 11, "eggclicker_library", "Library", 2, price({_p}, 1), bookshelf, price({_p}, 2))
+	#if {%{_uuid}%::area::eggclicker_library} is true:
+	#	room({_p}, 12, "eggclicker_bedroom", "The Bedroom", 5, price({_p}, 2), red bed, price({_p}, 5)) #50
+	#else:
+	#	format gui slot 12 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_bedroom} is true:
+	#	room({_p}, 13, "eggclicker_kitchen", "The Kitchen", 10, 2300, furnace, 6000) #100#
+	#else:
+	#	format gui slot 13 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_kitchen} is true:
+	#	room({_p}, 14, "eggclicker_cellar", "The Cellar", 20, 6000, smooth stone, 13500) #150
+	#else:
+	#	format gui slot 14 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+
+	#if {%{_uuid}%::area::eggclicker_cellar} is true:
+	#	room({_p}, 15, "eggclicker_backyard", "The Backyard", 50, 13500, oak leaves, 37500) #200
+	#else:
+	#	format gui slot 15 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_backyard} is true:
+	#	room({_p}, 16, "eggclicker_mine", "The Mine", 100, 37500, diamond pickaxe, 82500) #250
+	#else:
+	#	format gui slot 16 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_mine} is true:
+	#	room({_p}, 19, "eggclicker_stronghold", "The Stronghold", 200, 82500, end portal frame, 180000) #300
+	#else:
+	#	format gui slot 19 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_stronghold} is true:
+	#	room({_p}, 20, "eggclicker_end", "The End", 500, 180000, ender eye, 487500) #350
+	#else:
+	#	format gui slot 20 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+
+	#if {%{_uuid}%::area::eggclicker_end} is true:
+	#	room({_p}, 21, "eggclicker_nether", "The Nether", 1000, 487500, netherrack, 1050000) #400
+	#else:
+	#	format gui slot 21 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_nether} is true:
+	#	room({_p}, 22, "eggclicker_eggstreet", "Egg Street", 2000, 1050000, snow block, 2250000) #450
+	#else:
+	#	format gui slot 22 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_eggstreet} is true:
+	#	room({_p}, 23, "eggclicker_mcdonalds", "McDonalds", 5000, 2250000, cooked chicken, 6000000) #500
+	#else:
+	#	format gui slot 23 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_mcdonalds} is true:
+	#	room({_p}, 24, "eggclicker_hut", "The Hut", 10000, 6000000, fern, 12750000) #550
+	#else:
+	#	format gui slot 24 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+	#if {%{_uuid}%::area::eggclicker_hut} is true:
+	#	room({_p}, 25, "eggclicker_abandoned", "Abandoned House", 20000, 12750000, web, 27000000) #550
+	#else:
+	#	format gui slot 25 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
