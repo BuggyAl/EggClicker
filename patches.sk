@@ -1,40 +1,86 @@
 on join:
-	if {eggs::%player's uuid%} is not set:
-		set {eggs::%player's uuid%} to 0
-	if {tokens::%player's uuid%} is not set:
-		set {tokens::%player's uuid%} to 0
-	if {prestiges::%player's uuid%} is not set:
-		set {prestiges::%player's uuid%} to 0
-	if {multiplier::%player's uuid%} is not set:
-		set {multiplier::%player's uuid%} to 1
+	if {%player's uuid%::eggs} is not set:
+		set {%player's uuid%::eggs} to 0
+	if {%player's uuid%::tokens} is not set:
+		set {%player's uuid%::tokens} to 0
+	if {%player's uuid%::prestiges} is not set:
+		set {%player's uuid%::prestiges} to 0
+	if {%player's uuid%::multiplier} is not set:
+		set {%player's uuid%::multiplier} to 1
 		
-function checkClick(type: block, p: player) :: boolean:
+function checkClick(type: block, p: player, loc: location) :: boolean:
 
 	if {_type} is any bed:
 		if {_p} is not op:
 			return false
-			stop
 			
 	if {_type} is cake:
 		if {_p} is not op:
 			return false
-			stop
+	
+	if {_type} is any door:
+		if {_p} is not op:
+			return false
 			
 	return true
 
+command /updatepatches:
+	permission: op
+	trigger:
+		clear {patches::*}
+		set {patches::mecommand} to "mecommand"
+		set {patches::hunger} to "hunger"
+		set {patches::damage} to "damage"
+		set {patches::trample} to "trample"
+		set {patches::portals} to "portals"
+		set {patches::build} to "build"
+		send "&aPatches Reloaded!"
+
 on command "minecraft:me":
-	cancel event
+	if {%player's uuid%::bypasspatch::mecommand} is not true:
+		cancel event
+
+on break:
+	if {%player's uuid%::bypasspatch::build} is not true:
+		cancel event
+		if player has permission "patches.bypass":
+			send action bar "&cUse &4/bypasspatch build &cto toggle building!" to player
+
+on place:
+	if {%player's uuid%::bypasspatch::build} is not true:
+		cancel event
+		if player has permission "patches.bypass":
+			send action bar "&cUse &4/bypasspatch build &cto toggle building!" to player
+ 
+
+on hunger bar change:
+	if {%player's uuid%::bypasspatch::hunger} is not true:
+		cancel event
+
+on damage:
+	if {%victim's uuid%::bypasspatch::damage} is not true:
+		victim is player
+		cancel event
+
+on block trample:
+	if {%player's uuid%::bypasspatch::trample} is not true:
+		if player is in region "eggclicker_backyard":
+			cancel event
+
+on portal:
+	if {%player's uuid%::bypasspatch::portals} is not true: 
+		cancel event
 
 command /setprestige [<integer>] [<offline player>]:
 	permission: op
 	trigger:
 		if arg-1 is set:
 			if arg-2 is set:
-				set {prestiges::%arg-2's uuid%} to arg-1
+				set {%arg-2's uuid%::prestiges} to arg-1
 				send "&aDone!" to player
 				send "&aYour prestige has been modified by an staff member!" to arg-2
 			else:
-				set {prestiges::%player's uuid%} to arg-1
+				set {%player's uuid%::prestiges} to arg-1
 				send "&aDone!"
 		else:
 			send "&cPlease enter a prestige amount!"
@@ -44,11 +90,11 @@ command /settokens [<integer>] [<offline player>]:
 	trigger:
 		if arg-1 is set:
 			if arg-2 is set:
-				set {tokens::%arg-2's uuid%} to arg-1
+				set {%arg-2's uuid%::tokens} to arg-1
 				send "&aDone!" to player
 				send "&aYour tokens have been modified by an staff member!" to arg-2
 			else:
-				set {tokens::%player's uuid%} to arg-1
+				set {%player's uuid%::tokens} to arg-1
 				send "&aDone!"
 		else:
 			send "&cPlease enter a token amount!"
@@ -58,11 +104,11 @@ command /seteggs [<integer>] [<offline player>]:
 	trigger:
 		if arg-1 is set:
 			if arg-2 is set:
-				set {eggs::%arg-2's uuid%} to arg-1
+				set {%arg-2's uuid%::eggs} to arg-1
 				send "&aDone!" to player
 				send "&aYour eggs have been modified by an staff member!" to arg-2
 			else:
-				set {eggs::%player's uuid%} to arg-1
+				set {%player's uuid%::eggs} to arg-1
 				send "&aDone!"
 		else:
 			send "&cPlease enter an egg amount!"
@@ -72,11 +118,120 @@ command /setmulti [<integer>] [<offline player>]:
 	trigger:
 		if arg-1 is set:
 			if arg-2 is set:
-				set {multiplier::%arg-2's uuid%} to arg-1
+				set {%arg-2's uuid%::multiplier} to arg-1
 				send "&aDone!" to player
 				send "&aYour multiplier has been modified by an staff member!" to arg-2
 			else:
-				set {multiplier::%player's uuid%} to arg-1
+				set {%player's uuid%::multiplier} to arg-1
 				send "&aDone!"
 		else:
 			send "&cPlease enter an egg amount!"
+
+command /setvar [<text>] [<text>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				if arg-2 parsed as number is a number:
+					set {%arg-1%} to arg-2 parsed as number
+				else:
+					set {%arg-1%} to arg-2
+				send "&aSet &e{%arg-1%&e} &ato &e%arg-2%&a!"
+			else:
+				send "&aDeleted variable &e{%arg-1%}&a! &7(Value: %{%arg-1%}%&7)"
+				delete {%arg-1%}
+		else:
+			send "&cPlease input a variable! &7(This command sets or wipes ANY variable!"
+		
+
+command /bypasspatch [<text>]:
+	permission: patches.bypass
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if {patches::%arg-1%} exists:
+			if {%player's uuid%::bypasspatch::%arg-1%} is not true:
+				set {%player's uuid%::bypasspatch::%arg-1%} to true
+				send "&aYou are now bypassing patch &e%arg-1%&a!"	
+			else:
+				set {%player's uuid%::bypasspatch::%arg-1%} to false
+				send "&aYou are no longer bypassing patch &e%arg-1%&a!"				
+		else:
+			send "&cInvalid patch ID!"
+
+on tab complete of "/bypasspatch":
+	if player has permission "patches.bypass":
+		set tab completions for position 1 to {patches::*}
+
+command /clearchat:
+	permission: chat.clear
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		loop 2500 times:
+			broadcast ""
+		message centered "&7---", "&6Chat cleared by &e%player%&6!", and "&7---" to all players
+
+on join:
+	{cockpoop.%player's uuid%} is not set:
+		execute console command "/resetplayervariables %player%"
+		set {cockpoop.%player's uuid%} to true
+
+command /resetplayervariables <offline player>:
+	permission: op
+	trigger:
+		add "library" to {regs::*}
+		add "bedroom" to {regs::*}
+		add "kitchen" to {regs::*}
+		add "cellar" to {regs::*}
+		add "backyard" to {regs::*}
+		add "mine" to {regs::*}
+		add "nether" to {regs::*}
+		add "stronghold" to {regs::*}
+		add "end" to {regs::*}
+		add "eggstreet" to {regs::*}
+		add "mcdonalds" to {regs::*}
+		add "hut" to {regs::*}
+		add "abandoned" to {regs::*}
+		add "skyscraper" to {regs::*}
+		set {_uuid} to arg-1's uuid
+		set {%{_uuid}%::eggs} to 0
+		replace all "," with "" in {regs::*}
+		loop {regs::*}:
+			execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
+		clear {regs::*}
+		clear {prefix.%player%}
+		set {%{_uuid}%::prestiges} to 0
+		set {%{_uuid}%::area::*} to false
+		set {%{_uuid}%::multiplier} to 1
+		set {%{_uuid}%::tokens} to 0
+		set {%{_uuid}%::clicks} to 0
+		set {%arg-1's uuid%::area::eggclicker_spawn} to true
+		set {%arg-1's uuid%::area::eggclicker_library} to false
+		set {%arg-1's uuid%::area::eggclicker_bedroom} to false
+		set {%arg-1's uuid%::area::eggclicker_kitchen} to false
+		set {%arg-1's uuid%::area::eggclicker_cellar} to false
+		set {%arg-1's uuid%::area::eggclicker_backyard} to false
+		set {%arg-1's uuid%::area::eggclicker_mine} to false
+		set {%arg-1's uuid%::area::eggclicker_stronghold} to false
+		set {%arg-1's uuid%::area::eggclicker_end} to false
+		set {%arg-1's uuid%::area::eggclicker_nether} to false
+		set {%arg-1's uuid%::area::eggclicker_eggstreet} to false
+		set {%arg-1's uuid%::area::eggclicker_hut} to false
+		set {%arg-1's uuid%::area::eggclicker_mcdonalds} to false
+		set {%arg-1's uuid%::area::eggclicker_abandoned} to false
+		set {%arg-1's uuid%::area::eggclicker_skyscraper} to false
+#		broadcast "%{%arg-1's uuid%::area::eggclicker_library}%"
+
+every 3 seconds:
+	drawDot count 500, particle "blockdust", material jungle leaves, speed 0.01, XYZ 15, 15, 15, center {parkParticleLocation}, visibleRange 75
+
+
+command /resetserverclicks:
+	permission: op
+	trigger:
+		set {totalclicks} to 0
+
+command /setparkparticlelocation:
+	permission: op
+	trigger:
+		set {parkParticleLocation} to player's location
+		send "&aSet park particle origin to &e%{parkParticleLocation}%&a!"
