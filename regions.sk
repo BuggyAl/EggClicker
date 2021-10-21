@@ -16,9 +16,10 @@ function reloadRegions():
 	set {areas::eggclicker_cellar} to 5
 	set {areas::eggclicker_backyard} to 6
 	set {areas::eggclicker_mine} to 7
-	set {areas::eggclicker_stronghold} to 8
-	set {areas::eggclicker_end} to 9
-	set {areas::eggclicker_nether} to 10
+	set {areas::eggclicker_mine2} to 7
+	set {areas::eggclicker_nether} to 8
+	set {areas::eggclicker_stronghold} to 9
+	set {areas::eggclicker_end} to 10
 	set {areas::eggclicker_eggstreet} to 11
 	set {areas::eggclicker_mcdonalds} to 12
 	set {areas::eggclicker_hut} to 13
@@ -32,9 +33,10 @@ function reloadRegions():
 	set {areas::eggclicker_cellar::eggs} to 20
 	set {areas::eggclicker_backyard::eggs} to 50
 	set {areas::eggclicker_mine::eggs} to 100
-	set {areas::eggclicker_stronghold::eggs} to 200
-	set {areas::eggclicker_end::eggs} to 500
-	set {areas::eggclicker_nether::eggs} to 1000
+	set {areas::eggclicker_mine2::eggs} to 100
+	set {areas::eggclicker_nether::eggs} to 200
+	set {areas::eggclicker_stronghold::eggs} to 500
+	set {areas::eggclicker_end::eggs} to 1000
 	set {areas::eggclicker_eggstreet::eggs} to 2000
 	set {areas::eggclicker_mcdonalds::eggs} to 5000
 	set {areas::eggclicker_hut::eggs} to 10000
