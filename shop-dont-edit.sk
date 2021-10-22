@@ -62,12 +62,17 @@ effect format room of %players% named %text%:
 					if {%{_uuid}%::eggs} is more than or equal to {_co}:
 						close {_p}'s inventory
 						remove {_co} from {%{_uuid}%::eggs}
-						send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! Next room costs &9%getNumberFormatted(price({_p}, {rooms::%{_t}%::epc}))%&b." to {_p}
+						if {rooms::%{_t}%::epc} is 50000:
+							send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! To prestige, do &9/prestige&b." to {_p}
+						else:
+							send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! Next room costs &9%getNumberFormatted(price({_p}, {rooms::%{_t}%::epc}))%&b." to {_p}
 						set {%{_uuid}%::%{_t}%} to {rooms::%{_t}%::name}
-						execute console command "rg addmember %{_t}% %{_p}%"
+						execute console command "rg addmember eggclicker_%{_t}% %{_p}% -w EggClicker"
+						set {prefix.%player's uuid%} to " %{rooms::%{_t}%::prefix}%"
 						set {%{_uuid}%::area::eggclicker_%{_t}%} to true
 						if {_t} is "mine":
 							set {%{_uuid}%::area::eggclicker_mine2} to true
+							execute console command "rg addmember eggclicker_mine2 %{_p}% -w EggClicker"
 						roomPageOne({_p})
 					else:
 						send "&cYou can't afford!" to {_p} 
@@ -88,7 +93,7 @@ effect format room of %players% named %text%:
 						remove {_co} from {%{_uuid}%::eggs}
 						send "&bYou unlocked &9%{rooms::%{_t}%::name}%&b! Next room costs &9%getNumberFormatted(price({_p}, {rooms::%{_t}%::epc}))%&b." to {_p}
 						set {%{_uuid}%::%{_t}%} to {rooms::%{_t}%::name}
-						execute console command "rg addmember %{_t}% %{_p}%"
+						execute console command "rg addmember eggclicker_%{_t}% %{_p}% -w EggClicker"
 						set {%{_uuid}%::area::eggclicker_%{_t}%} to true
 						roomPageOne({_p})
 					else:
@@ -99,7 +104,7 @@ effect format room of %players% named %text%:
 			format gui slot {rooms::%expr-2%::slot} of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
 		
 
-effect create new room named %text% at slot %number% on page %number% with epc %number% and is displayed with %itemtype% with name %text% and the previous region is %text%:
+effect create new room named %text% at slot %number% on page %number% with epc %number% and is displayed with %itemtype% with name %text% and the previous region is %text% with prefix %text%:
 	trigger:
 		add "%expr-1%" to {rooms::*}
 		add "epc" to {rooms::%expr-1%::*}
@@ -108,13 +113,14 @@ effect create new room named %text% at slot %number% on page %number% with epc %
 		add "slot" to {rooms::%expr-1%::*}
 		add "name" to {rooms::%expr-1%::*}
 		add "previous" to {rooms::%expr-1%::*}
+		add "prefix" to {rooms::%expr-1%::*}
 		set {rooms::%expr-1%::slot} to expr-2
 		set {rooms::%expr-1%::page} to expr-3
 		set {rooms::%expr-1%::epc} to expr-4
 		set {rooms::%expr-1%::itemtype} to expr-5
 		set {rooms::%expr-1%::name} to expr-6
 		set {rooms::%expr-1%::previous} to expr-7
-		
+		set {rooms::%expr-1%::prefix} to expr-8
 		
 	
 		
@@ -167,7 +173,7 @@ command /shop:
 		format gui slot 13 of player with sunflower named "&eToken Shop" to run:
 			tokenShop(player)
 		format gui slot 15 of player with emerald named "&aStore" to run:
-			send "&alink" to player
+			make player say "/buy"
 #		broadcast "%{%player's uuid%::area::eggclicker_library}%"
 			
 
@@ -238,3 +244,16 @@ function roomPageOne(p: player):
 	#	room({_p}, 25, "eggclicker_abandoned", "Abandoned House", 20000, 12750000, web, 27000000) #550
 	#else:
 	#	format gui slot 25 of {_p} with barrier named "&c&lLOCKED" with lore "&cBuy the previous area to unlock"
+
+command /pushregionexceptionfix:
+	permission: op
+	trigger:
+		loop all players:
+			if {%loop-player's uuid%::area::eggclicker_mine} is true:
+				if {%loop-player's uuid%::area::eggclicker_mine2} is false:
+					set {%loop-player's uuid%::area::eggclicker_mine2} to true
+					execute console command "rg addmember eggclicker_mine2 %loop-player% -w EggClicker"
+			if {%loop-player's uuid%::area::eggclicker_end} is true:
+				if {%loop-player's uuid%::area::eggclicker_endtransition} is false:
+					set {%loop-player's uuid%::area::eggclicker_endtransition} to true
+					execute console command "rg addmember eggclicker_endtransition %loop-player% -w EggClicker"					
