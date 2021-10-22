@@ -10,7 +10,7 @@ on rightclick:
 						cancel event
 						click(player, location of event-block)
 						stop
-			send action bar "&cRegion at click location not found!" to player
+#			send action bar "&cRegion at click location not found!" to player
 
 function click(p: player, loc: location):
 	set {_uuid} to uuid of {_p}
