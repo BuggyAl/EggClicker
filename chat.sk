@@ -1,0 +1,132 @@
+on join:
+	set join message to "&7[&a+&7] %player%"
+	if number of all players is more than {playerrecord}:
+		send "&fNew players online record! &7(&b%number of all players%&7)" to all players
+		set {playerrecord} to number of all players
+
+on join:
+	if {%player's uuid%::clicks} is not set:
+		set {%player's uuid%::clicks} to 0
+
+on quit:
+     set quit message to "&7[&c-&7] %player%"
+
+on first join:
+	set join message to "&7[&aNEW JOIN&7] &f%player% &7(&b##%size of all offline players%&7)"
+
+command chatcolor [<text>]:
+	permission: egg.chatcolor
+	trigger:
+		if arg-1 is set:
+			arg-1 is "blue":
+				set {chatcolor::%player's uuid%} to "&9"
+			arg-1 is "aqua":
+				set {chatcolor::%player's uuid%} to "&b"
+			arg-1 is "red":
+				set {chatcolor::%player's uuid%} to "&c"
+			arg-1 is "darkred":
+				set {chatcolor::%player's uuid%} to "&4"
+			arg-1 is "yellow":
+				set {chatcolor::%player's uuid%} to "&e"
+			arg-1 is "white":
+				set {chatcolor::%player's uuid%} to "&f"
+			arg-1 is "lime":
+				set {chatcolor::%player's uuid%} to "&a"
+			arg-1 is "pink":
+				set {chatcolor::%player's uuid%} to "&d"
+		else:
+			send "&9Blue, &bAqua, &cRed, &4DarkRed, &eYellow, &fWhite, &aLime, &dPink"
+
+
+on chat:
+
+
+	loop all players:
+		if message contains "%loop-player%":
+			replace all "@" with "" in message
+			player's group is "default":
+				replace all "%loop-player%" with "&e&o@%loop-player%&7" in message
+			else:
+				replace all "%loop-player%" with "&e&o@%loop-player%&f" in message
+			play sound "block.note_block.pling" to loop-player
+
+	replace all "[eggs]" with "&e%getNumberFormatted({%player's uuid%::eggs})% Eggs&7" in message
+	replace all "[tokens]" with "&e%{%player's uuid%::tokens}% Tokens&7" in message
+	replace all "[prestige]" and "[prestiges]" with "&e%{%player's uuid%::prestiges}% Prestiges&7" in message
+	replace all "[multi]" and "[multiplier]" with "&e%{%player's uuid%::multiplier}% Multiplier&7" in message
+	replace all "[clicks]" with "&e%getNumberFormatted({%player's uuid%::clicks})% Clicks&7" in message
+
+
+on chat:
+	replace all "nigger" with "****" in message
+	replace all "jackass" with "****" in message
+	replace all "sex" with "****" in message
+	replace all "penis" with "****" in message
+	replace all "vagina" with "****" in message
+	replace all "卐" with "****" in message
+	replace all "卍" with "****" in message
+	replace all "nazi" with "****" in message
+	replace all "kill yourself" with "****" in message
+
+	{prefix.%player's uuid%} is not set:
+		set {prefix.%player's uuid%} to " &7[&eClicker&7]"
+	player's group is "default":
+		{tag.%player's uuid%} is not set:
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%player% &8» &7%message%"
+		else:
+			{nick.%player's uuid%} is not set:
+				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%player% %{tag.%player's uuid%}% &8» &7%message%"
+			else:
+				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%{nick.%player's uuid%}% %{tag.%player's uuid%}% &8» &7%message%"
+	else:
+		{chatcolor::%player's uuid%} is not set:
+			set {chatcolor::%player's uuid%} to "&f"
+		{tag.%player's uuid%} is not set:
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% %player's prefix%%player% &8» %{chatcolor::%player's uuid%}%%colored message%"
+		else:
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% %player's prefix%%player% %{tag.%player's uuid%}% &8» %{chatcolor::%player's uuid%}%%colored message%"
+		
+		
+command /bc <text>:
+	permission: click.broadcast
+	trigger:
+		broadcast ""
+		broadcast "&c&lEGGCLICKER BROADCAST &8>> &c%coloured arg-1%"
+		broadcast ""
+		play sound "block.note_block.bell" to all players
+		
+
+every 2 minutes:
+	broadcast ""
+	broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
+	broadcast ""
+	wait 1 minute
+	broadcast ""
+	broadcast "&fDid you know you can press &eF &fto open the &eshop&f?"
+	broadcast ""
+	
+every 5 minutes:
+	broadcast ""
+	broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
+	broadcast ""
+
+on command "/buy":
+	cancel event
+	send "<link:https://eggclicker.craftingstore.net/>&8--------------------------" to player
+	send "<link:https://eggclicker.craftingstore.net/>&bClick here to support the server <3" to player
+	send "<link:https://eggclicker.craftingstore.net/>&8--------------------------" to player
+	play sound "block.honey_block.break" to player
+
+
+command /discord:
+	aliases: dc
+	trigger:
+		send "" to player
+		send "<link:https://discord.gg/4m6WJZGYKr>&bClick here to join the official Discord" to player
+		send "" to player
+		play sound "block.honey_block.break" to player
+
+command /clearplrecord:
+	permission: op
+	trigger:
+		set {playerrecord} to 0

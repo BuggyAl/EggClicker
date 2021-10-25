@@ -1,5 +1,6 @@
 on skript load:
 	login to "OTAwNTI3NzU5MzkzMTY5NDE4.YXCn1A.TxgHkTdu3lIwN498Lle7CT8yYxU" with name "EggClicker Bot"
+	set {serverlaststart} to now 
 	
 	set {id::*} to "A", "E", "Z", "O", "F", "P" and "L"
 
@@ -53,7 +54,11 @@ discord command !server:
 			if size of {_onlineplayers::*} is greater than 0:
 				add field named "Online Players" with value "%{_onlineplayers::*}%" to embed
 			else:
-				add field named "Online Players" with value "There are no players online!" to embed
+				add field named "Online Players" with value "There are no players online!" to embe
+			if difference between now and {serverlaststart} is not set:
+				add field named "Server Uptime" with value "Restart the server to view server uptime!"
+			else:
+				add field named "Server Uptime" with value "%difference between now and {serverlaststart}%" to embed
 		reply with last created embed
 
 on command:
