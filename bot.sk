@@ -66,6 +66,26 @@ on command:
 		send "`[%now%] %player% executed command /%full command%`" to channel with id "878547303886118954" with "EggClicker Bot"
 		send "`[%now%] %player% executed command /%full command%`" to channel with id "900563377766674462" with "EggClicker Bot"
 
+on join:
+	make embed:
+		set title of embed to "**%player% joined the game!"
+		set the color of the embed to green
+		set the thumbnail of the embed to "https://crafatar.com/avatars/%player's uuid%?size=32&overlay"
+	send last created embed to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
+	send last created embed to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send "[%now%] %player% joined the game!" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "[%now%] %player% joined the game!" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+
+on quit:
+	make embed:
+		set title of embed to "**%player% left the game!"
+		set the color of the embed to green
+		set the thumbnail of the embed to "https://crafatar.com/avatars/%player's uuid%?size=32&overlay"
+	send last created embed to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
+	send last created embed to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send "[%now%] %player% left the game!" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "[%now%] %player% left the game!" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+
 on chat:
 	if player does not have permission "staff":
 		send "%player%: ``%message%``" to channel with id "900917072043851826" with "EggClicker Bot"
