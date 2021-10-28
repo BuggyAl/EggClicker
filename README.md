@@ -1,4 +1,4 @@
-# EggClicker [v4.0.1]
+# EggClicker [4.0.1]
 Welcome to the EggClicker repository! This repository is for the EggClicker on Minehut!
 
 ## Current Features in Development
