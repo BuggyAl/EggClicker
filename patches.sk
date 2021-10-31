@@ -221,17 +221,11 @@ command /resetplayervariables <offline player>:
 		set {%arg-1's uuid%::area::eggclicker_skyscraper} to false
 #		broadcast "%{%arg-1's uuid%::area::eggclicker_library}%"
 
-every 3 seconds:
-	drawDot count 500, particle "blockdust", material jungle leaves, speed 0.01, XYZ 15, 15, 15, center {parkParticleLocation}, visibleRange 75
-
-
 command /resetserverclicks:
 	permission: op
 	trigger:
 		set {totalclicks} to 0
 
-command /setparkparticlelocation:
-	permission: op
-	trigger:
-		set {parkParticleLocation} to player's location
-		send "&aSet park particle origin to &e%{parkParticleLocation}%&a!"
+on join:
+	if player does not have permission "staff":
+		kick player due to "&cThe server is currently under maintenance! Please "
