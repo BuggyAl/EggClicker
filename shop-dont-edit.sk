@@ -158,7 +158,7 @@ function room(p: player, s: number, r: text, ru: text, epc: number, c: number, i
 
 
 			
-function tprice(p: player, n: number) :: text:
+function price(p: player, n: number) :: text:
 	return getNumberFormatted(price({_p}, {_n}))
 
 command /shop:
@@ -252,8 +252,4 @@ command /pushregionexceptionfix:
 			if {%loop-player's uuid%::area::eggclicker_mine} is true:
 				if {%loop-player's uuid%::area::eggclicker_mine2} is false:
 					set {%loop-player's uuid%::area::eggclicker_mine2} to true
-					execute console command "rg addmember eggclicker_mine2 %loop-player% -w EggClicker"
-			if {%loop-player's uuid%::area::eggclicker_end} is true:
-				if {%loop-player's uuid%::area::eggclicker_endtransition} is false:
-					set {%loop-player's uuid%::area::eggclicker_endtransition} to true
-					execute console command "rg addmember eggclicker_endtransition %loop-player% -w EggClicker"					
+					execute console command "rg addmember eggclicker_mine2 %loop-player% -w EggClicker"		
