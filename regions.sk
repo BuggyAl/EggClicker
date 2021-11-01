@@ -43,6 +43,22 @@ function reloadRegions():
 	set {areas::eggclicker_abandoned::eggs} to 20000	
 	set {areas::eggclicker_skyscraper::eggs} to 50000	
 
+	set {areas::eggclicker_spawn::display} to "&bSpawn"
+	set {areas::eggclicker_library::display} to "&bLibrary"
+	set {areas::eggclicker_bedroom::display} to "&bBedroom"
+	set {areas::eggclicker_kitchen::display} to "&bKitchen"
+	set {areas::eggclicker_cellar::display} to "&bCellar"
+	set {areas::eggclicker_backyard::display} to "&bBackyard"
+	set {areas::eggclicker_mine::display} to "&bMine"
+	set {areas::eggclicker_nether::display} to "&bNether"
+	set {areas::eggclicker_stronghold::display} to "&bStronghold"
+	set {areas::eggclicker_end::display} to "&bEnd"
+	set {areas::eggclicker_eggstreet::display} to "&bEgg Street"
+	set {areas::eggclicker_mcdonalds::display} to "&bMcDonalds"
+	set {areas::eggclicker_hut::display} to "&bHut"
+	set {areas::eggclicker_abandoned::display} to "&bAbandoned House"
+	set {areas::eggclicker_skyscraper::display} to "&bSkyscraper"
+
 command /regioninfo:
 	permission: op
 	trigger:
