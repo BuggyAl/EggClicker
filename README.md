@@ -4,4 +4,4 @@ Welcome to the EggClicker repository! This repository is for the EggClicker on M
 ## Current Features in Development
 - Prestige Tree
 - Shop
-- New Areas (Park, Beach, Ocean)
+- New Areas (Park, Beach, Ocean, Graveyard, Church) (4.1 Release)
