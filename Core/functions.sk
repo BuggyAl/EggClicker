@@ -79,11 +79,6 @@ function contains(list: objects, check: object) :: boolean:
 			return true
 	return false
 	
-  
-  
-function print(t: text):
-	send "%{_t}%" to all players
-	
 command /viewregions:
 	permission: op
 	trigger:

@@ -197,7 +197,7 @@ function resetPlayerVariables(p: offline player):
 	loop {_regs::*}:
 		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
 	clear {_regs::*}
-	clear {prefix.%player%}
+	clear {prefix::%{_uuid}%}
 
 	set {%{_uuid}%::eggs} to 0
 	set {%{_uuid}%::prestiges} to 0
@@ -220,6 +220,8 @@ function resetPlayerVariables(p: offline player):
 	set {%{_uuid}%::area::eggclicker_mcdonalds} to false
 	set {%{_uuid}%::area::eggclicker_abandoned} to false
 	set {%{_uuid}%::area::eggclicker_skyscraper} to false	
+	set {%{_uuid}%::area::eggclicker_beach} to false	
+	set {%{_uuid}%::area::eggclicker_park} to false	
 
 command /resetplayervariables [<offline player>]:
 	permission: op

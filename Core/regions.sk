@@ -25,6 +25,8 @@ function reloadRegions():
 	set {areas::eggclicker_hut} to 13
 	set {areas::eggclicker_abandoned} to 14
 	set {areas::eggclicker_skyscraper} to 15
+	set {areas::eggclicker_park} to 16
+	set {areas::eggclicker_beach} to 17
 
 	set {areas::eggclicker_spawn::eggs} to 1
 	set {areas::eggclicker_library::eggs} to 2
@@ -42,6 +44,8 @@ function reloadRegions():
 	set {areas::eggclicker_hut::eggs} to 10000
 	set {areas::eggclicker_abandoned::eggs} to 20000	
 	set {areas::eggclicker_skyscraper::eggs} to 50000	
+	set {areas::eggclicker_park::eggs} to 100000	
+	set {areas::eggclicker_beach::eggs} to 200000	
 
 	set {areas::eggclicker_spawn::display} to "&bSpawn"
 	set {areas::eggclicker_library::display} to "&bLibrary"
@@ -58,6 +62,8 @@ function reloadRegions():
 	set {areas::eggclicker_hut::display} to "&bHut"
 	set {areas::eggclicker_abandoned::display} to "&bAbandoned House"
 	set {areas::eggclicker_skyscraper::display} to "&bSkyscraper"
+	set {areas::eggclicker_park::display} to "&bPark"
+	set {areas::eggclicker_beach::display} to "&bBeach"
 
 command /regioninfo:
 	permission: op
