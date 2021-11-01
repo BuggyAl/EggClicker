@@ -1,0 +1,3 @@
+command /rules:
+	trigger:
+		message centered "", "&6&lEggClicker Rules", "&7---", "&e1) Respect other players! &7(No racism, sexism, ect.)", "&e2) No NSFW content! &7("

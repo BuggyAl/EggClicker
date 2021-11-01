@@ -1,9 +1,9 @@
 function loadShop(p: player):
-    set metadata tag "shop" of player to chest inventory with 4 rows named "Shop"
+    set metadata tag "shop" of {_p} to chest inventory with 4 rows named "Shop"
     loop integers between 0 and 35:
-        set slot loop-value of player to black stained glass pane named " "
+        set slot loop-value of {_p} to black stained glass pane named " "
         
-    set slot 10 of player to formatShop(player, "library", "The Library", book, "spawn")
+    set slot 10 of {_p} to formatShop({_p}, "library", "The Library", book, "spawn")
     
 function formatShop(p: player, id: text, display: text, icon: itemtype, previous: text):
 
@@ -11,4 +11,4 @@ function formatShop(p: player, id: text, display: text, icon: itemtype, previous
     
     if {%{_uuid}%::areas::%{_previous}%} is true:
         if {%{_uuid}%::areas::%{_id}%} is true:
-            return {_icon} named "%{_display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs" and "&aClick to buy!" 
+            return {_icon} named "&b%{_display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs" and "&aClick to buy!" 

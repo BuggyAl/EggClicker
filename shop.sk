@@ -28,4 +28,4 @@ on load:
 	
 	create new room named "abandoned" at slot 25 on page 1 with epc 20000 and is displayed with mossy cobblestone with name "Abandoned House" and the previous region is "hut" with prefix "&7[&eHomeless&7]"
 	
-	create new room named "skyscraper" at slot 28 on page 1 with epc 50000 and is displayed with white stained glass pane with name "Skyscraper" and the previous region is "abandoned" with prefix "&7[&eFreeLancer&7]"
+	create new room named "skyscraper" at slot 28 on page 1 with epc 50000 and is displayed with white stained glass pane with name "Skyscraper" and the previous region is "abandoned" with prefix "&7[&eFreelancer&7]"

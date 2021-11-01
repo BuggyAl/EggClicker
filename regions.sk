@@ -24,7 +24,7 @@ function reloadRegions():
 	set {areas::eggclicker_mcdonalds} to 12
 	set {areas::eggclicker_hut} to 13
 	set {areas::eggclicker_abandoned} to 14
-#	set {areas::eggclicker_hotel} to 15
+	set {areas::eggclicker_skyscraper} to 15
 
 	set {areas::eggclicker_spawn::eggs} to 1
 	set {areas::eggclicker_library::eggs} to 2
@@ -41,7 +41,7 @@ function reloadRegions():
 	set {areas::eggclicker_mcdonalds::eggs} to 5000
 	set {areas::eggclicker_hut::eggs} to 10000
 	set {areas::eggclicker_abandoned::eggs} to 20000	
-#	set {areas::eggclicker_hotel::eggs} to 50000	
+	set {areas::eggclicker_skyscraper::eggs} to 50000	
 
 command /regioninfo:
 	permission: op

@@ -1,0 +1,18 @@
+command /milestones:
+	trigger:
+
+		set {_lockedMilestone} to gray dye named "&cLocked Milestone" with lore "&7Progress through the game" and "&7to unlock this milestone!"
+
+		set metadata tag "milestones" of player to chest inventory with 5 rows named "Milestones" # Setup / Border
+		loop integers between 0 and 9:
+			set slot loop-value of metadata tag "milestones" of player to black stained glass pane named "&o"
+		set slot 17 of metadata tag "milestones" of player to black stained glass pane named "&o"
+		set slot 18 of metadata tag "milestones" of player to black stained glass pane named "&o"
+		set slot 26 of metadata tag "milestones" of player to black stained glass pane named "&o"
+		set slot 27 of metadata tag "milestones" of player to black stained glass pane named "&o"
+		loop integers between 35 and 44:/
+			set slot loop-value of metadata tag "milestones" of player to black stained glass pane named "&o"
+
+		set {_clickerCurrentMilestone} to {%player's uuid%::milestones::clicker::level}
+
+		if {}

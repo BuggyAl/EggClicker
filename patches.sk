@@ -171,61 +171,66 @@ command /clearchat:
 		message centered "&7---", "&6Chat cleared by &e%player%&6!", and "&7---" to all players
 
 on join:
-	{cockpoop.%player's uuid%} is not set:
-		execute console command "/resetplayervariables %player%"
-		set {cockpoop.%player's uuid%} to true
+	{firstReset::%player's uuid%} is not set:
+		resetPlayerVariables(player)
+		set {firstReset::%player's uuid%} to true
 
-command /resetplayervariables <offline player>:
+function resetPlayerVariables(p: offline player):
+	set {_uuid} to uuid of {_p}
+	add "library" to {_regs::*}
+	add "bedroom" to {_regs::*}
+	add "kitchen" to {_regs::*}
+	add "cellar" to {_regs::*}
+	add "backyard" to {_regs::*}
+	add "mine" to {_regs::*}
+	add "mine2" to {_regs::*}
+	add "nether" to {_regs::*}
+	add "stronghold" to {_regs::*}
+	add "end" to {_regs::*}
+	add "eggstreet" to {_regs::*}
+	add "mcdonalds" to {_regs::*}
+	add "hut" to {_regs::*}
+	add "abandoned" to {_regs::*}
+	add "skyscraper" to {_regs::*}
+
+	replace all "," with "" in {_regs::*}
+	loop {_regs::*}:
+		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
+	clear {_regs::*}
+	clear {prefix.%player%}
+
+	set {%{_uuid}%::eggs} to 0
+	set {%{_uuid}%::prestiges} to 0
+	set {%{_uuid}%::area::*} to false
+	set {%{_uuid}%::multiplier} to 1
+	set {%{_uuid}%::tokens} to 0
+
+	set {%{_uuid}%::area::eggclicker_spawn} to true
+	set {%{_uuid}%::area::eggclicker_library} to false
+	set {%{_uuid}%::area::eggclicker_bedroom} to false
+	set {%{_uuid}%::area::eggclicker_kitchen} to false
+	set {%{_uuid}%::area::eggclicker_cellar} to false
+	set {%{_uuid}%::area::eggclicker_backyard} to false
+	set {%{_uuid}%::area::eggclicker_mine} to false
+	set {%{_uuid}%::area::eggclicker_stronghold} to false
+	set {%{_uuid}%::area::eggclicker_end} to false
+	set {%{_uuid}%::area::eggclicker_nether} to false
+	set {%{_uuid}%::area::eggclicker_eggstreet} to false
+	set {%{_uuid}%::area::eggclicker_hut} to false
+	set {%{_uuid}%::area::eggclicker_mcdonalds} to false
+	set {%{_uuid}%::area::eggclicker_abandoned} to false
+	set {%{_uuid}%::area::eggclicker_skyscraper} to false	
+
+command /resetplayervariables [<offline player>]:
 	permission: op
 	trigger:
-		add "library" to {regs::*}
-		add "bedroom" to {regs::*}
-		add "kitchen" to {regs::*}
-		add "cellar" to {regs::*}
-		add "backyard" to {regs::*}
-		add "mine" to {regs::*}
-		add "nether" to {regs::*}
-		add "stronghold" to {regs::*}
-		add "end" to {regs::*}
-		add "eggstreet" to {regs::*}
-		add "mcdonalds" to {regs::*}
-		add "hut" to {regs::*}
-		add "abandoned" to {regs::*}
-		add "skyscraper" to {regs::*}
-		set {_uuid} to arg-1's uuid
-		set {%{_uuid}%::eggs} to 0
-		replace all "," with "" in {regs::*}
-		loop {regs::*}:
-			execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
-		clear {regs::*}
-		clear {prefix.%player%}
-		set {%{_uuid}%::prestiges} to 0
-		set {%{_uuid}%::area::*} to false
-		set {%{_uuid}%::multiplier} to 1
-		set {%{_uuid}%::tokens} to 0
-		set {%{_uuid}%::clicks} to 0
-		set {%arg-1's uuid%::area::eggclicker_spawn} to true
-		set {%arg-1's uuid%::area::eggclicker_library} to false
-		set {%arg-1's uuid%::area::eggclicker_bedroom} to false
-		set {%arg-1's uuid%::area::eggclicker_kitchen} to false
-		set {%arg-1's uuid%::area::eggclicker_cellar} to false
-		set {%arg-1's uuid%::area::eggclicker_backyard} to false
-		set {%arg-1's uuid%::area::eggclicker_mine} to false
-		set {%arg-1's uuid%::area::eggclicker_stronghold} to false
-		set {%arg-1's uuid%::area::eggclicker_end} to false
-		set {%arg-1's uuid%::area::eggclicker_nether} to false
-		set {%arg-1's uuid%::area::eggclicker_eggstreet} to false
-		set {%arg-1's uuid%::area::eggclicker_hut} to false
-		set {%arg-1's uuid%::area::eggclicker_mcdonalds} to false
-		set {%arg-1's uuid%::area::eggclicker_abandoned} to false
-		set {%arg-1's uuid%::area::eggclicker_skyscraper} to false
-#		broadcast "%{%arg-1's uuid%::area::eggclicker_library}%"
+		if arg-1 is not set:
+			send "&cPlease enter a player to reset!"
+		else:
+			resetPlayerVariables(arg-1)
+			send "&aThe stats of &e%arg-1% &ahave been reset!"
 
 command /resetserverclicks:
 	permission: op
 	trigger:
 		set {totalclicks} to 0
-
-on join:
-	if player does not have permission "staff":
-		kick player due to "&cThe server is currently under maintenance! Please "
