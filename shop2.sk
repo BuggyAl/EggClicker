@@ -1,14 +1,160 @@
 function loadShop(p: player):
-    set metadata tag "shop" of {_p} to chest inventory with 4 rows named "Shop"
-    loop integers between 0 and 35:
-        set slot loop-value of {_p} to black stained glass pane named " "
-        
-    set slot 10 of {_p} to formatShop({_p}, "library", "The Library", book, "spawn")
-    
-function formatShop(p: player, id: text, display: text, icon: itemtype, previous: text):
+	set metadata tag "shop" of {_p} to chest inventory with 5 rows named "Room Shop"
+	set slot 0,2,4,6,8,18,26,38,40,42, and 44 of metadata tag "shop" of {_p} to orange stained glass pane named " "
+	set slot 1,3,5,7,9,17,27,35,37,39,41, and 43 of metadata tag "shop" of {_p} to black stained glass pane named " "
+	set slot 36 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"
+		
+	set slot 10 of metadata tag "shop" of {_p} to formatShop({_p}, "spawn", "Spawn", egg, "spawn")
 
-    set {_uuid} to uuid of {_p}
-    
-    if {%{_uuid}%::areas::%{_previous}%} is true:
-        if {%{_uuid}%::areas::%{_id}%} is true:
-            return {_icon} named "&b%{_display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs" and "&aClick to buy!" 
+	set slot 11 of metadata tag "shop" of {_p} to formatShop({_p}, "library", "Library", bookshelf, "spawn")
+	set slot 12 of metadata tag "shop" of {_p} to formatShop({_p}, "bedroom", "Bedroom", red bed, "library")
+	set slot 13 of metadata tag "shop" of {_p} to formatShop({_p}, "kitchen", "Kitchen", furnace, "bedroom")
+	set slot 14 of metadata tag "shop" of {_p} to formatShop({_p}, "cellar", "Cellar", barrel, "kitchen")
+	set slot 15 of metadata tag "shop" of {_p} to formatShop({_p}, "backyard", "Backyard", campfire, "cellar")
+	set slot 16 of metadata tag "shop" of {_p} to formatShop({_p}, "mine", "Mine", iron pickaxe, "backyard")
+	set slot 19 of metadata tag "shop" of {_p} to formatShop({_p}, "nether", "Nether", netherrack, "mine")
+	set slot 20 of metadata tag "shop" of {_p} to formatShop({_p}, "stronghold", "Stronghold", end portal frame, "nether")
+	set slot 21 of metadata tag "shop" of {_p} to formatShop({_p}, "end", "End", endstone, "stronghold")
+	set slot 22 of metadata tag "shop" of {_p} to formatShop({_p}, "eggstreet", "Egg Street", black concrete, "end")
+	set slot 23 of metadata tag "shop" of {_p} to formatShop({_p}, "mcdonalds", "McDonalds", red concrete, "eggstreet")
+	set slot 24 of metadata tag "shop" of {_p} to formatShop({_p}, "hut", "The Hut", fern, "mcdonalds")
+	set slot 25 of metadata tag "shop" of {_p} to formatShop({_p}, "abandoned", "Abandoned House", web, "hut")
+	set slot 28 of metadata tag "shop" of {_p} to formatShop({_p}, "skyscraper", "Skyscraper", white stained glass, "abandoned")
+	set slot 29 of metadata tag "shop" of {_p} to formatShop({_p}, "park", "Park", flowering azalea, "skyscraper")
+	set slot 30 of metadata tag "shop" of {_p} to formatShop({_p}, "beach", "Beach", sand, "park")
+	
+function formatShop(p: player, id: text, display: text, icon: itemtype, previous: text) :: item:
+
+	set {_uuid} to uuid of {_p}
+	
+	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
+		if {%{_uuid}%::area::eggclicker_%{_id}%} is true:
+			return 1 of {_icon} named "&b%{_display}% (Unlocked)" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%", "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs", and "&aClick to buy!"
+		else:
+			return 1 of {_icon} named "&b%{_display}% (Locked)" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%", "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs", and "&aClick to buy!"
+	else:
+		return 1 of {_icon} named "&b%{_display}% (Prev Still Locked)" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&a&lUNLOCKED"
+
+function loadShopMenu(p: player):
+
+	set metadata tag "shopMenu" of {_p} to chest inventory with 3 rows named "The Shop"
+	set slot 0,2,4,6,8,10,12,14,16,18,20,22,24, and 26 of metadata tag "shopMenu" of {_p} to orange stained glass pane named " "
+	set slot 1,3,5,7,9,11,13,15,17,19,21,23, and 25 of metadata tag "shopMenu" of {_p} to black stained glass pane named " "
+
+	set slot 11 of metadata tag "shopMenu" of {_p} to egg named "&6&lRoom Shop" with lore "&7Buy rooms here!"
+	set slot 13 of metadata tag "shopMenu" of {_p} to sunflower named "&e&lToken Shop" with lore "&7Spend tokens here!"
+	set slot 15 of metadata tag "shopMenu" of {_p} to emerald named "&a&lServer Store" with lore "&7Support the server!"
+
+
+function loadTokenShop(p: player):
+	set metadata tag "tokenShop" of {_p} to chest inventory with 3 rows named "Token Shop"
+	set slot 1,3,5,7,9,17,19,21,23, and 25 of metadata tag "tokenShop" of {_p} to orange stained glass pane named " "
+	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
+	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
+
+on swap hand items:
+	if player's current inventory is not (metadata tag "shopMenu" of player):
+		if player's current inventory is not (metadata tag "shop" of player):
+			if player's current inventory is not (metadata tag "tokenShop" of player):
+				cancel event
+				execute player command "/shop"
+	
+
+on inventory click:
+
+	if event-inventory = (metadata tag "shopMenu" of player):
+		cancel event
+		if index of event-slot is 11:
+			loadShop(player)
+			open metadata tag "shop" of player to player
+		else if index of event-slot is 13:
+			loadTokenShop(player)
+			open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 15:
+			execute player command "/buy"
+			close player's inventory
+
+	else if event-inventory = (metadata tag "tokenShop" of player):
+		cancel event
+		if index of event-slot is 18:
+			loadShopMenu(player)
+			open metadata tag "shopMenu" of player to player
+
+	else if event-inventory = (metadata tag "shop" of player):
+		cancel event
+		if index of event-slot is 36:
+			loadShopMenu(player)
+			open metadata tag "shopMenu" of player to player
+		
+		else if index of event-slot is 11:
+			buyRoom(player, "library")
+		else if index of event-slot is 12:
+			buyRoom(player, "bedroom")
+		else if index of event-slot is 13:
+			buyRoom(player, "kitchen")
+		else if index of event-slot is 14:
+			buyRoom(player, "cellar")
+		else if index of event-slot is 15:
+			buyRoom(player, "backyard")
+		else if index of event-slot is 16:
+			buyRoom(player, "mine")
+		else if index of event-slot is 19:
+			buyRoom(player, "nether")
+		else if index of event-slot is 20:
+			buyRoom(player, "stronghold")
+		else if index of event-slot is 21:
+			buyRoom(player, "end")
+		else if index of event-slot is 22:
+			buyRoom(player, "eggstreet")
+		else if index of event-slot is 23:
+			buyRoom(player, "mcdonalds")
+		else if index of event-slot is 24:
+			buyRoom(player, "hut")
+		else if index of event-slot is 25:
+			buyRoom(player, "abandoned")
+		else if index of event-slot is 28:
+			buyRoom(player, "skyscraper")
+		else if index of event-slot is 29:
+			buyRoom(player, "park")
+		else if index of event-slot is 30:
+			buyRoom(player, "beach")
+
+command /shop:
+	trigger:
+		loadShopMenu(player)
+		open metadata tag "shopMenu" of player to player
+
+
+command /reloadshop:
+	permission: op
+	trigger:
+		execute player command "/sk reload shop"
+		execute player command "/sk reload regions"
+		execute player command "/reloadregions"
+		send "&eShop and regions have been updated!"
+
+
+function buyRoom(p: player, id: text, previous: text):
+	set {_uuid} to uuid of {_p}
+	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
+		if {%{_uuid}%::area::eggclicker_%{_id}%} is false:
+			if {%{_uuid}%::eggs} is greater than or equal to {areas::eggclicker_%{_id}%::price}:
+				send "&cYou do not have enough eggs to purchase this room!" to {_p}
+				play sound "entity.villager.no" to {_p}
+			else:
+				set {%{_uuid}%::area::eggclicker_%{_id}%} to true
+				set {%{_uuid}%::eggs} to {%{_uuid}%::eggs} - {areas::eggclicker_%{_id}%::price}
+				execute console command "/rg addmember eggclicker_%{_id}% %{_p}% -w EggClicker"
+				play sound "entity.player.levelup" to {_p}
+				loadShop({_p})
+				open metadata tag "shop" of {_p} to {_p}
+
+command /newtestprofile: #egg, tokens, multi, prestige, clicks
+	permission: op
+	trigger:
+		set {%player's uuid%::eggs} to random integer between 0 and 1000000000000
+		set {%player's uuid%::tokens} to random integer between 0 and 1000
+		set {%player's uuid%::multiplier} to random number between 1 and 125
+		set {%player's uuid%::prestiges} to random integer between 0 and 500
+		set {%player's uuid%::clicks} to random integer between 0 and 100000
+		send "&aGenerated a new test profile!"
