@@ -4,13 +4,13 @@ function loadShop(p: player):
 	set slot 1,3,5,7,9,17,27,35,37,39,41, and 43 of metadata tag "shop" of {_p} to black stained glass pane named " "
 	set slot 36 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"
 		
-	set slot 10 of metadata tag "shop" of {_p} to formatShop({_p}, "spawn" egg, "spawn")
+	set slot 10 of metadata tag "shop" of {_p} to formatShop({_p}, "spawn", egg, "spawn")
 
 	set slot 11 of metadata tag "shop" of {_p} to formatShop({_p}, "library", bookshelf, "spawn")
 	set slot 12 of metadata tag "shop" of {_p} to formatShop({_p}, "bedroom", red bed, "library")
 	set slot 13 of metadata tag "shop" of {_p} to formatShop({_p}, "kitchen", furnace, "bedroom")
 	set slot 14 of metadata tag "shop" of {_p} to formatShop({_p}, "cellar", barrel, "kitchen")
-	set slot 15 of metadata tag "shop" of {_p} to formatShop({_p}, "backyard", "Backyard", campfire, "cellar")
+	set slot 15 of metadata tag "shop" of {_p} to formatShop({_p}, "backyard", campfire, "cellar")
 	set slot 16 of metadata tag "shop" of {_p} to formatShop({_p}, "mine", iron pickaxe, "backyard")
 	set slot 19 of metadata tag "shop" of {_p} to formatShop({_p}, "nether", netherrack, "mine")
 	set slot 20 of metadata tag "shop" of {_p} to formatShop({_p}, "stronghold", end portal frame, "nether")
@@ -59,7 +59,6 @@ on swap hand items:
 				cancel event
 				execute player command "/shop"
 	
-
 on inventory click:
 
 	if event-inventory = (metadata tag "shopMenu" of player):
@@ -87,37 +86,37 @@ on inventory click:
 			open metadata tag "shopMenu" of player to player
 		
 		else if index of event-slot is 11:
-			buyRoom(player, "library")
+			buyRoom(player, "library", "spawn")
 		else if index of event-slot is 12:
-			buyRoom(player, "bedroom")
+			buyRoom(player, "bedroom", "library")
 		else if index of event-slot is 13:
-			buyRoom(player, "kitchen")
+			buyRoom(player, "kitchen", "bedroom")
 		else if index of event-slot is 14:
-			buyRoom(player, "cellar")
+			buyRoom(player, "cellar", "kitchen")
 		else if index of event-slot is 15:
-			buyRoom(player, "backyard")
+			buyRoom(player, "backyard", "cellar")
 		else if index of event-slot is 16:
-			buyRoom(player, "mine")
+			buyRoom(player, "mine", "backyard")
 		else if index of event-slot is 19:
-			buyRoom(player, "nether")
+			buyRoom(player, "nether", "mine")
 		else if index of event-slot is 20:
-			buyRoom(player, "stronghold")
+			buyRoom(player, "stronghold", "nether")
 		else if index of event-slot is 21:
-			buyRoom(player, "end")
+			buyRoom(player, "end", "stronghold")
 		else if index of event-slot is 22:
-			buyRoom(player, "eggstreet")
+			buyRoom(player, "eggstreet", "end")
 		else if index of event-slot is 23:
-			buyRoom(player, "mcdonalds")
+			buyRoom(player, "mcdonalds", "eggstreet")
 		else if index of event-slot is 24:
-			buyRoom(player, "hut")
+			buyRoom(player, "hut", "mcdonalds")
 		else if index of event-slot is 25:
-			buyRoom(player, "abandoned")
+			buyRoom(player, "abandoned", "hut")
 		else if index of event-slot is 28:
-			buyRoom(player, "skyscraper")
+			buyRoom(player, "skyscraper", "abandoned")
 		else if index of event-slot is 29:
-			buyRoom(player, "park")
+			buyRoom(player, "park", "skyscraper")
 		else if index of event-slot is 30:
-			buyRoom(player, "beach")
+			buyRoom(player, "beach", "park")
 
 command /shop:
 	trigger:
@@ -148,6 +147,12 @@ function buyRoom(p: player, id: text, previous: text):
 				play sound "entity.player.levelup" to {_p}
 				loadShop({_p})
 				open metadata tag "shop" of {_p} to {_p}
+		else if {%{_uuid}%::area::eggclicker_%{_id}%} is not set:
+			set {%{_uuid}%::area::eggclicker_%{_id}%} to false
+			buyRoom({_p}, {_id}, {_previous})
+	else:
+		send "&cYou do not have unlocked the previous area!" to {_p}
+		play sound "entity.villager.no" to {_p}
 
 command /newtestprofile: #egg, tokens, multi, prestige, clicks
 	permission: op
