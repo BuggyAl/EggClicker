@@ -1,0 +1,351 @@
+on right-click on concrete:
+	if player is op:
+		if player is sneaking:
+			if event-block is black concrete:
+				switchOn(player, event-block)
+			else if event-block is red concrete:
+				switchOff(player, event-block)
+			
+on break of sandstone:
+	clear {and::powered::%event-block%}
+	clear {and::output::%event-block%}
+	
+on break of coal ore:
+	clear {or::powered::%event-block%}
+	clear {or::output::%event-block%}
+			
+on break of diamond ore:
+	clear {xor::powered::%event-block%}
+	clear {xor::output::%event-block%}
+			
+on break of red wool:
+	clear {not::output::%event-block%}
+			
+			
+			
+function pistonOn(p: player, b:block):
+	set {_pl} to {piston::length::%{_b}%} ? 1
+
+	set block at {_b}'s location to purple concrete
+	set {_f} to {piston::dir::%{_b}%}
+	if {_f} is north:
+		set {_mb} to block 1 north {_b}
+		set {_pb} to block {_pl} north {_b}
+		set {_nb} to block 1 + {_pl} north {_b}
+	else if {_f} is east:
+		set {_mb} to block 1 east {_b}
+		set {_pb} to block {_pl} east {_b}
+		set {_nb} to block 1 + {_pl} east {_b}
+	else if {_f} is south:
+		set {_mb} to block 1 south {_b}
+		set {_pb} to block {_pl} south {_b}
+		set {_nb} to block 1 + {_pl} south {_b}
+	else if {_f} is west:
+		set {_mb} to block 1 west {_b}
+		set {_pb} to block {_pl} west {_b}
+		set {_nb} to block 1 + {_pl} west {_b}
+	else if {_f} is above:
+		set {_mb} to block 1 above {_b}
+		set {_pb} to block {_pl} above {_b}
+		set {_nb} to block 1 + {_pl} above {_b}
+	else if {_f} is below:
+		set {_mb} to block 1 below {_b}
+		set {_pb} to block {_pl} below {_b}
+		set {_nb} to block 1 + {_pl} below {_b}
+
+	checkandmoveon({_mb}, {_f}, {_pl})
+	set {_bt} to type of {_mb}
+	loop all blocks within block at {_mb}'s location and block at {_pb}'s location:
+		if {_bt} is not air:
+			set block at loop-block to purple concrete
+			loop all players in radius 2 around loop-block:
+				set {_l} to block {_f} block at loop-player's location
+				teleport loop-player to {_l}
+			wait 3 ticks
+	#lookandmove({_pb}, {_f}, {_pl}, {_bt})
+	set block at {_nb}'s location to {_bt}
+		
+function checkandmoveon(b: block, f: direction, pl: number):
+	if {_f} is north:
+		set {_mb} to block north {_b}
+		set {_nb} to block 1 + {_pl} north {_b}
+	else if {_f} is east:
+		set {_mb} to block east {_b}
+		set {_nb} to block 1 + {_pl} east {_b}
+	else if {_f} is south:
+		set {_mb} to block south {_b}
+		set {_nb} to block 1 + {_pl} south {_b}
+	else if {_f} is west:
+		set {_mb} to block west {_b}
+		set {_nb} to block 1 + {_pl} west {_b}
+	else if {_f} is above:
+		set {_mb} to block above {_b}
+		set {_nb} to block 1 + {_pl} above {_b}
+	else if {_f} is below:
+		set {_mb} to block below {_b}
+		set {_nb} to block 1 + {_pl} below {_b}
+	if {_mb} is not air:
+		checkandmoveon({_mb}, {_f}, {_pl})
+		set {_it} to "%type of {_mb}%" parsed as item type
+		set block at {_nb}'s location to {_it}
+		set block at {_mb}'s location to air
+		
+function checkandmoveoff(b: block, f: direction, pl: number):
+	if {_f} is north:
+		set {_mb} to block north {_b}
+		set {_nb} to block {_pl} - 1 south {_b}
+	else if {_f} is east:
+		set {_mb} to block east {_b}
+		set {_nb} to block {_pl} - 1 west {_b}
+	else if {_f} is south:
+		set {_mb} to block south {_b}
+		set {_nb} to block {_pl} - 1 north {_b}
+	else if {_f} is west:
+		set {_mb} to block west {_b}
+		set {_nb} to block  {_pl} - 1 east {_b}
+	else if {_f} is above:
+		set {_mb} to block above {_b}
+		set {_nb} to block {_pl} - 1 below {_b}
+	else if {_f} is below:
+		set {_mb} to block below {_b}
+		set {_nb} to block {_pl} - 1 above {_b}
+	if {_mb} is not air:
+		if {_nb} is not white concrete:
+			set {_it} to "%type of {_mb}%" parsed as item type
+			set block at {_nb}'s location to {_it}
+			set block at {_mb}'s location to air
+			checkandmoveoff({_mb}, {_f}, {_pl})
+
+function lookandmove(b: block, f: direction, pl: number, bt: item type):
+	loop all blocks in radius 1 around {_b}:
+		if type of loop-block is {_bt}:
+			if {_f} is north:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} north loop-block
+			else if {_f} is east:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} east loop-block
+			else if {_f} is south:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} south loop-block
+			else if {_f} is west:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} west loop-block
+			else if {_f} is above:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} above loop-block
+			else if {_f} is below:
+				set {_mb} to loop-block
+				set {_nb} to block {_pl} below loop-block
+			
+			if block at {_nb}'s location is not white concrete:
+				#lookandmove({_nb}, {_f}, {_pl}, {_bt})
+				set block at {_nb}'s location to {_bt}
+				#set block at loop-block's location to air
+			
+			
+function pistonGUI(p: player, b: block):
+	open virtual chest inventory with size 1 named "Piston Settings" to {_p}
+	format gui slot 0 of {_p} with red dye named "&eRemove Length" to run:
+		close {_p}'s inventory
+		if {piston::length::%{_b}%} is more than 1:
+			remove 1 from {piston::length::%{_b}%}
+		pistonGUI({_p}, {_b})
+		
+	format gui slot 1 of {_p} with purple concrete named "&eLength" with lore "&a%{piston::length::%{_b}%} ? 1%"
+	
+	format gui slot 2 of {_p} with lime dye named "&eAdd Length" to run:
+		close {_p}'s inventory
+		add 1 to {piston::length::%{_b}%}
+		pistonGUI({_p}, {_b})
+
+on right-click on white concrete:
+	if player is not sneaking:
+		pistonGUI(player, event-block)
+	
+on right-click with blaze rod:
+	if event-block is white concrete:
+		set {piston::dir::%event-block%} to player's facing
+		send "%player's facing%" to player
+			
+on right-click with lime dye:
+	if event-block is white concrete:
+		add 1 to {piston::length::%event-block%}
+		send "%{piston::length::%event-block%}%" to player
+			
+on right-click with red dye:
+	if event-block is white concrete:
+		remove 1 from {piston::length::%event-block%}
+		send "%{piston::length::%event-block%}%" to player
+		
+		
+			
+function pistonOff(p: player, b:block):
+	set {_pl} to {piston::length::%{_b}%} ? 1
+	set block at {_b}'s location to white concrete
+	set {_f} to {piston::dir::%{_b}%}
+	if {_f} is north:
+		set {_mb} to block 1 north {_b}
+		set {_pb} to block 2 north {_b}
+		set {_nb} to block 1 + {_pl} north {_b}
+	else if {_f} is east:
+		set {_mb} to block 1 east {_b}
+		set {_pb} to block 2 east {_b}
+		set {_nb} to block 1 + {_pl} east {_b}
+	else if {_f} is south:
+		set {_mb} to block 1 south {_b}
+		set {_pb} to block 2 south {_b}
+		set {_nb} to block 1 + {_pl} south {_b}
+	else if {_f} is west:
+		set {_mb} to block 1 west {_b}
+		set {_pb} to block 2 west {_b}
+		set {_nb} to block 1 + {_pl} west {_b}
+	else if {_f} is above:
+		set {_mb} to block 1 above {_b}
+		set {_pb} to block 2 above {_b}
+		set {_nb} to block 1 + {_pl} above {_b}
+	else if {_f} is below:
+		set {_mb} to block 1 below {_b}
+		set {_pb} to block 2 below {_b}
+		set {_nb} to block 1 + {_pl} below {_b}
+	if {_f} is north:
+		set {_if} to south
+	else if {_f} is east:
+		set {_if} to west
+	else if {_f} is south:
+		set {_if} to north
+	else if {_f} is west:
+		set {_if} to east
+	else if {_f} is above:
+		set {_if} to below
+	else if {_f} is below:
+		set {_if} to above
+	
+	set block at {_mb}'s location to "%type of {_nb}%" parsed as item type
+	loop all blocks within block at {_pb}'s location and block at {_nb}'s location:
+		add loop-block to {_db::*}
+	set {_db::*} to reversed {_db::*}
+	loop {_db::*}:
+		set block at loop-value's location to air
+		wait 3 ticks
+
+	checkandmoveoff({_nb}, {_f}, {_pl})
+			
+function switchOn(p: player, b:block):
+	set block at {_b}'s location to red concrete
+	loop all blocks in radius 1 around {_b}:
+		if loop-block is yellow concrete:
+			wireOn({_p}, loop-block)
+		
+			
+function switchOff(p: player, b:block):
+	set block at {_b}'s location to black concrete
+	loop all blocks in radius 1 around {_b}:
+		if loop-block is lime concrete:
+			wireOff({_p}, loop-block)
+		
+			
+function wireOn(p: player, b: block):
+	#wait 1 tick
+	set block at {_b}'s location to lime concrete
+	loop all blocks in radius 1 around {_b}:
+		if loop-block is yellow concrete:
+			wireOn({_p}, loop-block)
+		if loop-block is sandstone:
+			if {_b} is not {and::output::%loop-block%}:
+				andOn({_p}, loop-block)
+		if loop-block is coal ore:
+			if {_b} is not {or::output::%loop-block%}:
+				orOn({_p}, loop-block)
+		if loop-block is diamond ore:
+			if {_b} is not {xor::output::%loop-block%}:
+				xorOn({_p}, loop-block)
+		if loop-block is red wool:
+			if {_b} is not {not::output::%loop-block%}:
+				notOn({_p}, loop-block)
+		if loop-block is white concrete:
+			pistonOn({_p}, loop-block)
+			
+function wireOff(p: player, b: block):
+	#wait 1 tick
+	set block at {_b}'s location to yellow concrete
+	loop all blocks in radius 1 around {_b}:
+		if loop-block is lime concrete:
+			wireOff({_p}, loop-block)
+		if loop-block is sandstone:
+			if {_b} is not {and::output::%loop-block%}:
+				andOff({_p}, loop-block)
+		if loop-block is coal ore:
+			if {_b} is not {or::output::%loop-block%}:
+				orOff({_p}, loop-block)
+		if loop-block is diamond ore:
+			if {_b} is not {xor::output::%loop-block%}:
+				xorOff({_p}, loop-block)
+		if loop-block is red wool:
+			if {_b} is not {not::output::%loop-block%}:
+				notOff({_p}, loop-block)
+		if loop-block is purple concrete:
+			pistonOff({_p}, loop-block)
+			
+			
+function andOn(p: player, b: block):
+	add 1 to {and::powered::%{_b}%}
+	if {and::powered::%{_b}%} is 2:
+		if {and::output::%{_b}%} is not set:
+			loop all blocks in radius 1 around {_b}:
+				if loop-block is yellow concrete:
+					set {and::output::%{_b}%} to loop-block
+		wireOn({_p}, {and::output::%{_b}%})
+		
+function andOff(p: player, b: block):
+	remove 1 from {and::powered::%{_b}%}
+	if {and::powered::%{_b}%} is less than 2:
+		wireOff({_p}, {and::output::%{_b}%})
+		
+function orOn(p: player, b: block):
+	add 1 to {or::powered::%{_b}%}
+	if {or::powered::%{_b}%} is 2:
+		if {or::output::%{_b}%} is not set:
+			loop all blocks in radius 1 around {_b}:
+				if loop-block is yellow concrete:
+					set {or::output::%{_b}%} to loop-block
+	if {or::powered::%{_b}%} is more than 0:
+		wireOn({_p}, {or::output::%{_b}%})
+		
+function orOff(p: player, b: block):
+	remove 1 from {or::powered::%{_b}%}
+	if {or::powered::%{_b}%} is 0:
+		wireOff({_p}, {or::output::%{_b}%})
+		
+		
+function xorOn(p: player, b: block):
+	add 1 to {xor::powered::%{_b}%}
+	if {xor::powered::%{_b}%} is 2:
+		if {xor::output::%{_b}%} is not set:
+			loop all blocks in radius 1 around {_b}:
+				if loop-block is yellow concrete:
+					set {xor::output::%{_b}%} to loop-block
+	if {xor::powered::%{_b}%} is 1:
+		wireOn({_p}, {xor::output::%{_b}%})
+	if {xor::powered::%{_b}%} is 2:
+		wireOff({_p}, {xor::output::%{_b}%})
+		
+function xorOff(p: player, b: block):
+	remove 1 from {xor::powered::%{_b}%}
+	if {xor::powered::%{_b}%} is 0:
+		wireOff({_p}, {xor::output::%{_b}%})
+	if {xor::powered::%{_b}%} is 1:
+		wireOn({_p}, {xor::output::%{_b}%})
+		
+		
+function notOn(p: player, b: block):
+	if {not::output::%{_b}%} is not set:
+		loop all blocks in radius 1 around {_b}:
+			if loop-block is yellow concrete:
+				set {not::output::%{_b}%} to loop-block
+	wireOff({_p}, {not::output::%{_b}%})
+		
+function notOff(p: player, b: block):
+	wireOn({_p}, {not::output::%{_b}%})
+	
+	
