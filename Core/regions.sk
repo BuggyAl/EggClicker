@@ -27,6 +27,11 @@ function reloadRegions():
 	set {areas::eggclicker_skyscraper} to 15
 	set {areas::eggclicker_park} to 16
 	set {areas::eggclicker_beach} to 17
+	set {areas::eggclicker_ship} to 18
+	set {areas::eggclicker_lighthouse} to 19
+	set {areas::eggclicker_graveyard} to 20
+	set {areas::eggclicker_church} to 21
+	set {areas::eggclicker_trainstation} to 22
 
 	set {areas::eggclicker_spawn::eggs} to 1
 	set {areas::eggclicker_library::eggs} to 2
@@ -46,6 +51,11 @@ function reloadRegions():
 	set {areas::eggclicker_skyscraper::eggs} to 50000	
 	set {areas::eggclicker_park::eggs} to 100000	
 	set {areas::eggclicker_beach::eggs} to 200000	
+	set {areas::eggclicker_ship::eggs} to 500000	
+	set {areas::eggclicker_lighthouse::eggs} to 1000000	
+	set {areas::eggclicker_graveyard::eggs} to 2000000	
+	set {areas::eggclicker_church::eggs} to 5000000	
+	set {areas::eggclicker_trainstation::eggs} to 10000000	
 
 	set {areas::eggclicker_spawn::display} to "&bSpawn"
 	set {areas::eggclicker_library::display} to "&bLibrary"
@@ -64,6 +74,11 @@ function reloadRegions():
 	set {areas::eggclicker_skyscraper::display} to "&bSkyscraper"
 	set {areas::eggclicker_park::display} to "&bPark"
 	set {areas::eggclicker_beach::display} to "&bBeach"
+	set {areas::eggclicker_ship::display} to "&bShip"
+	set {areas::eggclicker_lighthouse::display} to "&bLighthouse"
+	set {areas::eggclicker_graveyard::display} to "&bGraveyard"
+	set {areas::eggclicker_church::display} to "&bChurch"
+	set {areas::eggclicker_trainstation::display} to "&bTrain Station"
 
 command /regioninfo:
 	permission: op

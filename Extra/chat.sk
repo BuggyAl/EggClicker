@@ -96,19 +96,19 @@ command /bc <text>:
 		play sound "block.note_block.bell" to all players
 		
 
-every 2 minutes:
-	broadcast ""
-	broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
-	broadcast ""
-	wait 1 minute
-	broadcast ""
-	broadcast "&fDid you know you can press &eF &fto open the &eshop&f?"
-	broadcast ""
+#every 2 minutes:
+#	broadcast ""
+#	broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
+#	broadcast ""
+#	wait 1 minute
+#	broadcast ""
+#	broadcast "&fDid you know you can press &eF &fto open the &eshop&f?"
+#	broadcast ""
 	
-every 5 minutes:
-	broadcast ""
-	broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
-	broadcast ""
+#every 5 minutes:
+#	broadcast ""
+#	broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
+#	broadcast ""
 
 on command "/buy":
 	cancel event

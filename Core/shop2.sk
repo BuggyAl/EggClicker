@@ -1,8 +1,8 @@
 function loadShop(p: player):
-	set metadata tag "shop" of {_p} to chest inventory with 5 rows named "Room Shop"
-	set slot 0,2,4,6,8,18,26,38,40,42, and 44 of metadata tag "shop" of {_p} to orange stained glass pane named " "
-	set slot 1,3,5,7,9,17,27,35,37,39,41, and 43 of metadata tag "shop" of {_p} to black stained glass pane named " "
-	set slot 36 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"
+	set metadata tag "shop" of {_p} to chest inventory with 6 rows named "Room Shop"
+	set slot 0,2,4,6,8,18,26,36,44,46,48,50, and 52 of metadata tag "shop" of {_p} to orange stained glass pane named " "
+	set slot 1,3,5,7,9,17,27,35,47,49,51, and 53 of metadata tag "shop" of {_p} to black stained glass pane named " "
+	set slot 45 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"
 		
 	set slot 10 of metadata tag "shop" of {_p} to formatShop({_p}, "spawn", egg, "spawn")
 
@@ -22,6 +22,11 @@ function loadShop(p: player):
 	set slot 28 of metadata tag "shop" of {_p} to formatShop({_p}, "skyscraper", white stained glass, "abandoned")
 	set slot 29 of metadata tag "shop" of {_p} to formatShop({_p}, "park", flowering azalea, "skyscraper")
 	set slot 30 of metadata tag "shop" of {_p} to formatShop({_p}, "beach", sand, "park")
+	set slot 31 of metadata tag "shop" of {_p} to formatShop({_p}, "ship", oak boat, "beach")
+	set slot 32 of metadata tag "shop" of {_p} to formatShop({_p}, "lighthouse", redstone lamp, "ship")
+	set slot 33 of metadata tag "shop" of {_p} to formatShop({_p}, "graveyard", zombie head, "lighthouse")
+	set slot 34 of metadata tag "shop" of {_p} to formatShop({_p}, "church", egg, "graveyard")
+	set slot 37 of metadata tag "shop" of {_p} to formatShop({_p}, "trainstation", rail, "church")
 	
 function formatShop(p: player, id: text, icon: itemtype, previous: text) :: item:
 
@@ -52,6 +57,14 @@ function loadTokenShop(p: player):
 	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
 	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
 
+	set slot 10 of metadata tag "tokenShop" of {_p} to paper named "&7[&cBasid&7] Tag" with lore "&cCOMING SOON"
+	set slot 11 of metadata tag "tokenShop" of {_p} to paper named "&7[&9Noob&7] Tag" with lore "&cCOMING SOON"
+	set slot 12 of metadata tag "tokenShop" of {_p} to paper named "&7[&bPro&7] Tag" with lore "&cCOMING SOON"
+	set slot 13 of metadata tag "tokenShop" of {_p} to paper named "&7[&6bruh&7] Tag" with lore "&cCOMING SOON"
+	set slot 14 of metadata tag "tokenShop" of {_p} to paper named "&7[&eNerd&7] Tag" with lore "&cCOMING SOON"
+	set slot 15 of metadata tag "tokenShop" of {_p} to paper named "&7[&eEgg&7] Tag" with lore "&cCOMING SOON"
+	set slot 16 of metadata tag "tokenShop" of {_p} to paper named "&7[&dTryhard&7] Tag" with lore "&cCOMING SOON"
+
 on swap hand items:
 	if player's current inventory is not (metadata tag "shopMenu" of player):
 		if player's current inventory is not (metadata tag "shop" of player):
@@ -81,7 +94,7 @@ on inventory click:
 
 	else if event-inventory = (metadata tag "shop" of player):
 		cancel event
-		if index of event-slot is 36:
+		if index of event-slot is 45:
 			loadShopMenu(player)
 			open metadata tag "shopMenu" of player to player
 		
@@ -117,7 +130,16 @@ on inventory click:
 			buyRoom(player, "park", "skyscraper")
 		else if index of event-slot is 30:
 			buyRoom(player, "beach", "park")
-
+		else if index of event-slot is 31:
+			buyRoom(player, "ship", "beach")
+		else if index of event-slot is 32:
+			buyRoom(player, "lighthouse", "ship")
+		else if index of event-slot is 33:
+			buyRoom(player, "graveyard", "lighthouse")
+		else if index of event-slot is 34:
+			buyRoom(player, "church", "graveyard")
+		else if index of event-slot is 37:
+			buyRoom(player, "trainstation", "church")
 command /shop:
 	trigger:
 		loadShopMenu(player)
@@ -151,7 +173,7 @@ function buyRoom(p: player, id: text, previous: text):
 			set {%{_uuid}%::area::eggclicker_%{_id}%} to false
 			buyRoom({_p}, {_id}, {_previous})
 	else:
-		send "&cYou do not have unlocked the previous area!" to {_p}
+		send action bar "&cYou have the unlocked the previous area!" to {_p}
 		play sound "entity.villager.no" to {_p}
 
 command /newtestprofile: #egg, tokens, multi, prestige, clicks
