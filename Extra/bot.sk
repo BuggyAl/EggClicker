@@ -1,3 +1,7 @@
+on join:
+	if player is op:
+		send "bot.sk is running!"
+
 on skript load:
 	login to "OTAwNTI3NzU5MzkzMTY5NDE4.YXCn1A.TxgHkTdu3lIwN498Lle7CT8yYxU" with name "EggClicker Bot"
 	set {serverlaststart} to now 
@@ -62,16 +66,16 @@ discord command !server:
 		reply with last created embed
 
 on join:
-	send "[%now%] %player% joined the game!" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
-	send "[%now%] %player% joined the game!" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
-	send "[%now%] %player% joined the game!" to channel with id "900861674863611945" with "EggClicker Bot" 
-	send "[%now%] %player% joined the game!" to channel with id "900917072043851826" with "EggClicker Bot" 
+	send "**`[%now%] %player% joined the game!`**" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "**`[%now%] %player% joined the game!`**" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+	send "**`[%now%] %player% joined the game!`**" to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send "**`[%now%] %player% joined the game!`**" to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
 
 on quit:
-	send "[%now%] %player% left the game!" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
-	send "[%now%] %player% left the game!" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
-	send "[%now%] %player% left the game!" to channel with id "900861674863611945" with "EggClicker Bot" 
-	send "[%now%] %player% left the game!" to channel with id "900917072043851826" with "EggClicker Bot" 
+	send "**`[%now%] %player% left the game!`**" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "**`[%now%] %player% left the game!`**" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+	send "**`[%now%] %player% left the game!`**" to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send "**`[%now%] %player% left the game!`**" to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
 
 on command:
 	event-commandsender is not console:
@@ -97,5 +101,3 @@ on guild message received seen by "EggClicker Bot":
 			broadcast "<##449aeb>&lDISCORD &7| &f%event-member% &7» &f%event-message%" 
 		else:
 			broadcast "<##449aeb>&lDISCORD &8| &7%event-member% &8» &7%event-message%"
-
-			
