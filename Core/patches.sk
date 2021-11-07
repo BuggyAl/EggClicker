@@ -7,21 +7,19 @@ on join:
 		set {%player's uuid%::prestiges} to 0
 	if {%player's uuid%::multiplier} is not set:
 		set {%player's uuid%::multiplier} to 1
+	if {%player's uuid%::area::eggclicker_spawn} is not true:
+		set {%player's uuid%::area::eggclicker_spawn} to true
 		
 function checkClick(type: block, p: player, loc: location) :: boolean:
-
 	if {_type} is any bed:
 		if {_p} is not op:
 			return false
-			
 	if {_type} is cake:
 		if {_p} is not op:
-			return false
-	
+			return false	
 	if {_type} is any door:
 		if {_p} is not op:
-			return false
-			
+			return false			
 	return true
 
 command /updatepatches:
@@ -171,9 +169,9 @@ command /clearchat:
 		message centered "&7---", "&6Chat cleared by &e%player%&6!", and "&7---" to all players
 
 on join:
-	{firstReset::%player's uuid%} is not set:
+	{statsConfigured::%player's uuid%} is not set:
 		resetPlayerVariables(player)
-		set {firstReset::%player's uuid%} to true
+		set {statsConfigured::%player's uuid%} to true
 
 function resetPlayerVariables(p: offline player):
 	set {_uuid} to uuid of {_p}
@@ -192,42 +190,26 @@ function resetPlayerVariables(p: offline player):
 	add "hut" to {_regs::*}
 	add "abandoned" to {_regs::*}
 	add "skyscraper" to {_regs::*}
-
 	replace all "," with "" in {_regs::*}
 	loop {_regs::*}:
 		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
+		if loop-value is not "mine2":
+			set {%{_uuid}%::area::eggclicker_%loop-value%} to false	
 	clear {_regs::*}
 	clear {prefix::%{_uuid}%}
-
 	set {%{_uuid}%::eggs} to 0
 	set {%{_uuid}%::prestiges} to 0
-	set {%{_uuid}%::area::*} to false
 	set {%{_uuid}%::multiplier} to 1
 	set {%{_uuid}%::tokens} to 0
-
+	set {%{_uuid}%::area::*} to false
 	set {%{_uuid}%::area::eggclicker_spawn} to true
-	set {%{_uuid}%::area::eggclicker_library} to false
-	set {%{_uuid}%::area::eggclicker_bedroom} to false
-	set {%{_uuid}%::area::eggclicker_kitchen} to false
-	set {%{_uuid}%::area::eggclicker_cellar} to false
-	set {%{_uuid}%::area::eggclicker_backyard} to false
-	set {%{_uuid}%::area::eggclicker_mine} to false
-	set {%{_uuid}%::area::eggclicker_stronghold} to false
-	set {%{_uuid}%::area::eggclicker_end} to false
-	set {%{_uuid}%::area::eggclicker_nether} to false
-	set {%{_uuid}%::area::eggclicker_eggstreet} to false
-	set {%{_uuid}%::area::eggclicker_hut} to false
-	set {%{_uuid}%::area::eggclicker_mcdonalds} to false
-	set {%{_uuid}%::area::eggclicker_abandoned} to false
-	set {%{_uuid}%::area::eggclicker_skyscraper} to false	
-	set {%{_uuid}%::area::eggclicker_beach} to false	
-	set {%{_uuid}%::area::eggclicker_park} to false	
 
 command /resetplayervariables [<offline player>]:
 	permission: op
 	trigger:
 		if arg-1 is not set:
-			send "&cPlease enter a player to reset!"
+			resetPlayerVariables(player)
+			send "&aYour stats have been reset!"
 		else:
 			resetPlayerVariables(arg-1)
 			send "&aThe stats of &e%arg-1% &ahave been reset!"
