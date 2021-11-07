@@ -1,56 +1,22 @@
 command /prestige:
 	trigger:
-		if {%player's uuid%::area::eggclicker_skyscraper} is true:
-			if {%player's uuid%::eggs} >= price(player, 50000):
+		if {%player's uuid%::area::eggclicker_trainstation} is true:
+			set {_cost} to 7500000000 * {%player's uuid%::multiplier}
+			if {_cost} is less than 7500000000:
+				set {_cost} to 7500000000
+			if {%player's uuid%::eggs} >= {_cost}:
 				play "block_note_block_pling" to player at volume 1
 				add 1 to {%player's uuid%::prestiges}
+				resetPlayerAreas(player)
 				set {%player's uuid%::eggs} to 0
 				add 0.25 to {%player's uuid%::multiplier}
 				send title "&a&lPrestige" with subtitle "&e+0.25 multiplier &7&o(x%{%player's uuid%::multiplier}%)" to player
 				send "&b%player% &fhas prestiged to &b✫%{%player's uuid%::prestiges}%" to all players
-				set {%player's uuid%::area::eggclicker_spawn} to true
-				set {%player's uuid%::area::eggclicker_library} to false
-				set {%player's uuid%::area::eggclicker_bedroom} to false
-				set {%player's uuid%::area::eggclicker_kitchen} to false
-				set {%player's uuid%::area::eggclicker_cellar} to false
-				set {%player's uuid%::area::eggclicker_backyard} to false
-				set {%player's uuid%::area::eggclicker_mine} to false
-				set {%player's uuid%::area::eggclicker_mine2} to false
-				set {%player's uuid%::area::eggclicker_stronghold} to false
-				set {%player's uuid%::area::eggclicker_end} to false
-				set {%player's uuid%::area::eggclicker_nether} to false
-				set {%player's uuid%::area::eggclicker_eggstreet} to false
-				set {%player's uuid%::area::eggclicker_hut} to false
-				set {%player's uuid%::area::eggclicker_mcdonalds} to false
-				set {%player's uuid%::area::eggclicker_abandoned} to false
-				set {%player's uuid%::area::eggclicker_skyscraper} to false
-				set {%player's uuid%::area::spawn} to true
-				add "library" to {regs::*}
-				add "bedroom" to {regs::*}
-				add "kitchen" to {regs::*}
-				add "cellar" to {regs::*}
-				add "backyard" to {regs::*}
-				add "mine" to {regs::*}
-				add "mine2" to {regs::*}
-				add "nether" to {regs::*}
-				add "stronghold" to {regs::*}
-				add "endtransition" to {regs::*}
-				add "end" to {regs::*}
-				add "eggstreet" to {regs::*}
-				add "mcdonalds" to {regs::*}
-				add "hut" to {regs::*}
-				add "abandoned" to {regs::*}
-				add "skyscraper" to {regs::*}
 				clear {suffix.%player's uuid%}
-				replace all "," with "" in {regs::*}
-				loop {regs::*}:
-					execute console command "rg removemember eggclicker_%loop-value% %player% -w EggClicker"
 				teleport player to spawn
-				clear {regs::*}
 			else:
 				play sound "block_note_block_pling" with volume 1 and pitch -1 at player for player
-				send "&cYou don't have enough eggs &7&o(%getNumberFormatted({%player's uuid%::eggs})%&7&o/%getNumberFormatted(price(player, 50000))%&7&o)"
+				send "&cYou don't have enough eggs! &7&o(%getNumberFormatted({%player's uuid%::eggs})%&7&o/%getNumberFormatted({_cost})%&7&o)"
 		else:
 			play sound "block_note_block_pling" with volume 1 and pitch -1 at player for player
-			send "&cYou can't prestige yet, you need to buy all the areas first." to player
-			
+			send "&cYou can't prestige yet, you need to buy all the areas first!" to player
