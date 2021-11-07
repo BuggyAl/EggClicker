@@ -84,3 +84,33 @@ command /viewregions:
 	trigger:
 		send "%{areas::clicker::*}%" to player
 		send "Done!" to player
+
+function resetPlayerAreas(p: player):
+	set {_uuid} to uuid of {_p}
+	set {%{_uuid}%::area::*} to false
+	set {%{_uuid}%::area::eggclicker_spawn} to true
+	add "library" to {_regs::*}
+	add "bedroom" to {_regs::*}
+	add "kitchen" to {_regs::*}
+	add "cellar" to {_regs::*}
+	add "backyard" to {_regs::*}
+	add "mine" to {_regs::*}
+	add "mine2" to {_regs::*}
+	add "nether" to {_regs::*}
+	add "stronghold" to {_regs::*}
+	add "end" to {_regs::*}
+	add "eggstreet" to {_regs::*}
+	add "mcdonalds" to {_regs::*}
+	add "hut" to {_regs::*}
+	add "abandoned" to {_regs::*}
+	add "skyscraper" to {_regs::*}
+	add "beach" to {_regs::*}
+	add "ship" to {_regs::*}
+	add "lighthouse" to {_regs::*}
+	add "graveyard" to {_regs::*}
+	add "church" to {_regs::*}
+	add "trainstation" to {_regs::*}
+	replace all "," with "" in {_regs::*}
+	loop {_regs::*}:
+		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
+	clear {_regs::*}
