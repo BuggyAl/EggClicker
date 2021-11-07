@@ -122,7 +122,7 @@ command /discord:
 	aliases: dc
 	trigger:
 		send "" to player
-		send "<link:https://discord.gg/4m6WJZGYKr>&bClick here to join the official Discord" to player
+		send "<link:https://discord.gg/TTZVZbXG7e>&bClick here to join the official Discord" to player
 		send "" to player
 		play sound "block.honey_block.break" to player
 
