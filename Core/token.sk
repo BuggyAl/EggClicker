@@ -1,132 +1,18 @@
 command tokenshop:
 	trigger:
-		tokenShop(player)
+		loadTokenShop(player)
 
 
-function tokenShop(p: player):
-	set {_uuid} to {_p}'s uuid
-	open virtual chest inventory with size 3 named "&eToken Shop" to {_p}
-	format gui slot 0,2,4,6,8,18,20,22,24 and 26 of {_p} with green stained glass pane named " " to nothing
-	format gui slot 1,3,5,7,9,17,19,21,23 and 25 of {_p} with lime stained glass pane named " " to nothing
+function loadTokenShop(p: player):
+	set metadata tag "tokenShop" of {_p} to chest inventory with 3 rows named "Token Shop"
+	set slot 1,3,5,7,9,17,19,21,23, and 25 of metadata tag "tokenShop" of {_p} to orange stained glass pane named " "
+	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
+	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
 
-	if {unlocked.chick.%{_uuid}%} is not set:
-		format gui slot 10 of {_p} with paper named "&cChick Tag" with lore "&eCost: &f20 tokens" to run:
-			if {%{_uuid}%::tokens} is more than or equal to 20:
-				set {tag.%{_uuid}%} to "&cChick"
-				remove 20 from {%{_uuid}%::tokens}	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.chick.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 10 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&cChick"
-			send "&aEquipped tag." to {_p}
-			
-			
-			
-			
-			
-			
-			
-			
-	
-	
-	if {unlocked.dog.%{_uuid}%} is not set:
-		format gui slot 11 of {_p} with paper named "&eDog Tag" with lore "&eCost: &f50 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 50:
-				set {tag.%{_uuid}%} to "&eDog"
-				remove 50 from {%{_uuid}%::tokens}
-	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.dog.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 11 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&eDog"
-			send "&aEquipped tag." to {_p}
-			
-			
-	if {unlocked.cat.%{_uuid}%} is not set:
-		format gui slot 12 of {_p} with paper named "&aCat Tag" with lore "&eCost: &f80 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 80:
-				set {tag.%{_uuid}%} to "&aCat"
-				remove 80 from {%{_uuid}%::tokens}
-	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.cat.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 12 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&aCat"
-			send "&aEquipped tag." to {_p}
-			
-			
-	if {unlocked.nerd.%{_uuid}%} is not set:
-		format gui slot 13 of {_p} with paper named "&bNerd Tag" with lore "&eCost: &f120 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 120:
-				set {tag.%{_uuid}%} to "&bNerd"
-				remove 120 from {%{_uuid}%::tokens}
-	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.nerd.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 13 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&bNerd"
-			send "&aEquipped tag." to {_p}
-			
-			
-	if {unlocked.noob.%{_uuid}%} is not set:
-		format gui slot 14 of {_p} with paper named "&dNoob Tag" with lore "&eCost: &f150 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 150:
-				set {tag.%{_uuid}%} to "&dNoob"
-				remove 150 from {%{_uuid}%::tokens}
-	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.noob.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 14 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&dNoob"
-			send "&aEquipped tag." to {_p}
-			
-			
-	if {unlocked.bruh.%{_uuid}%} is not set:
-		format gui slot 15 of {_p} with paper named "&6bruh Tag" with lore "&eCost: &f150 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 150:
-				set {tag.%{_uuid}%} to "&6bruh"
-				remove 150 from {%{_uuid}%::tokens}
-	
-	
-				send "&aPurchase successful." to {_p}
-				set {unlocked.bruh.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 15 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&6bruh"
-			send "&aEquipped tag." to {_p}
-			
-			
-	if {unlocked.egg.%{_uuid}%} is not set:
-		format gui slot 16 of {_p} with paper named "&e&lEgg Tag" with lore "&eCost: &f500 tokens" to run:
-		
-			if {%{_uuid}%::tokens} is more than or equal to 500:
-				set {tag.%{_uuid}%} to "&e&lEgg"
-				remove 500 from {%{_uuid}%::tokens}
-				send "&aPurchase successful." to {_p}
-				set {unlocked.egg.%{_uuid}%} to true
-				tokenShop(player)
-	else:
-		format gui slot 16 of {_p} with map named "&a&lUnlocked" with lore "&7You have already unlocked", "&7this tag, left click", "&7to equip it." to run:
-			set {tag.%{_uuid}%} to "&e&lEgg"
-			send "&aEquipped tag." to {_p}
+	set slot 10 of metadata tag "tokenShop" of {_p} to paper named "&7[&cBasid&7] Tag" with lore "&cCOMING SOON"
+	set slot 11 of metadata tag "tokenShop" of {_p} to paper named "&7[&9Noob&7] Tag" with lore "&cCOMING SOON"
+	set slot 12 of metadata tag "tokenShop" of {_p} to paper named "&7[&bPro&7] Tag" with lore "&cCOMING SOON"
+	set slot 13 of metadata tag "tokenShop" of {_p} to paper named "&7[&6bruh&7] Tag" with lore "&cCOMING SOON"
+	set slot 14 of metadata tag "tokenShop" of {_p} to paper named "&7[&eNerd&7] Tag" with lore "&cCOMING SOON"
+	set slot 15 of metadata tag "tokenShop" of {_p} to paper named "&7[&eEgg&7] Tag" with lore "&cCOMING SOON"
+	set slot 16 of metadata tag "tokenShop" of {_p} to paper named "&7[&dTryhard&7] Tag" with lore "&cCOMING SOON"
