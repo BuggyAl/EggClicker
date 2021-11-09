@@ -12,7 +12,7 @@ command /prestige:
 				add 0.25 to {%player's uuid%::multiplier}
 				send title "&a&lPrestige" with subtitle "&e+0.25 multiplier &7&o(x%{%player's uuid%::multiplier}%)" to player
 				send "&b%player% &fhas prestiged to &b✫%{%player's uuid%::prestiges}%" to all players
-				clear {suffix.%player's uuid%}
+				clear {%player's uuid%::roomtag}
 				teleport player to spawn
 			else:
 				play sound "block_note_block_pling" with volume 1 and pitch -1 at player for player
