@@ -72,19 +72,19 @@ on chat:
 		set {prefix.%player's uuid%} to " &7[&eClicker&7]"
 	player's group is "default":
 		{tag.%player's uuid%} is not set:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%player% &8» &7%message%"
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%player% &8» &7%message%"
 		else:
 			{nick.%player's uuid%} is not set:
-				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%player% %{tag.%player's uuid%}% &8» &7%message%"
+				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%player% %{tag.%player's uuid%}% &8» &7%message%"
 			else:
-				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% &7%{nick.%player's uuid%}% %{tag.%player's uuid%}% &8» &7%message%"
+				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%{nick.%player's uuid%}% %{tag.%player's uuid%}% &8» &7%message%"
 	else:
 		{chatcolor::%player's uuid%} is not set:
 			set {chatcolor::%player's uuid%} to "&f"
 		{tag.%player's uuid%} is not set:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% %player's prefix%%player% &8» %{chatcolor::%player's uuid%}%%colored message%"
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» %{chatcolor::%player's uuid%}%%colored message%"
 		else:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7]%{prefix.%player's uuid%}% %player's prefix%%player% %{tag.%player's uuid%}% &8» %{chatcolor::%player's uuid%}%%colored message%"
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tag.%player's uuid%}% &8» %{chatcolor::%player's uuid%}%%colored message%"
 		
 		
 command /bc <text>:
