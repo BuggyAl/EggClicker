@@ -131,6 +131,7 @@ function buyRoom(p: player, id: text, previous: text):
 				set {%{_uuid}%::area::eggclicker_%{_id}%} to true
 				set {%{_uuid}%::eggs} to {%{_uuid}%::eggs} - {areas::eggclicker_%{_id}%::price}
 				execute console command "/rg addmember eggclicker_%{_id}% %{_p}% -w EggClicker"
+				set {%{_uuid}%::roomtag} to {areas::eggclicker_%{_id}%::tag}
 				if {_id} is "mine":
 					execute console command "/rg addmember eggclicker_mine2 %{_p}% -w EggClicker"
 				play sound "entity.player.levelup" to {_p}
