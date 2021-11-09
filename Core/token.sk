@@ -9,10 +9,21 @@ function loadTokenShop(p: player):
 	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
 	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
 
-	set slot 10 of metadata tag "tokenShop" of {_p} to paper named "&7[&cBasid&7] Tag" with lore "&cCOMING SOON"
+	set slot 10 of metadata tag "tokenShop" of {_p} to paper named "&7[&eChicken&7] Tag" with lore "&cCOMING SOON"
 	set slot 11 of metadata tag "tokenShop" of {_p} to paper named "&7[&9Noob&7] Tag" with lore "&cCOMING SOON"
 	set slot 12 of metadata tag "tokenShop" of {_p} to paper named "&7[&bPro&7] Tag" with lore "&cCOMING SOON"
 	set slot 13 of metadata tag "tokenShop" of {_p} to paper named "&7[&6bruh&7] Tag" with lore "&cCOMING SOON"
 	set slot 14 of metadata tag "tokenShop" of {_p} to paper named "&7[&eNerd&7] Tag" with lore "&cCOMING SOON"
 	set slot 15 of metadata tag "tokenShop" of {_p} to paper named "&7[&eEgg&7] Tag" with lore "&cCOMING SOON"
 	set slot 16 of metadata tag "tokenShop" of {_p} to paper named "&7[&dTryhard&7] Tag" with lore "&cCOMING SOON"
+
+fuction buyTag(p: player, id: text, display: text):
+	set {_uuid} to uuid of {_p}
+	if {%{_uuid}%::tag::%{_id}%} is false:
+		if {%{_uuid}%::tokens} >= {tokenshop::tags::%{_id}%::price}:
+			set {%{_uuid}%::tokens} to {%{_uuid}%::tokens} - {tokenshop::tags::%{_id}%::price}
+			set {%{_uuid}%::tag::%{_id}%} to true
+			send "&aYou bought the %{_display}% &atag for &e%{tokenshop::tags::%{_id}%::price}% &atokens!" to {_p}
+		else:
+			send "&aYou don't have enough tokens for the %{_display}% &atag! &7&o(%{%{_uuid}%::tokens}%&7&0/%{tokenshop::tags::%{_id}%::price}%&7&o)" to {_p}
+	
