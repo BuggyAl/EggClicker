@@ -177,7 +177,7 @@ function resetPlayerVariables(p: offline player):
 	set {_uuid} to uuid of {_p}
 	resetPlayerAreas({_p})
 	clear {_regs::*}
-	clear {prefix::%{_uuid}%}
+	clear {%{_uuid}%::roomtag}
 	set {%{_uuid}%::eggs} to 0
 	set {%{_uuid}%::prestiges} to 0
 	set {%{_uuid}%::multiplier} to 1
