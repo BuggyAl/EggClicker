@@ -11,6 +11,7 @@ Welcome to the EggClicker repository! This repository is for the EggClicker on M
 - 4.3 (Quest + Acheivement Update)
 
 ### EggClicker 4.0.2 TODO
+- Shop Price (SUPER IMPORTANT)
 - Token Shop (Base GUI Complete)
 - Chat Tags (DONE BUT NEEDS TESTING)
 
