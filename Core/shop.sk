@@ -63,8 +63,6 @@ on inventory click:
 		else if index of event-slot is 15:
 			execute player command "/buy"
 			close player's inventory
-	else if event-inventory = (metadata tag "tokenShop" of player):
-		cancel event
 		if index of event-slot is 18:
 			loadShopMenu(player)
 			open metadata tag "shopMenu" of player to player
@@ -148,8 +146,9 @@ command /newtestprofile: #egg, tokens, multi, prestige, clicks
 	permission: op
 	trigger:
 		set {%player's uuid%::eggs} to random integer between 0 and 100000000
-		set {%player's uuid%::tokens} to random integer between 0 and 1000
+		set {%player's uuid%::tokens} to random integer between 0 and 750
 		set {%player's uuid%::multiplier} to (random integer between 4 and 200) * 0.25
 		set {%player's uuid%::prestiges} to random integer between 0 and 500
 		set {%player's uuid%::clicks} to random integer between 0 and 100000
 		send "&aGenerated a new test profile!"
+
