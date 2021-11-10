@@ -95,7 +95,7 @@ function reloadRegions():
 	set {areas::eggclicker_abandoned::tag} to "&7[&bHomeless&7]"
 	set {areas::eggclicker_skyscraper::tag} to "&7[&bFreelancer&7]"
 	set {areas::eggclicker_park::tag} to "&7[&bJogger&7]"
-	set {areas::eggclicker_beach::tag} to "&7[&bSuntanner&7]"
+	set {areas::eggclicker_beach::tag} to "&7[&bLifeguard&7]"
 	set {areas::eggclicker_ship::tag} to "&7[&bPirate&7]"
 	set {areas::eggclicker_lighthouse::tag} to "&7[&bLookout&7]"
 	set {areas::eggclicker_graveyard::tag} to "&7[&bUndead&7]"
