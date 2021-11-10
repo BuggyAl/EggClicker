@@ -1,7 +1,6 @@
-command tokenshop:
+command /tokenshop:
 	trigger:
 		loadTokenShop(player)
-
 
 function loadTokenShop(p: player):
 	set metadata tag "tokenShop" of {_p} to chest inventory with 3 rows named "Token Shop"
@@ -9,21 +8,153 @@ function loadTokenShop(p: player):
 	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
 	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
 
-	set slot 10 of metadata tag "tokenShop" of {_p} to paper named "&7[&eChicken&7] Tag" with lore "&cCOMING SOON"
-	set slot 11 of metadata tag "tokenShop" of {_p} to paper named "&7[&9Noob&7] Tag" with lore "&cCOMING SOON"
-	set slot 12 of metadata tag "tokenShop" of {_p} to paper named "&7[&bPro&7] Tag" with lore "&cCOMING SOON"
-	set slot 13 of metadata tag "tokenShop" of {_p} to paper named "&7[&6bruh&7] Tag" with lore "&cCOMING SOON"
-	set slot 14 of metadata tag "tokenShop" of {_p} to paper named "&7[&eNerd&7] Tag" with lore "&cCOMING SOON"
-	set slot 15 of metadata tag "tokenShop" of {_p} to paper named "&7[&eEgg&7] Tag" with lore "&cCOMING SOON"
-	set slot 16 of metadata tag "tokenShop" of {_p} to paper named "&7[&dTryhard&7] Tag" with lore "&cCOMING SOON"
+	set slot 10 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "chicken")
+	set slot 11 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "noob")
+	set slot 12 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "pro")
+	set slot 13 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "bruh")
+	set slot 14 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "nerd")
+	set slot 15 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "egg")
+	set slot 16 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "tryhard")
 
-fuction buyTag(p: player, id: text, display: text):
+function buyTag(p: player, id: text):
 	set {_uuid} to uuid of {_p}
-	if {%{_uuid}%::tag::%{_id}%} is false:
+	if {%{_uuid}%::tag::%{_id}%} is not true:
 		if {%{_uuid}%::tokens} >= {tokenshop::tags::%{_id}%::price}:
 			set {%{_uuid}%::tokens} to {%{_uuid}%::tokens} - {tokenshop::tags::%{_id}%::price}
 			set {%{_uuid}%::tag::%{_id}%} to true
-			send "&aYou bought the %{_display}% &atag for &e%{tokenshop::tags::%{_id}%::price}% &atokens!" to {_p}
+			set {%{_uuid}%::currentTag} to {_id}
+			send "&aYou purchased the %{tokenshop::tags::%{_id}%::display}% &atag for &e%{tokenshop::tags::%{_id}%::price}% &atokens!" to {_p}
+			play sound "entity.player.levelup" to {_p}
+			loadTokenShop({_p})
+			open metadata tag "tokenShop" of {_p} to {_p}
 		else:
-			send "&aYou don't have enough tokens for the %{_display}% &atag! &7&o(%{%{_uuid}%::tokens}%&7&0/%{tokenshop::tags::%{_id}%::price}%&7&o)" to {_p}
-	
+			send "&cYou cannot afford this tag! &7&o(%{%{_uuid}%::tokens}%&7&o/%{tokenshop::tags::%{_id}%::price}%&7&o)" to {_p}
+			play sound "entity.villager.no" to {_p}
+
+function formatTokenShop(p: player, id: text) :: item:
+	set {_uuid} to uuid of {_p}
+	if {%{_uuid}%::tag::%{_id}%} is true:
+		if "%{%{_uuid}%::currentTag}%" matches "%{_id}%":
+			return 1 of paper named "%{tokenshop::tags::%{_id}%::display}% &7Tag" with lore "&aSelected!"
+		else:
+			return 1 of paper named "%{tokenshop::tags::%{_id}%::display}% &7Tag" with lore "&eClick to select this tag!"
+	else:
+		return 1 of map named "%{tokenshop::tags::%{_id}%::display}% &7Tag" with lore "&7Cost: &e%{tokenshop::tags::%{_id}%::price}% &eTokens" and "&aClick to Purchase!"
+
+function reloadTokenShop():
+	set {tokenshop::tags::none::display} to "&fNone!"
+	set {tokenshop::tags::chicken::display} to "&7[&eChicken&7]"
+	set {tokenshop::tags::noob::display} to "&7[&9Noob&7]"
+	set {tokenshop::tags::pro::display} to "&7[&bPro&7]"
+	set {tokenshop::tags::bruh::display} to "&7[&6bruh&7]"
+	set {tokenshop::tags::nerd::display} to "&7[&eNerd&7]"
+	set {tokenshop::tags::egg::display} to "&7[&eEgg&7]"
+	set {tokenshop::tags::tryhard::display} to "&7[&dTryhard&7]"
+
+	set {tokenshop::tags::none::price} to 0
+	set {tokenshop::tags::chicken::price} to 25
+	set {tokenshop::tags::noob::price} to 50
+	set {tokenshop::tags::pro::price} to 75
+	set {tokenshop::tags::bruh::price} to 125
+	set {tokenshop::tags::nerd::price} to 250
+	set {tokenshop::tags::egg::price} to 500
+	set {tokenshop::tags::tryhard::price} to 750
+
+on inventory click:
+	if event-inventory = (metadata tag "tokenShop" of player):
+		cancel event
+		if index of event-slot is 10:
+			if {%player's uuid%::tag::chicken} is not true:
+				buyTag(player, "chicken")
+			else:
+				set {%player's uuid%::currentTag} to "chicken"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 11:
+			if {%player's uuid%::tag::noob} is not true:
+				buyTag(player, "noob")
+			else:
+				set {%player's uuid%::currentTag} to "noob"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 12:
+			if {%player's uuid%::tag::pro} is not true:
+				buyTag(player, "pro")
+			else:
+				set {%player's uuid%::currentTag} to "pro"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 13:
+			if {%player's uuid%::tag::bruh} is not true:
+				buyTag(player, "bruh")
+			else:
+				set {%player's uuid%::currentTag} to "bruh"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 14:
+			if {%player's uuid%::tag::nerd} is not true:
+				buyTag(player, "nerd")
+			else:
+				set {%player's uuid%::currentTag} to "nerd"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 15:
+			if {%player's uuid%::tag::egg} is not true:
+				buyTag(player, "egg")
+			else:
+				set {%player's uuid%::currentTag} to "egg"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+		else if index of event-slot is 16:
+			if {%player's uuid%::tag::tryhard} is not true:
+				buyTag(player, "tryhard")
+			else:
+				set {%player's uuid%::currentTag} to "tryhard"
+				play sound "entity.experience_orb.pickup" to player
+				loadTokenShop(player)
+				open metadata tag "tokenShop" of player to player
+
+		else if index of event-slot is 18:
+			loadShopMenu(player)
+			open metadata tag "shopMenu" of player to player
+
+on skript load:
+	reloadTokenShop()
+
+command /updatetokenshop:
+	permission: op
+	trigger:
+		reloadTokenShop()
+		send "&aToken shop reloaded!"
+
+command /resetplayertags [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-1 is not player:
+				resetPlayerTags(arg-1)
+				send "&aYour tags have been reset by a staff member!" to arg-1
+				send "&aThe tags of &e%arg-1% &ahave been reset!"
+			else:
+				resetPlayerTags(player)
+				send "&aYour tags have been reset!"
+		else:
+			resetPlayerTags(player)
+			send "&aYour tags have been reset!"			
+
+function resetPlayerTags(p: player):
+	set {_uuid} to uuid of {_p}
+	set {%{_uuid}%::tag::chicken} to false
+	set {%{_uuid}%::tag::noob} to false
+	set {%{_uuid}%::tag::pro} to false
+	set {%{_uuid}%::tag::bruh} to false
+	set {%{_uuid}%::tag::nerd} to false
+	set {%{_uuid}%::tag::egg} to false
+	set {%{_uuid}%::tag::tryhard} to false
+	set {%{_uuid}%::currentTag} to "none"
