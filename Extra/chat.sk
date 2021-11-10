@@ -56,6 +56,9 @@ on chat:
 	replace all "[multi]" and "[multiplier]" with "&e%{%player's uuid%::multiplier}% Multiplier&7" in message
 	replace all "[clicks]" with "&e%getNumberFormatted({%player's uuid%::clicks})% Clicks&7" in message
 
+on join:
+	if {%player's uuid%::currentTag} is not set:
+		set {%player's uuid%::currentTag} to "none"
 
 on chat:
 	replace all "nigger" with "****" in message
@@ -68,25 +71,17 @@ on chat:
 	replace all "nazi" with "****" in message
 	replace all "kill yourself" with "****" in message
 
-	{prefix.%player's uuid%} is not set:
-		set {prefix.%player's uuid%} to " &7[&eClicker&7]"
-	player's group is "default":
-		{tag.%player's uuid%} is not set:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%player% &8» &7%message%"
+	player has permission "whitechat":
+		if {%player's uuid%::currentTag} is not "none":
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &f%{chatcolor::%player's uuid%}%%colored message%"
 		else:
-			{nick.%player's uuid%} is not set:
-				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%player% %{tag.%player's uuid%}% &8» &7%message%"
-			else:
-				set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% &7%{nick.%player's uuid%}% %{tag.%player's uuid%}% &8» &7%message%"
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &f%message%"
 	else:
-		{chatcolor::%player's uuid%} is not set:
-			set {chatcolor::%player's uuid%} to "&f"
-		{tag.%player's uuid%} is not set:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» %{chatcolor::%player's uuid%}%%colored message%"
+		if {%player's uuid%::currentTag} is not "none":
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &7%{chatcolor::%player's uuid%}%%colored message%"
 		else:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tag.%player's uuid%}% &8» %{chatcolor::%player's uuid%}%%colored message%"
-		
-		
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &7%message%"
+
 command /bc <text>:
 	permission: click.broadcast
 	trigger:
