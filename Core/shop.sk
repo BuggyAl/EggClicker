@@ -118,6 +118,10 @@ command /shop:
 		loadShopMenu(player)
 		open metadata tag "shopMenu" of player to player
 
+on join:
+	if {%player's uuid%::roomtag} is not set:
+		set {%player's uuid%::roomtag} to {areas::eggclicker_spawn::tag} 
+
 function buyRoom(p: player, id: text, previous: text):
 	set {_uuid} to uuid of {_p}
 	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
