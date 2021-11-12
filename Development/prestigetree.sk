@@ -5,166 +5,50 @@ command /prestigeshop:
 		else:
 			if {%player's uuid%::prestiges} is greater than 0:
 				loadPrestigeTree(player)
-				open (metadata tag "prestigeTree" of player) to player
+				open metadata tag "prestigeTree" of player to player
 			else:
 				send "Force opening prestige tree for debug!"
 				loadPrestigeTree(player)
-				open (metadata tag "prestigeTree" of player) to player
+				open metadata tag "prestigeTree" of player to player
 
-function loadPrestigeTree(p: player):
-
+function formatSkillItem(p: player, id: text, previous: text) :: item:
 	set {_uuid} to uuid of {_p}
+	if {_id} is not "core":
+		if {%{_uuid}%::skills::%{_previous}%} is true:
+			if {%{_uuid}%::skills::%{_id}%} is true:
+				return 1 of {skilltree::icons::%{_id}%::unlocked}
+			else:
+				return 1 of {skilltree::icons::%{_id}%::buyable}
+		else:
+			if {%{_uuid}%::skills::%{_id}%} is true:
+				set {%{_uuid}%::skills::%{_id}%} to false
+				loadPrestigeTree({_p})
+				open metadata tag "prestigeTree" of {_p} to {_p}
+			return 1 of {skilltree::icons::%{_id}%::locked}
+	else:
+		if {%{_uuid}%::skills::%{_id}%} is true:
+			return 1 of {skilltree::icons::%{_id}%::unlocked}
+		else:
+			return 1 of {skilltree::icons::%{_id}%::buyable}
 
-	if {%{_uuid}%::prestigefragments} is not set:
-		set {%{_uuid}%::prestigefragments} to 0
-
-	set metadata tag "prestigeTree" of {_p} to chest inventory with 5 rows named "Prestige Tree (%{%{_uuid}%::prestigefragments}%)"
-
-
+#// load a prestige tree that has multiple skills with different requirements, and 4 upgradeable abilities at the end
+function loadPrestigeTree(p: player):
+	set (metadata tag "prestigeTree" of {_p}) to chest inventory with 5 rows named "Prestige Tree"
 	loop integers between 0 and 44:
-		set slot loop-value of metadata tag "prestigeTree" of {_p} to black stained glass pane named "&0" 
+		set slot loop-value of (metadata tag "prestigeTree" of {_p}) to black stained glass pane named " "
 	
-
-	if {%{_uuid}%::prestiges} is greater than 0:
-		if checkPrestigeTree({_uuid}, "core") is true:
-			set slot 4 of metadata tag "prestigeTree" of {_p} to beacon of mending with hidden enchants flag named "&6Prestige Core" with lore "&7Unlocks the Prestige Tree!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 4 of metadata tag "prestigeTree" of {_p} to beacon named "&6Prestige Core" with lore "&7Unlocks the Prestige Tree!", "", and "&7Cost: &d1 Fragment"
-	else:
-		set slot 4 of metadata tag "prestigeTree" of {_p} to barrier named "&c&lERROR" with lore "&7Come back once you have prestiged >:)"
-
-
-	if checkPrestigeTree({_uuid}, "core") is true:
-		if checkPrestigeTree({_uuid}, "luckyClicker") is true:
-			set slot 13 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eLucky Clicker" with lore "&7Grants a &a1%% &7chance to gain", "&7double eggs on click!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 13 of metadata tag "prestigeTree" of {_p} to coal named "&6Lucky Clicker" with lore "&7Grants a &a1%% &7chance to gain", "&7double eggs on click!", "", and "&7Cost: &d2 Fragments"
-	else:
-		set slot 13 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &6Prestige Core &7to purchase!"
-		set {%{_uuid}%::prestigetree::luckyClicker} to false
-
-	if checkPrestigeTree({_uuid}, "luckyClicker") is true:
-		if checkPrestigeTree({_uuid}, "dailyEggs") is true:
-			set slot 12 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eDaily Eggs" with lore "&7Logging in every day will increase your", "&7egg production by &a1%%&7. This resets", "&7on a missed login!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 12 of metadata tag "prestigeTree" of {_p} to coal named "&6Daily Eggs" with lore "&7Logging in every day will increase your", "&7egg production by &a1%%&7. This resets", "&7on a missed login!", "", and "&7Cost: &d5 Fragments"
-	else:
-		set slot 12 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &eLucky Clicker &7to purchase!"
-		set {%{_uuid}%::prestigetree::dailyEggs} to false
-
-	if checkPrestigeTree({_uuid}, "dailyEggs") is true:
-		if checkPrestigeTree({_uuid}, "ability_frenzy") is true:
-			set slot 21 of metadata tag "prestigeTree" of {_p} to emerald block of mending with hidden enchants flag named "&dFrenzy &7(Sneak + Right Click)" with lore "&7Gain &atriple eggs &7and &adouble token", "&7chance for &e30 &7seconds on use.", "", "&7Cooldown: &35 Minutes", "", and "&a&lUNLOCKED"
-		else:
-			set slot 21 of metadata tag "prestigeTree" of {_p} to coal block named "&dFrenzy &7(Sneak + Right Click)" with lore "&7Gain &atriple eggs &7and &adouble token", "&7chance for &e30 &7seconds on use.", "", "&7Cooldown: &35 Minutes", "", and "&7Cost: &d10 Fragments"
-	else:
-		set slot 21 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &eDaily Eggs &7to purchase!"
-		set {%{_uuid}%::prestigetree::ability_frenzy} to false
-
-	# EGG PATH
-
-	if checkPrestigeTree({_uuid}, "ability_frenzy") is true:
-		if checkPrestigeTree({_uuid}, "powerupRadar") is true:
-			set slot 20 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&ePowerup Radar" with lore "&7When clicking, grants a small chance", "&7to find &etemporary powerups &7to boost you!", and "&a&lUNLOCKED"
-		else:
-			set slot 20 of metadata tag "prestigeTree" of {_p} to coal named "&ePowerup Radar" with lore "&7When clicking, grants a small chance", "&7to find &etemporary powerups &7to boost you!", "", and "&7Cost: &d10 Fragments"
-	else:
-		set slot 20 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &dFrenzy &7to purchase!"
-		set {%{_uuid}%::prestigetree::powerupRadar} to false
-
-	if checkPrestigeTree({_uuid}, "powerupRadar") is true:
-		if checkPrestigeTree({_uuid}, "eggDeliveries") is true:
-			set slot 19 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eEgg Deliveries" with lore "&7Unlocks the ability to", "&7gain &aEgg Bundles&7!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 19 of metadata tag "prestigeTree" of {_p} to coal named "&eEgg Deliveries" with lore "&7Unlocks the ability to", "&7gain &aEgg Bundles&7!", "", and "&7Cost: &d15 Fragments"
-	else:
-		set slot 19 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &ePowerup Radar &7to purchase!"
-		set {%{_uuid}%::prestigetree::eggDeliveries} to false
-
-	if checkPrestigeTree({_uuid}, "eggDeliveries") is true:
-		if checkPrestigeTree({_uuid}, "helpingHand") is true:
-			set slot 28 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eHelping Hand" with lore "&7Unlocks the &aMinion Shop&7. (&a/minions&7)", "", and "&a&lUNLOCKED"
-		else:
-			set slot 28 of metadata tag "prestigeTree" of {_p} to coal named "&eHelping Hand" with lore "&7Unlocks the &aMinion Shop&7. (&a/minions&7)", "", and "&7Cost: &d15 Fragments"
-	else:
-		set slot 28 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &eEgg Deliveries &7to purchase!"
-		set {%{_uuid}%::prestigetree::helpingHand} to false
-
-	set slot 37 of metadata tag "prestigeTree" of {_p} to diamond named "&dEgg Upgrade Placeholder" with lore "&7Coming Soon!"
-
-	# TOKEN PATH
-
-	if checkPrestigeTree({_uuid}, "ability_frenzy") is true:
-		if checkPrestigeTree({_uuid}, "tokenator") is true:
-			set slot 30 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eTokenator" with lore "&7Grants an extra &a5%% &7chance to find tokens!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 30 of metadata tag "prestigeTree" of {_p} to coal named "&eTokenator" with lore "&7Grants an extra &a5%% &7chance to find tokens!", "", and "&7Cost: &d15 Fragments"
-	else:
-		set slot 30 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &dFrenzy &7to purchase!"
-		set {%{_uuid}%::prestigetree::tokenator} to false
-
-	set slot 39 of metadata tag "prestigeTree" of {_p} to diamond named "&dToken Upgrade Placeholder" with lore "&7Coming Soon!"
-
-
-
-
-	if checkPrestigeTree({_uuid}, "luckyClicker") is true:
-		if checkPrestigeTree({_uuid}, "discountCode") is true:
-			set slot 30 of metadata tag "prestigeTree" of {_p} to emerald of mending with hidden enchants flag named "&eDiscount Code" with lore "&7Most shop costs are", "&7decreased by &a5%%&7!", "", and "&a&lUNLOCKED"
-		else:
-			set slot 30 of metadata tag "prestigeTree" of {_p} to coal named "&eDiscount Code" with lore "&7Most shop costs are", "&7decreased by &a5%%&7!", "", and "&7Cost: &d10 Fragments"
-	else:
-		set slot 30 of metadata tag "prestigeTree" of {_p} to barrier named "&cLocked Skill" with lore "&7Requires &dFrenzy &7to purchase!"
-		set {%{_uuid}%::prestigetree::discountCode} to false	
-
-
-
+	set slot 4 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "core", "core")
+	set slot 13 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "dailyEggs", "luckyClicker")
+	set slot 14 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "luckyClicker", "core")
+	set slot 15 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "discountCode", "luckyClicker")
+	set slot 22 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "ability_frenzy", "dailyEggs")
+	set slot 24 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "ability_raidiance", "discountCode")
+	set slot 21 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "powerupRadar", "ability_frenzy")
+	set slot 25 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "pristine", "ability_raidiance")
+	set slot 26 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "soldOut", "pristine")
+	set slot 35 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "prestigeBlood", "soldOut")
+	set slot 44 of metadata tag "prestigeTree" of {_p} to diamond named "&6Pristine Prestige"
 
 on inventory click:
 	if event-inventory = (metadata tag "prestigeTree" of player):
 		cancel event
-
-function checkPrestigeTree(uuid: text, skill: text) :: boolean:
-	if {%{_uuid}%::prestigetree::%{_skill}%} is true:
-		return true
-	else:
-		return false
-
-command /unlockallprestigeabilites:
-	permission: op
-	trigger:
-		set {%player's uuid%::prestigetree::core} to true
-		set {%player's uuid%::prestigetree::luckyClicker} to true
-		set {%player's uuid%::prestigetree::dailyEggs} to true
-		set {%player's uuid%::prestigetree::ability_frenzy} to true
-		set {%player's uuid%::prestigetree::powerupRadar} to true
-		set {%player's uuid%::prestigetree::eggDeliveries} to true
-		set {%player's uuid%::prestigetree::helpingHand} to true
-		set {%player's uuid%::prestigetree::tokenator} to true
-		
-		send "&aDone!"
-
-command /lockallprestigeabilites:
-	permission: op
-	trigger:
-		set {%player's uuid%::prestigetree::core} to false
-
-		send "&aDone!"
-
-command /toggleprestige [<text>]:
-	permission: op
-	trigger:
-		if arg-1 is not set:
-			send "&aPlease enter a prestige ability ID!"
-		else:
-			if {%player's uuid%::prestigetree::%arg-1%} does not exist:
-				send "&cInvalid prestige ability ID!"
-			else:
-				if {%player's uuid%::prestigetree::%arg-1%} is true:
-					set {%player's uuid%::prestigetree::%arg-1%} to false
-				else:
-					set {%player's uuid%::prestigetree::%arg-1%} to true
-				send "&aSet prestige ability ID &e%arg-1% &ato &e%{%player's uuid%::prestigetree::%arg-1%}%&a!"
-
-on tab complete of "/toggleprestige":
-	set tab completions for position 1 to (indexes of {%player's uuid%::prestigetree::*})
