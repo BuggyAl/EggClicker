@@ -1,4 +1,4 @@
-function price(p: player, n: number) :: number:
+function price(n: number) :: number:
 	set {_a} to {_n}
 	set {_b} to {_n}
 	set {_c} to {_n}
