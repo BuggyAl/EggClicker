@@ -1,54 +1,22 @@
-command /prestigeshop:
-	trigger:
-		if player is not op:
-			send "Unknown command. Type ""/help"" for help." to player
-		else:
-			if {%player's uuid%::prestiges} is greater than 0:
-				loadPrestigeTree(player)
-				open metadata tag "prestigeTree" of player to player
-			else:
-				send "Force opening prestige tree for debug!"
-				loadPrestigeTree(player)
-				open metadata tag "prestigeTree" of player to player
-
-function formatSkillItem(p: player, id: text, previous: text) :: item:
+# // format a skill tree with different abilities
+function loadSkillTree(p: player):
 	set {_uuid} to uuid of {_p}
-	if {_id} is not "core":
-		if {%{_uuid}%::skills::%{_previous}%} is true:
-			if {%{_uuid}%::skills::%{_id}%} is true:
-				return 1 of {skilltree::icons::%{_id}%::unlocked}
-			else:
-				return 1 of {skilltree::icons::%{_id}%::buyable}
-		else:
-			if {%{_uuid}%::skills::%{_id}%} is true:
-				set {%{_uuid}%::skills::%{_id}%} to false
-				loadPrestigeTree({_p})
-				open metadata tag "prestigeTree" of {_p} to {_p}
-			return 1 of {skilltree::icons::%{_id}%::locked}
-	else:
-		if {%{_uuid}%::skills::%{_id}%} is true:
-			return 1 of {skilltree::icons::%{_id}%::unlocked}
-		else:
-			return 1 of {skilltree::icons::%{_id}%::buyable}
-
-#// load a prestige tree that has multiple skills with different requirements, and 4 upgradeable abilities at the end
-function loadPrestigeTree(p: player):
-	set (metadata tag "prestigeTree" of {_p}) to chest inventory with 5 rows named "Prestige Tree"
-	loop integers between 0 and 44:
-		set slot loop-value of (metadata tag "prestigeTree" of {_p}) to black stained glass pane named " "
-	
-	set slot 4 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "core", "core")
-	set slot 13 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "dailyEggs", "luckyClicker")
-	set slot 14 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "luckyClicker", "core")
-	set slot 15 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "discountCode", "luckyClicker")
-	set slot 22 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "ability_frenzy", "dailyEggs")
-	set slot 24 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "ability_raidiance", "discountCode")
-	set slot 21 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "powerupRadar", "ability_frenzy")
-	set slot 25 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "pristine", "ability_raidiance")
-	set slot 26 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "soldOut", "pristine")
-	set slot 35 of metadata tag "prestigeTree" of {_p} to formatSkillItem({_p}, "prestigeBlood", "soldOut")
-	set slot 44 of metadata tag "prestigeTree" of {_p} to diamond named "&6Pristine Prestige"
+	set metadata tag "skillTree" of {_p} to chest inventory with 5 rows named "Prestige Tree"
+	loop integers between 0 and 44 :
+		set slot loop-value of metadata tag "skillTree" of {_p} to black stained glass pane named " " 
+		set slot 4 of metadata tag "skillTree" of {_p} to beacon named "&6Prestige Core" with lore "&7Unlocks the &6Prestige Tree&7!"
+		set slot 13 of metadata tag "skillTree" of {_p} to emerald named "&eLucky Clicker" with lore "&7Grants a &a1%% &7chance to gain" and "&7double eggs on click!"
 
 on inventory click:
-	if event-inventory = (metadata tag "prestigeTree" of player):
+	if event-inventory = metadata tag "skillTree" of player:
 		cancel event
+
+command /prestigetree:
+	permission: op
+	permission message: "&cYou do not have permission to use this command!"
+	description: "Opens the prestige tree"
+	trigger: 
+		loadSkillTree(player)
+		open metadata tag "skillTree" of player to player
+
+		
