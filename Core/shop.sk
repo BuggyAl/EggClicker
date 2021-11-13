@@ -23,16 +23,18 @@ function loadShop(p: player):
 	set slot 32 of metadata tag "shop" of {_p} to formatShop({_p}, "lighthouse", redstone lamp, "ship")
 	set slot 33 of metadata tag "shop" of {_p} to formatShop({_p}, "graveyard", zombie head, "lighthouse")
 	set slot 34 of metadata tag "shop" of {_p} to formatShop({_p}, "church", totem of undying, "graveyard")
-	set slot 37 of metadata tag "shop" of {_p} to formatShop({_p}, "trainstation", rail, "church")
+	set slot 37 of metadata tag "shop" of {_p} to barrier named "&cComing Soon!" with lore "&7This area is currently in development!"
+#	set slot 37 of metadata tag "shop" of {_p} to formatShop({_p}, "trainstation", rail, "church")
 	set slot 45 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"	
-	
+
 function formatShop(p: player, id: text, icon: itemtype, previous: text) :: item:
 	set {_uuid} to uuid of {_p}	
+	set {_price} to ({areas::eggclicker_%{_id}%::price} * ({%{_uuid}%::prestiges} / 10 + 1))
 	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
 		if {%{_uuid}%::area::eggclicker_%{_id}%} is true:
 			return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&a&lUNLOCKED"
 		else:
-			return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%", "&dCost &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::price})% Eggs", and "&aClick to buy!"
+			return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%", "&dCost &7- &5%getNumberFormatted({_price})% Eggs", and "&aClick to buy!"
 	else:
 		return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&7Requires &e%{areas::eggclicker_%{_previous}%::display}% &7to purchase!"
 
@@ -111,8 +113,8 @@ on inventory click:
 			buyRoom(player, "graveyard", "lighthouse")
 		else if index of event-slot is 34:
 			buyRoom(player, "church", "graveyard")
-		else if index of event-slot is 37:
-			buyRoom(player, "trainstation", "church")
+#		else if index of event-slot is 37:
+#			buyRoom(player, "trainstation", "church")
 command /shop:
 	trigger:
 		loadShopMenu(player)
@@ -126,7 +128,8 @@ function buyRoom(p: player, id: text, previous: text):
 	set {_uuid} to uuid of {_p}
 	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
 		if {%{_uuid}%::area::eggclicker_%{_id}%} is false:
-			if {%{_uuid}%::eggs} is greater than or equal to {areas::eggclicker_%{_id}%::price}:
+			set {_price} to ({areas::eggclicker_%{_id}%::price} * ({%{_uuid}%::prestiges} / 10 + 1))
+			if {%{_uuid}%::eggs} is not greater than or equal to {_price}:
 				send "&cYou do not have enough eggs to purchase this room!" to {_p}
 				play sound "entity.villager.no" to {_p}
 			else:
@@ -155,3 +158,4 @@ command /newtestprofile: #egg, tokens, multi, prestige, clicks
 		set {%player's uuid%::prestiges} to random integer between 0 and 500
 		set {%player's uuid%::clicks} to random integer between 0 and 100000
 		send "&aGenerated a new test profile!"
+
