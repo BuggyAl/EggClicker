@@ -1,7 +1,10 @@
 command /reloadregions:
 	permission: op
 	trigger:
+		loop {areas::*}:
+			delete {areas::%loop-index%::price}
 		reloadRegions()
+		reloadShopPrices()
 		send "&aRegion data has been reloaded!"
 
 on skript start:
@@ -31,7 +34,6 @@ function reloadRegions():
 	set {areas::eggclicker_lighthouse} to 19
 	set {areas::eggclicker_graveyard} to 20
 	set {areas::eggclicker_church} to 21
-	set {areas::eggclicker_trainstation} to 22
 
 	set {areas::eggclicker_spawn::eggs} to 1
 	set {areas::eggclicker_library::eggs} to 2
@@ -55,7 +57,6 @@ function reloadRegions():
 	set {areas::eggclicker_lighthouse::eggs} to 1000000	
 	set {areas::eggclicker_graveyard::eggs} to 2000000	
 	set {areas::eggclicker_church::eggs} to 5000000	
-	set {areas::eggclicker_trainstation::eggs} to 10000000	
 
 	set {areas::eggclicker_spawn::display} to "&bSpawn"
 	set {areas::eggclicker_library::display} to "&bLibrary"
@@ -78,7 +79,6 @@ function reloadRegions():
 	set {areas::eggclicker_lighthouse::display} to "&bLighthouse"
 	set {areas::eggclicker_graveyard::display} to "&bGraveyard"
 	set {areas::eggclicker_church::display} to "&bChurch"
-	set {areas::eggclicker_trainstation::display} to "&bTrain Station"
 
 	set {areas::eggclicker_spawn::tag} to "&7[&bClicker&7]"
 	set {areas::eggclicker_library::tag} to "&7[&bLibrarian&7]"
@@ -90,6 +90,7 @@ function reloadRegions():
 	set {areas::eggclicker_nether::tag} to "&7[&bPigman&7]"
 	set {areas::eggclicker_stronghold::tag} to "&7[&bExplorer&7]"
 	set {areas::eggclicker_end::tag} to "&7[&bEnderman7[&b&7]"
+	set {areas::eggclicker_eggstreet::tag} to "&7[&bPedestrian&7]"
 	set {areas::eggclicker_mcdonalds::tag} to "&7[&bHamburger&7]"
 	set {areas::eggclicker_hut::tag} to "&7[&bGrandma&7]"
 	set {areas::eggclicker_abandoned::tag} to "&7[&bHomeless&7]"
@@ -100,7 +101,32 @@ function reloadRegions():
 	set {areas::eggclicker_lighthouse::tag} to "&7[&bLookout&7]"
 	set {areas::eggclicker_graveyard::tag} to "&7[&bUndead&7]"
 	set {areas::eggclicker_church::tag} to "&7[&bPriest&7]"
-	set {areas::eggclicker_trainstation::tag} to "&7[&bConductor&7]"
+
+	set {areas::eggclicker_library::previous} to "spawn"
+	set {areas::eggclicker_bedroom::previous} to "library"
+	set {areas::eggclicker_kitchen::previous} to "bedroom"
+	set {areas::eggclicker_cellar::previous} to "kitchen"
+	set {areas::eggclicker_backyard::previous} to "cellar"
+	set {areas::eggclicker_mine::previous} to "backyard"
+	set {areas::eggclicker_nether::previous} to "mine"
+	set {areas::eggclicker_stronghold::previous} to "nether"
+	set {areas::eggclicker_end::previous} to "stronghold"
+	set {areas::eggclicker_eggstreet::previous} to "end"
+	set {areas::eggclicker_mcdonalds::previous} to "eggstreet"
+	set {areas::eggclicker_hut::previous} to "mcdonalds"
+	set {areas::eggclicker_abandoned::previous} to "hut"	
+	set {areas::eggclicker_skyscraper::previous} to "abandoned"
+	set {areas::eggclicker_park::previous} to "skyscraper"	
+	set {areas::eggclicker_beach::previous} to "park"
+	set {areas::eggclicker_ship::previous} to "beach"
+	set {areas::eggclicker_lighthouse::previous} to "ship"
+	set {areas::eggclicker_graveyard::previous} to "lighthouse"
+	set {areas::eggclicker_church::previous} to "graveyard"
+
+function reloadShopPrices():
+	loop {areas::*}:
+		set {_previous} to {areas::%loop-index%::previous}
+		set {areas::%loop-index%::price} to (((25 * {areas::%loop-index%}) + 450) * {areas::eggclicker_%{_previous}%::eggs})
 
 command /regioninfo:
 	permission: op
@@ -120,3 +146,4 @@ command /sortregiontest:
 		send "Entry Values: %{_sortedregions::*}%"
 		loop {_sortedregions::*}:
 			send loop-index to player
+
