@@ -77,18 +77,13 @@ function contains(list: objects, check: object) :: boolean:
 	loop {%{_list}%::*}:
 		if loop-value is {_check}:
 			return true
-	return false
-	
-command /viewregions:
-	permission: op
-	trigger:
-		send "%{areas::clicker::*}%" to player
-		send "Done!" to player
+	return false        
 
 function resetPlayerAreas(p: player):
 	set {_uuid} to uuid of {_p}
-	set {%{_uuid}%::area::*} to false
-	set {%{_uuid}%::area::eggclicker_spawn} to true
+	loop {%{_uuid}%::area::*}:
+		set {%{_uuid}%::area::%loop-index%} to false
+		set {%{_uuid}%::area::eggclicker_spawn} to true
 	add "library" to {_regs::*}
 	add "bedroom" to {_regs::*}
 	add "kitchen" to {_regs::*}
@@ -104,12 +99,13 @@ function resetPlayerAreas(p: player):
 	add "hut" to {_regs::*}
 	add "abandoned" to {_regs::*}
 	add "skyscraper" to {_regs::*}
+	add "park" to {_regs::*}
 	add "beach" to {_regs::*}
 	add "ship" to {_regs::*}
 	add "lighthouse" to {_regs::*}
 	add "graveyard" to {_regs::*}
 	add "church" to {_regs::*}
-	add "trainstation" to {_regs::*}
+	set {%{_uuid}%::roomtag} to {areas::eggclicker_spawn::tag} 
 	replace all "," with "" in {_regs::*}
 	loop {_regs::*}:
 		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
