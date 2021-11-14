@@ -16,10 +16,13 @@ function click(p: player, loc: location):
 	set {_uuid} to uuid of {_p}
 	loop {areas::*}:
 		if {_loc} is in region (loop-index parsed as region):
-			set {_gainedEggs} to round({areas::%loop-index%::eggs} * {%{_uuid}%::multiplier})
-			add {_gainedEggs} to {%{_uuid}%::eggs}
-			if {_gainedEggs} is 1:
-				send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEgg &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
+			if {%{_uuid}%::area::%loop-index%} is true:
+				set {_gainedEggs} to round({areas::%loop-index%::eggs} * {%{_uuid}%::multiplier})
+				add {_gainedEggs} to {%{_uuid}%::eggs}
+				if {_gainedEggs} is 1:
+					send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEgg &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
+				else:
+					send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEggs &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
+				stop
 			else:
-				send action bar "&e+%getNumberFormatted({_gainedEggs})% &eEggs &8(&f%getNumberFormatted({%{_uuid}%::eggs})%&8)" to {_p}
-			stop
+				send action bar "&cYou have not unlocked this area!" to {_p}
