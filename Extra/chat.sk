@@ -75,7 +75,7 @@ on chat:
 		if {%player's uuid%::currentTag} is not "none":
 			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &f%{chatcolor::%player's uuid%}%%colored message%"
 		else:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &f%message%"
+			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &f%colored message%"
 	else:
 		if {%player's uuid%::currentTag} is not "none":
 			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &7%{chatcolor::%player's uuid%}%%colored message%"

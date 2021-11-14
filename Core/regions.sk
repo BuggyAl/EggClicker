@@ -1,14 +1,13 @@
 command /reloadregions:
 	permission: op
 	trigger:
-		loop {areas::*}:
-			delete {areas::%loop-index%::price}
 		reloadRegions()
 		reloadShopPrices()
 		send "&aRegion data has been reloaded!"
 
 on skript start:
 	reloadRegions()
+	reloadShopPrices()
 
 function reloadRegions():
 	clear {areas::*}
