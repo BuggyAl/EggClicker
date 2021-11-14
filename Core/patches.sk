@@ -169,19 +169,27 @@ command /clearchat:
 		message centered "&7---", "&6Chat cleared by &e%player%&6!", and "&7---" to all players
 
 on join:
-	{statsConfigured::%player's uuid%} is not set:
+	broadcast "%player's uuid% | %{statsConfigured::%player's uuid%}%"
+	{statsConfigured::%player's uuid%} is not true:
 		resetPlayerVariables(player)
+		set {%player's uuid%::clicks} to 0
+		clear player's inventory
+		execute player command "/spawn"
 		set {statsConfigured::%player's uuid%} to true
 
 function resetPlayerVariables(p: offline player):
 	set {_uuid} to uuid of {_p}
 	resetPlayerAreas({_p})
-	clear {_regs::*}
-	clear {%{_uuid}%::roomtag}
+	set {%{_uuid}%::currentTag} to "none"
 	set {%{_uuid}%::eggs} to 0
 	set {%{_uuid}%::prestiges} to 0
 	set {%{_uuid}%::multiplier} to 1
 	set {%{_uuid}%::tokens} to 0
+
+command /viewvar <text>:
+	permission: op
+	trigger:
+		send "Variable Value: %{%arg-1%}%"
 
 command /resetplayervariables [<offline player>]:
 	permission: op
@@ -192,6 +200,11 @@ command /resetplayervariables [<offline player>]:
 		else:
 			resetPlayerVariables(arg-1)
 			send "&aThe stats of &e%arg-1% &ahave been reset!"
+
+command /devcopyuuid:
+	permission: op
+	trigger:
+		send formatted "<suggest command:%player's uuid%>&eClick this to copy your UUID!"
 
 command /resetserverclicks:
 	permission: op
