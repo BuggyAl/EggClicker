@@ -1,15 +1,15 @@
 command /prestige:
 	trigger:
-		if {%player's uuid%::area::eggclicker_trainstation} is true:
-			set {_cost} to 7500000000 * {%player's uuid%::multiplier}
-			if {_cost} is less than 7500000000:
-				set {_cost} to 7500000000
+		if {%player's uuid%::area::eggclicker_church} is true:
+			set {_cost} to 10750000000 * {%player's uuid%::multiplier}
+			if {_cost} is less than 10750000000:
+				set {_cost} to 10750000000
 			if {%player's uuid%::eggs} >= {_cost}:
 				play "block_note_block_pling" to player at volume 1
 				add 1 to {%player's uuid%::prestiges}
 				resetPlayerAreas(player)
 				set {%player's uuid%::eggs} to 0
-				add 0.25 to {%player's uuid%::multiplier}
+				add 0.1 to {%player's uuid%::multiplier}
 				send title "&a&lPrestige" with subtitle "&e+0.25 multiplier &7&o(x%{%player's uuid%::multiplier}%)" to player
 				send "&b%player% &fhas prestiged to &b✫%{%player's uuid%::prestiges}%" to all players
 				clear {%player's uuid%::roomtag}

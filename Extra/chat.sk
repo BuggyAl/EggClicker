@@ -70,6 +70,7 @@ on chat:
 	replace all "卍" with "****" in message
 	replace all "nazi" with "****" in message
 	replace all "kill yourself" with "****" in message
+	replace all " cock " with "****" in message
 
 	player has permission "whitechat":
 		if {%player's uuid%::currentTag} is not "none":

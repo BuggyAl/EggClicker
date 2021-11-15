@@ -4,7 +4,7 @@ on right click:
 
 on join:
 	while player is online:
-		set title of player's scoreboard to "&e&lEggClicker &8〡&7[v4.0.1]"
+		set title of player's scoreboard to "&e&lEggClicker &8〡&7[v4.0.2]"
 		set line 16 of player's scoreboard to "&7"
 		set line 15 of player's scoreboard to "&6&l%player%"
 		set line 14 of player's scoreboard to "&8✦ &eEggs: &f%getNumberFormatted({%player's uuid%::eggs})%"

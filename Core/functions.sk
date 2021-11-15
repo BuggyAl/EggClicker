@@ -60,14 +60,16 @@ function capitalize(text: text) :: text:
 	set {_remaining} to the last (length of {_text} - 1) characters of {_text}
  
 	return "%{_char}%%{_remaining}%"
-   
-function getNumberFormatted(n: number) :: string:
-	set {_l::*} to split "K,M,B,T,Qa,Qi,Sx,Sp,Oc,No,Dc,Ud,Dd,Td,Qad,Qid,Sxd,Spd,Ocd,Nod,Vg,Uvg,Dvg,Tvg,Qavg,Qivg,Sxvg,Spvg,Ocvg,Novg,Tg,Ut,Dt" at ","
-	set {_i} to min(floor(log({_n})/3), size of {_l::*})
-	return "%{_n}%" if {_i} <= 0
-	set {_i2} to 1000^{_i}
-	return "%{_n}/{_i2}%%{_l::%{_i}%}%"
 
+function getNumberFormatted(n: number) :: text:
+	set {_data} to "Sx,21|Qi,18|Qa,15|T,12|B,9|M,6|K,3"
+	loop split {_data} at "|":
+		set {_s::*} to split loop-value at ","
+		{_n} >= 10 ^ {_s::2} parsed as number
+		set {_result} to floor({_n} / 10 ^ (({_s::2} parsed as number) - 2)) / 100
+		return "%{_result}%%{_s::1}%"
+	return "%{_n}%"
+	
 command /testformatter <number>:
 	permission: op
 	trigger:
@@ -77,7 +79,7 @@ function contains(list: objects, check: object) :: boolean:
 	loop {%{_list}%::*}:
 		if loop-value is {_check}:
 			return true
-	return false        
+	return false
 
 function resetPlayerAreas(p: player):
 	set {_uuid} to uuid of {_p}
@@ -109,4 +111,36 @@ function resetPlayerAreas(p: player):
 	replace all "," with "" in {_regs::*}
 	loop {_regs::*}:
 		execute console command "rg removemember eggclicker_%loop-value% %{_p}% -w EggClicker"
+	clear {_regs::*}
+
+function unlockPlayerAreas(p: player):
+	set {_uuid} to uuid of {_p}
+	loop {%{_uuid}%::area::*}:
+		set {%{_uuid}%::area::%loop-index%} to true
+		set {%{_uuid}%::area::eggclicker_spawn} to true
+	add "library" to {_regs::*}
+	add "bedroom" to {_regs::*}
+	add "kitchen" to {_regs::*}
+	add "cellar" to {_regs::*}
+	add "backyard" to {_regs::*}
+	add "mine" to {_regs::*}
+	add "mine2" to {_regs::*}
+	add "nether" to {_regs::*}
+	add "stronghold" to {_regs::*}
+	add "end" to {_regs::*}
+	add "eggstreet" to {_regs::*}
+	add "mcdonalds" to {_regs::*}
+	add "hut" to {_regs::*}
+	add "abandoned" to {_regs::*}
+	add "skyscraper" to {_regs::*}
+	add "park" to {_regs::*}
+	add "beach" to {_regs::*}
+	add "ship" to {_regs::*}
+	add "lighthouse" to {_regs::*}
+	add "graveyard" to {_regs::*}
+	add "church" to {_regs::*}
+	set {%{_uuid}%::roomtag} to {areas::eggclicker_church::tag} 
+	replace all "," with "" in {_regs::*}
+	loop {_regs::*}:
+		execute console command "rg addmember eggclicker_%loop-value% %{_p}% -w EggClicker"
 	clear {_regs::*}

@@ -127,6 +127,10 @@ on inventory click:
 on skript load:
 	reloadTokenShop()
 
+on rightclick:
+	chance of 1%:
+		add 1 to {%{_uuid}%::tokens}
+
 command /updatetokenshop:
 	permission: op
 	trigger:

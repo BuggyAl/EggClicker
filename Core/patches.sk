@@ -141,7 +141,6 @@ command /setvar [<text>] [<text>]:
 		else:
 			send "&cPlease input a variable! &7(This command sets or wipes ANY variable!"
 		
-
 command /bypasspatch [<text>]:
 	permission: patches.bypass
 	permission message: &cYou do not have permission to use this command!
@@ -169,7 +168,6 @@ command /clearchat:
 		message centered "&7---", "&6Chat cleared by &e%player%&6!", and "&7---" to all players
 
 on join:
-	broadcast "%player's uuid% | %{statsConfigured::%player's uuid%}%"
 	{statsConfigured::%player's uuid%} is not true:
 		resetPlayerVariables(player)
 		set {%player's uuid%::clicks} to 0
@@ -200,6 +198,34 @@ command /resetplayervariables [<offline player>]:
 		else:
 			resetPlayerVariables(arg-1)
 			send "&aThe stats of &e%arg-1% &ahave been reset!"
+
+command /unlockPlayerAreas [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is not set:
+			unlockPlayerAreas(player)
+			send "&aYour areas have been unlocked!"
+		else:
+			unlockPlayerAreas(arg-1)
+			send "&aThe areas of &e%arg-1% &ahave been unlocked!"
+
+command /wipeplayer [<offlineplayer>]:
+	permission: op
+	trigger:
+		if arg-1 is not set:
+			resetPlayerVariables(player)
+			set {totalclicks} to ({totalclicks} - {%player's uuid%::clicks})
+			set {%player's uuid%::clicks} to 0
+			send "&aYour stats have been wiped!"
+		else:
+			resetPlayerVariables(arg-1)
+			set {totalclicks} to ({totalclicks} - {%arg-1's uuid%::clicks})
+			set {%arg-1's uuid%::clicks} to 0
+			if arg-1 is not player:
+				send "&aThe stats of &e%arg-1% &ahave been wiped!"
+				send "&aYour stats have been wiped by a staff member!" to arg-1
+			else:
+				send "&aYour stats have been wiped!"
 
 command /devcopyuuid:
 	permission: op

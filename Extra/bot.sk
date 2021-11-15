@@ -1,7 +1,3 @@
-on join:
-	if player is op:
-		send "bot.sk is running!"
-
 on skript load:
 	login to "OTAwNTI3NzU5MzkzMTY5NDE4.YXCn1A.TxgHkTdu3lIwN498Lle7CT8yYxU" with name "EggClicker Bot"
 	set {serverlaststart} to now 
@@ -28,7 +24,10 @@ discord command !stats [<offline player>]:
 				make embed:
 					set title of embed to "**Stats of %arg-1%** [✫%{%uuid of arg-1%::prestiges}%]"
 					set the thumbnail of the embed to "https://crafatar.com/avatars/%uuid of arg-1%?overlay"
-					set the color of the embed to yellow
+					if arg-1 is online:
+						set the color of the embed to green
+					else:
+						set the color of the embed to red
 
 					add field named "Eggs :egg:" with value getNumberFormatted({%uuid of arg-1%::eggs}) to embed
 					add field named "Tokens :coin:" with value getNumberFormatted({%uuid of arg-1%::tokens}) to embed
