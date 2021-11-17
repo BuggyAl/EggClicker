@@ -7,7 +7,6 @@ on join:
 on join:
 	if {%player's uuid%::clicks} is not set:
 		set {%player's uuid%::clicks} to 0
-
 on quit:
      set quit message to "&7[&c-&7] %player%"
 
@@ -37,10 +36,7 @@ command chatcolor [<text>]:
 		else:
 			send "&9Blue, &bAqua, &cRed, &4DarkRed, &eYellow, &fWhite, &aLime, &dPink"
 
-
 on chat:
-
-
 	loop all players:
 		if message contains "%loop-player%":
 			replace all "@" with "" in message
@@ -70,7 +66,8 @@ on chat:
 	replace all "卍" with "****" in message
 	replace all "nazi" with "****" in message
 	replace all "kill yourself" with "****" in message
-	replace all " cock " with "****" in message
+	replace all "fuck" with "****" in message
+	replace all "nigga" with "****" in message
 
 	player has permission "whitechat":
 		if {%player's uuid%::currentTag} is not "none":
@@ -85,6 +82,7 @@ on chat:
 
 command /bc <text>:
 	permission: click.broadcast
+	aliases: /broadcast
 	trigger:
 		broadcast ""
 		broadcast "&c&lEGGCLICKER BROADCAST &8>> &c%coloured arg-1%"

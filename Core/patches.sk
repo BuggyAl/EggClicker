@@ -236,3 +236,23 @@ command /resetserverclicks:
 	permission: op
 	trigger:
 		set {totalclicks} to 0
+
+function fixPlayerErrors(p: player):
+	set {_uuid} to uuid of {_p}
+	if {%{_uuid}%::clicks} is not set:
+		set {%{_uuid}%::clicks} to 0
+	if {%{_uuid}%::currentTag} is not set:
+		set {%{_uuid}%::currentTag} to "none"
+	if {%{_uuid}%::eggs} is not set:
+		set {%{_uuid}%::eggs} to 0
+	if {%{_uuid}%::prestiges} is not set:
+		set {%{_uuid}%::prestiges} to 0
+	if {%{_uuid}%::multiplier} is not set:
+		set {%{_uuid}%::multiplier} to 1
+	if {%{_uuid}%::tokens} is not set:
+		set {%{_uuid}%::tokens} to 0
+	loop {%player's uuid%::bypasspatch::*}:
+		if {%player's uuid%::bypasspatch::%loop-index%} is not set:
+			set {%player's uuid%::bypasspatch::%loop-index%} to false
+	if {%{_uuid}%::area::eggclicker_spawn} is not true:
+		set {%{_uuid}%::area::eggclicker_spawn} to true

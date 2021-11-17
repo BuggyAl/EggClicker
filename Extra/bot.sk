@@ -1,7 +1,23 @@
 on skript load:
 	login to "OTAwNTI3NzU5MzkzMTY5NDE4.YXCn1A.TxgHkTdu3lIwN498Lle7CT8yYxU" with name "EggClicker Bot"
 	set {serverlaststart} to now 
-	
+	make embed:
+		set title of embed to "**EggClicker is now online!**"
+		set the color of the embed to green
+	send "**[%now%] The server has started!**" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "**[%now%] The server has started!**" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+	send last created embed to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send last created embed to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
+
+on skript unload:
+	make embed:
+		set title of embed to "**EggClicker is now offline!**"
+		set the color of the embed to red
+	send "**[%now%] The server has stopped!**" to channel with id "878547303886118954" with "EggClicker Bot" # EggClicker Logs
+	send "**[%now%] The server has stopped!**" to channel with id "900563377766674462" with "EggClicker Bot" # BuggyLabs Logs
+	send last created embed to channel with id "900861674863611945" with "EggClicker Bot" # BuggyLabs Chat
+	send last created embed to channel with id "900917072043851826" with "EggClicker Bot" # EggClicker Chat
+
 	set {id::*} to "A", "E", "Z", "O", "F", "P" and "L"
 
 command /loginbot:
