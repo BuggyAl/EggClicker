@@ -71,7 +71,6 @@ on region enter:
 				cancel event
 				send "&cYou have not unlocked this room, do &4/shop&c!" to player
 				if loop-value is "stronghold":
-					teleport player to location at (40.5, 55, 327.5) in world "EggClicker"
 					teleportPlayer(player, 40.5, 55, 327.5, 0, 0, "EggClicker") # testing to see if working
 
 			
