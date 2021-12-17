@@ -1,0 +1,19 @@
+on right-click on cyan carpet:
+	if {carpets::%player's uuid%::*} does not contain event-block:
+		add event-block to {carpets::%player's uuid%::*}
+		send "&bYou found a carpet, only %28 - size of {carpets::%player's uuid%::*}% left!" to player
+		set {foundcarpets::%player's uuid%} to size of {carpets::%player's uuid%::*}
+		if size of {carpets::%player's uuid%::*} is 28:
+			if {claimed} is not set:
+				send "&bCongrats, you found all carpets and won the &eEGG+ Rank!" to player
+				send "&b%player% is the first one to find all cyan carpets and won &eEGG+ Rank!"
+				execute console command "/buyrank %player% egg+ 2 150"
+				play sound "block.note_block.pling" to all players
+				set {claimed} to true
+			else:
+				send "&bCongrats, you found all carpets" to player
+				send "&b%player% has found all cyan carpets!" to all players
+	else:
+		send "&cYou have already found that carpet!" to player
+				
+				

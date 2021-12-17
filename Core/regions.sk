@@ -1,148 +1,124 @@
-command /reloadregions:
+command /fixregions:
 	permission: op
 	trigger:
-		reloadRegions()
-		reloadShopPrices()
-		send "&aRegion data has been reloaded!"
+		loop {rooms::*}:
+			execute console command "/rg flag -w EggClicker %{rooms::%loop-value%::r}% entry allow"
+			execute console command "/rg removemember -w EggClicker -a %{rooms::%loop-value%::r}%"
+			send "&aFixed %{rooms::%loop-value%::r}%!"
 
-on skript start:
-	reloadRegions()
-	reloadShopPrices()
 
-function reloadRegions():
-	clear {areas::*}
-	set {areas::eggclicker_spawn} to 1
-	set {areas::eggclicker_library} to 2
-	set {areas::eggclicker_bedroom} to 3
-	set {areas::eggclicker_kitchen} to 4
-	set {areas::eggclicker_cellar} to 5
-	set {areas::eggclicker_backyard} to 6
-	set {areas::eggclicker_mine} to 7
-	set {areas::eggclicker_mine2} to 7
-	set {areas::eggclicker_nether} to 8
-	set {areas::eggclicker_stronghold} to 9
-	set {areas::eggclicker_end} to 10
-	set {areas::eggclicker_eggstreet} to 11
-	set {areas::eggclicker_mcdonalds} to 12
-	set {areas::eggclicker_hut} to 13
-	set {areas::eggclicker_abandoned} to 14
-	set {areas::eggclicker_skyscraper} to 15
-	set {areas::eggclicker_park} to 16
-	set {areas::eggclicker_beach} to 17
-	set {areas::eggclicker_ship} to 18
-	set {areas::eggclicker_lighthouse} to 19
-	set {areas::eggclicker_graveyard} to 20
-	set {areas::eggclicker_church} to 21
+on load:
+	clear {rooms::*}
+	room("spawn", "Spawn", "Clicker", egg)
+	room("library", "Library", "Librarian", bookshelf)
+	room("bedroom", "Bedroom", "Sleeper", red bed)
+	room("kitchen", "Kitchen", "Chef", furnace)
+	room("cellar", "Cellar", "Kidnapped Child", barrel)
+	room("backyard", "Backyard", "Camper", campfire)
+	room("mine", "Mine", "Miner", iron pickaxe)
+	room("nether", "Nether", "Piglin", netherrack)
+	room("stronghold", "Stronghold", "Silverfish", end portal frame)
+	room("end", "End", "Enderman", endstone)
+	room("eggstreet", "Egg Street", "Homeless", black concrete)
+	room("mcdonalds", "McDonalds", "Fat", cooked beef)
+	room("hut", "Hut", "Grandma", fern)
+	room("abandoned", "Abandoned House", "Ghost", web)
+	room("skyscraper", "Skyscraper", "Entrepreneur", white stained glass)
+	room("lushcave", "Lush Cave", "Lush", flowering azalea)
+	room("jungletemple", "Jungle Temple", "Tomb Raider", mossy cobblestone)
+	room("jungle", "Jungle", "Tarzan", jungle leaves)
+	room("deserttemple", "Desert Temple", "TNT", orange terracotta)
+	room("desert", "Desert", "Camel", sand)
+	room("park", "Park", "Bird", poppy)
+	room("beach", "Beach", "Lifeguard", yellow carpet)
+	room("ship", "Ship", "Pirate", spyglass)
+	room("lighthouse", "Lighthouse", "Lightkeeper", sea lantern)
+	room("graveyard", "Graveyard", "Undead", skeleton skull)
+	room("church", "Church", "Priest", lectern)
+	room("prison", "Prison", "Thief", iron bars)
+	room("prisonyard", "Prison Yard", "Robber", painting)
+	
+#room(name, clickregion, eggs per second)
+function room(n: text, u: text, tag: text, it: itemtype):
+	add {_n} to {rooms::*}
+	set {_r} to "eggclicker_%{_n}%"
+	set {rooms::%{_n}%::r} to {_r}
+	set {rooms::%{_n}%::id} to size of {rooms::*}
+	set {rooms::%{_n}%::epc} to clickmoney(size of {rooms::*})
+	set {rooms::%{_n}%::c} to price(clickmoney(size of {rooms::*}))
+	set {rooms::%{_n}%::it} to {_it}
+	set {rooms::%{_n}%::u} to {_u}
+	set {rooms::%{_n}%::tag} to {_tag}
+    
+	
+	
+on right-click:
+	loop {rooms::*}:
+		if region at player is {rooms::%loop-value%::r} parsed as region:
+			if {ul::%player's uuid%::*} contains {rooms::%loop-value%::id}:
+				add round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}) to {eggs::%player's uuid%}
+				chance of 1%:
+					add 1 to {tokens::%player's uuid%}
+					play sound "block.amethyst_block.hit" to player
+				add 1 to {clicks::%player's uuid%}
+				add 1 to {clicks}
+				send action bar "&e+%getNumberFormatted(round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}))% Eggs &8(&f%getNumberFormatted({eggs::%player's uuid%})%&8)" to player
+			
+on region enter:
+	loop {rooms::*}:
+		if {rooms::%loop-value%::r} parsed as region is event-region:
+			if {ul::%player's uuid%::*} does not contain {rooms::%loop-value%::id}:
+				cancel event
+				send "&cYou have not unlocked this room, do &4/shop&c!" to player
 
-	set {areas::eggclicker_spawn::eggs} to 1
-	set {areas::eggclicker_library::eggs} to 2
-	set {areas::eggclicker_bedroom::eggs} to 5
-	set {areas::eggclicker_kitchen::eggs} to 10
-	set {areas::eggclicker_cellar::eggs} to 20
-	set {areas::eggclicker_backyard::eggs} to 50
-	set {areas::eggclicker_mine::eggs} to 100
-	set {areas::eggclicker_mine2::eggs} to 100
-	set {areas::eggclicker_nether::eggs} to 200
-	set {areas::eggclicker_stronghold::eggs} to 500
-	set {areas::eggclicker_end::eggs} to 1000
-	set {areas::eggclicker_eggstreet::eggs} to 2000
-	set {areas::eggclicker_mcdonalds::eggs} to 5000
-	set {areas::eggclicker_hut::eggs} to 10000
-	set {areas::eggclicker_abandoned::eggs} to 20000	
-	set {areas::eggclicker_skyscraper::eggs} to 50000	
-	set {areas::eggclicker_park::eggs} to 100000	
-	set {areas::eggclicker_beach::eggs} to 200000	
-	set {areas::eggclicker_ship::eggs} to 500000	
-	set {areas::eggclicker_lighthouse::eggs} to 1000000	
-	set {areas::eggclicker_graveyard::eggs} to 2000000	
-	set {areas::eggclicker_church::eggs} to 5000000	
+			
+function price(n: number) :: number:
+	set {_a} to {_n}
+	set {_b} to {_n}
+	set {_c} to {_n}
+	set {_e} to {_n}
+	set {_d} to 0
+	set {_check} to true
 
-	set {areas::eggclicker_spawn::display} to "&bSpawn"
-	set {areas::eggclicker_library::display} to "&bLibrary"
-	set {areas::eggclicker_bedroom::display} to "&bBedroom"
-	set {areas::eggclicker_kitchen::display} to "&bKitchen"
-	set {areas::eggclicker_cellar::display} to "&bCellar"
-	set {areas::eggclicker_backyard::display} to "&bBackyard"
-	set {areas::eggclicker_mine::display} to "&bMine"
-	set {areas::eggclicker_nether::display} to "&bNether"
-	set {areas::eggclicker_stronghold::display} to "&bStronghold"
-	set {areas::eggclicker_end::display} to "&bEnd"
-	set {areas::eggclicker_eggstreet::display} to "&bEgg Street"
-	set {areas::eggclicker_mcdonalds::display} to "&bMcDonalds"
-	set {areas::eggclicker_hut::display} to "&bHut"
-	set {areas::eggclicker_abandoned::display} to "&bAbandoned House"
-	set {areas::eggclicker_skyscraper::display} to "&bSkyscraper"
-	set {areas::eggclicker_park::display} to "&bPark"
-	set {areas::eggclicker_beach::display} to "&bBeach"
-	set {areas::eggclicker_ship::display} to "&bShip"
-	set {areas::eggclicker_lighthouse::display} to "&bLighthouse"
-	set {areas::eggclicker_graveyard::display} to "&bGraveyard"
-	set {areas::eggclicker_church::display} to "&bChurch"
+	set {_l} to (length of "%{_a}%") - 1 #2
 
-	set {areas::eggclicker_spawn::tag} to "&7[&bClicker&7]"
-	set {areas::eggclicker_library::tag} to "&7[&bLibrarian&7]"
-	set {areas::eggclicker_bedroom::tag} to "&7[&bSleeper&7]"
-	set {areas::eggclicker_kitchen::tag} to "&7[&bChef&7]"
-	set {areas::eggclicker_cellar::tag} to "&7[&bOrganizer&7]"
-	set {areas::eggclicker_backyard::tag} to "&7[&bExplorer&7]"
-	set {areas::eggclicker_mine::tag} to "&7[&bMiner&7]"
-	set {areas::eggclicker_nether::tag} to "&7[&bPigman&7]"
-	set {areas::eggclicker_stronghold::tag} to "&7[&bExplorer&7]"
-	set {areas::eggclicker_end::tag} to "&7[&bEnderman7&7]"
-	set {areas::eggclicker_eggstreet::tag} to "&7[&bPedestrian&7]"
-	set {areas::eggclicker_mcdonalds::tag} to "&7[&bHamburger&7]"
-	set {areas::eggclicker_hut::tag} to "&7[&bGrandma&7]"
-	set {areas::eggclicker_abandoned::tag} to "&7[&bHomeless&7]"
-	set {areas::eggclicker_skyscraper::tag} to "&7[&bFreelancer&7]"
-	set {areas::eggclicker_park::tag} to "&7[&bJogger&7]"
-	set {areas::eggclicker_beach::tag} to "&7[&bLifeguard&7]"
-	set {areas::eggclicker_ship::tag} to "&7[&bSailor&7]"
-	set {areas::eggclicker_lighthouse::tag} to "&7[&bLookout&7]"
-	set {areas::eggclicker_graveyard::tag} to "&7[&bUndead&7]"
-	set {areas::eggclicker_church::tag} to "&7[&bPriest&7]"
+	loop {_l} times:
+		set {_a} to {_a} / 10 #a = 5
 
-	set {areas::eggclicker_library::previous} to "spawn"
-	set {areas::eggclicker_bedroom::previous} to "library"
-	set {areas::eggclicker_kitchen::previous} to "bedroom"
-	set {areas::eggclicker_cellar::previous} to "kitchen"
-	set {areas::eggclicker_backyard::previous} to "cellar"
-	set {areas::eggclicker_mine::previous} to "backyard"
-	set {areas::eggclicker_nether::previous} to "mine"
-	set {areas::eggclicker_stronghold::previous} to "nether"
-	set {areas::eggclicker_end::previous} to "stronghold"
-	set {areas::eggclicker_eggstreet::previous} to "end"
-	set {areas::eggclicker_mcdonalds::previous} to "eggstreet"
-	set {areas::eggclicker_hut::previous} to "mcdonalds"
-	set {areas::eggclicker_abandoned::previous} to "hut"	
-	set {areas::eggclicker_skyscraper::previous} to "abandoned"
-	set {areas::eggclicker_park::previous} to "skyscraper"	
-	set {areas::eggclicker_beach::previous} to "park"
-	set {areas::eggclicker_ship::previous} to "beach"
-	set {areas::eggclicker_lighthouse::previous} to "ship"
-	set {areas::eggclicker_graveyard::previous} to "lighthouse"
-	set {areas::eggclicker_church::previous} to "graveyard"
+	if {_a} is 5:
+		set {_e} to {_n} / 2.5 #e = 200
+	else:
+		set {_e} to {_n} / 2 #e = 0,5
 
-function reloadShopPrices():
-	loop {areas::*}:
-		set {_previous} to {areas::%loop-index%::previous}
-		set {areas::%loop-index%::price} to (((45 * {areas::%loop-index%}) + 660) * {areas::eggclicker_%{_previous}%::eggs})
+	while {_check} is true:
+		set {_l} to (length of "%{_c}%") - 1 #2
+		if {_l} is 0:
+			set {_l} to 1
+		loop {_l} times: #1:c = 500
+			if {_c} is 1:
+				set {_check} to false
+			else:
+				set {_f} to {_c} #1:f = 500
+				if {_c} is more than 5:
+					set {_b} to {_c} / 10 #1:b = 50
+				else: 
+					set {_b} to {_c}
 
-command /regioninfo:
-	permission: op
-	trigger:
-		send "Size of area list: %size of {areas::*}%"
-		send "Entry Values: %{areas::*}%"
-		loop {areas::*}:
-			send loop-index to player
-
-command /sortregiontest:
-	permission: op
-	trigger:
-		set {_sorted::*} to sorted {areas::*}
-		send {_sorted::*} to player
-		send " " to player
-		send "Size of area list: %size of {_sortedregions::*}%"
-		send "Entry Values: %{_sortedregions::*}%"
-		loop {_sortedregions::*}:
-			send loop-index to player
-
+				if "%{_b}%" contains "5":
+					set {_c} to {_c} / 2.5 #c = 200
+				else:
+					set {_c} to {_f} / 2  #c = 500
+				add 1 to {_d}
+				
+	return (({_e} * 250 + {_e} * {_d} * 50) * 1.5) 
+			
+function clickmoney(n: number) :: number:
+	set {_a} to {_n}
+	while {_a} > 3:
+		remove 3 from {_a} 
+	if {_a} is 3: 
+		return 5 * ((10 ^ round(({_n} / 3))) / 10)
+	else if {_a} is 2:
+		return 2 * ((10 ^ round(({_n} / 3))) / 10)
+	else: 
+		return 1 * (10 ^ round(({_n} / 3))) 

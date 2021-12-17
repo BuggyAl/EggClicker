@@ -1,161 +1,178 @@
-function loadShop(p: player):
-	set metadata tag "shop" of {_p} to chest inventory with 6 rows named "Room Shop"
-	set slot 0,2,4,6,8,18,26,36,44,46,48,50, and 52 of metadata tag "shop" of {_p} to orange stained glass pane named " "
-	set slot 1,3,5,7,9,17,27,35,47,49,51, and 53 of metadata tag "shop" of {_p} to black stained glass pane named " "
-	set slot 10 of metadata tag "shop" of {_p} to formatShop({_p}, "spawn", egg, "spawn")
-	set slot 11 of metadata tag "shop" of {_p} to formatShop({_p}, "library", bookshelf, "spawn")
-	set slot 12 of metadata tag "shop" of {_p} to formatShop({_p}, "bedroom", red bed, "library")
-	set slot 13 of metadata tag "shop" of {_p} to formatShop({_p}, "kitchen", furnace, "bedroom")
-	set slot 14 of metadata tag "shop" of {_p} to formatShop({_p}, "cellar", barrel, "kitchen")
-	set slot 15 of metadata tag "shop" of {_p} to formatShop({_p}, "backyard", campfire, "cellar")
-	set slot 16 of metadata tag "shop" of {_p} to formatShop({_p}, "mine", iron pickaxe, "backyard")
-	set slot 19 of metadata tag "shop" of {_p} to formatShop({_p}, "nether", netherrack, "mine")
-	set slot 20 of metadata tag "shop" of {_p} to formatShop({_p}, "stronghold", end portal frame, "nether")
-	set slot 21 of metadata tag "shop" of {_p} to formatShop({_p}, "end", endstone, "stronghold")
-	set slot 22 of metadata tag "shop" of {_p} to formatShop({_p}, "eggstreet", black concrete, "end")
-	set slot 23 of metadata tag "shop" of {_p} to formatShop({_p}, "mcdonalds", red concrete, "eggstreet")
-	set slot 24 of metadata tag "shop" of {_p} to formatShop({_p}, "hut", fern, "mcdonalds")
-	set slot 25 of metadata tag "shop" of {_p} to formatShop({_p}, "abandoned", web, "hut")
-	set slot 28 of metadata tag "shop" of {_p} to formatShop({_p}, "skyscraper", white stained glass, "abandoned")
-	set slot 29 of metadata tag "shop" of {_p} to formatShop({_p}, "park", flowering azalea, "skyscraper")
-	set slot 30 of metadata tag "shop" of {_p} to formatShop({_p}, "beach", sand, "park")
-	set slot 31 of metadata tag "shop" of {_p} to formatShop({_p}, "ship", oak boat, "beach")
-	set slot 32 of metadata tag "shop" of {_p} to formatShop({_p}, "lighthouse", redstone lamp, "ship")
-	set slot 33 of metadata tag "shop" of {_p} to formatShop({_p}, "graveyard", zombie head, "lighthouse")
-	set slot 34 of metadata tag "shop" of {_p} to formatShop({_p}, "church", totem of undying, "graveyard")
-	set slot 37 of metadata tag "shop" of {_p} to barrier named "&cComing Soon!" with lore "&7This area is currently in development!"
-#	set slot 37 of metadata tag "shop" of {_p} to formatShop({_p}, "trainstation", rail, "church")
-	set slot 45 of metadata tag "shop" of {_p} to arrow named "&7&oBack to Menu"	
-
-function formatShop(p: player, id: text, icon: itemtype, previous: text) :: item:
-	set {_uuid} to uuid of {_p}	
-	set {_price} to ({areas::eggclicker_%{_id}%::price} * ({%{_uuid}%::prestiges} / 10 + 1))
-	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
-		if {%{_uuid}%::area::eggclicker_%{_id}%} is true:
-			return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&a&lUNLOCKED"
-		else:
-			return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%", "&dCost &7- &5%getNumberFormatted({_price})% Eggs", and "&aClick to buy!"
+#function suffixCost(p: player, n: number) :: number:
+#	set {_s} to {_n} * 2 * 3 / 2.5 * 11 / 2
+#	set {_b} to {_s} * {_n} / 1.3
+#	return round({_b})
+#function buySuffix(p: player):
+function buySuffix(p: player, cost: number, suf: text):
+	set {_uuid} to {_p}'s uuid
+	if {tokens::%{_uuid}%} is more than or equal to {_cost}:
+		remove {_cost} from {tokens::%{_uuid}%}
+		set {suffix::%{_uuid}%} to {_suf}
+		add {_suf} to {suffixes::%{_uuid}%::*}
+		play sound "block.note_block.pling" to {_p}
+		send title "&a&l&nSuffix Purchased" to {_p}
+		tokenShop({_p})
 	else:
-		return 1 of {_icon} named "&b%{areas::eggclicker_%{_id}%::display}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({areas::eggclicker_%{_id}%::eggs})%" and "&7Requires &e%{areas::eggclicker_%{_previous}%::display}% &7to purchase!"
-
-function loadShopMenu(p: player):
-	set metadata tag "shopMenu" of {_p} to chest inventory with 3 rows named "The Shop"
-	set slot 0,2,4,6,8,10,12,14,16,18,20,22,24, and 26 of metadata tag "shopMenu" of {_p} to orange stained glass pane named " "
-	set slot 1,3,5,7,9,11,13,15,17,19,21,23, and 25 of metadata tag "shopMenu" of {_p} to black stained glass pane named " "	
-	set slot 11 of metadata tag "shopMenu" of {_p} to egg named "&6&lRoom Shop" with lore "&7Buy rooms here!"
-	set slot 13 of metadata tag "shopMenu" of {_p} to sunflower named "&e&lToken Shop" with lore "&7Spend tokens here!"
-	set slot 15 of metadata tag "shopMenu" of {_p} to emerald named "&a&lServer Store" with lore "&7Support the server!"
-
-on swap hand items:
-	if player's current inventory is not (metadata tag "shopMenu" of player):
-		if player's current inventory is not (metadata tag "shop" of player):
-			if player's current inventory is not (metadata tag "tokenShop" of player):
-				cancel event
-				execute player command "/shop"
+		send "&cNot enough tokens! &8(%{tokens::%{_uuid}%}%&8/%{_cost}%&8)" to {_p}
+		
+function equipSuffix(p: player, suf: text):
+	set {_uuid} to {_p}'s uuid
+	set {suffix::%{_uuid}%} to {_suf}
+	play sound "block.note_block.pling" to {_p}
+	send title "&a&l&nSuffix Equipped" to {_p}
+	tokenShop({_p})
+		
+		
+#command sufco <number>:
+#	permission: op
+#	trigger:
+#		send "%suffixCost(player, arg-1)%"
+function shop(p: player):
+	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yxrxtxsxy", and "xyxyxyxyx":
+		format gui slot "x" with red stained glass pane named " "
+		format gui slot "y" with white stained glass pane named " "
+		format gui slot "r" with egg named "&6&lRoom Shop" with lore "&7Buy rooms here!":
+			roomShop({_p})
+		format gui slot "t" with sunflower named "&e&lToken Shop" with lore "&7Spend tokens here!":
+			tokenShop({_p})
+		format gui slot "s" with emerald named "&a&lServer Store" with lore "&7Support the server!":
+			close {_p}'s inventory
+			make {_p} say "/buy"
+	open the last gui for {_p}
+		
+function tokenShop(p: player):
+	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyx":
+		format gui slot "x" with red stained glass pane named " "
+		format gui slot "y" with white stained glass pane named " "
+		
+		if {suffix::%{_p}'s uuid%} is "&cChicken":
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&cChicken":
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aBought - Click to equip":
+				equipSuffix(player, "&cChicken")
+		else:
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aClick to buy":
+				buySuffix(player, 10, "&cChicken")
+		
+		
+		if {suffix::%{_p}'s uuid%} is "&eGamer":
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&eGamer":
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aBought - Click to equip":
+				equipSuffix(player, "&eGamer")
+		else:
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aClick to buy":
+				buySuffix(player, 20, "&eGamer")
+				
+				
+		if {suffix::%{_p}'s uuid%} is "&bPro":
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&bPro":
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aBought - Click to equip":
+				equipSuffix(player, "&bPro")
+		else:
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aClick to buy":
+				buySuffix(player, 40, "&bPro")
+		
 	
-on inventory click:
-	if event-inventory = (metadata tag "shopMenu" of player):
-		cancel event
-		if index of event-slot is 11:
-			loadShop(player)
-			open metadata tag "shop" of player to player
-		else if index of event-slot is 13:
-			loadTokenShop(player)
-			open metadata tag "tokenShop" of player to player
-		else if index of event-slot is 15:
-			execute player command "/buy"
-			close player's inventory
-		if index of event-slot is 18:
-			loadShopMenu(player)
-			open metadata tag "shopMenu" of player to player
-	else if event-inventory = (metadata tag "shop" of player):
-		cancel event
-		if index of event-slot is 45:
-			loadShopMenu(player)
-			open metadata tag "shopMenu" of player to player		
-		else if index of event-slot is 11:
-			buyRoom(player, "library", "spawn")
-		else if index of event-slot is 12:
-			buyRoom(player, "bedroom", "library")
-		else if index of event-slot is 13:
-			buyRoom(player, "kitchen", "bedroom")
-		else if index of event-slot is 14:
-			buyRoom(player, "cellar", "kitchen")
-		else if index of event-slot is 15:
-			buyRoom(player, "backyard", "cellar")
-		else if index of event-slot is 16:
-			buyRoom(player, "mine", "backyard")
-		else if index of event-slot is 19:
-			buyRoom(player, "nether", "mine")
-		else if index of event-slot is 20:
-			buyRoom(player, "stronghold", "nether")
-		else if index of event-slot is 21:
-			buyRoom(player, "end", "stronghold")
-		else if index of event-slot is 22:
-			buyRoom(player, "eggstreet", "end")
-		else if index of event-slot is 23:
-			buyRoom(player, "mcdonalds", "eggstreet")
-		else if index of event-slot is 24:
-			buyRoom(player, "hut", "mcdonalds")
-		else if index of event-slot is 25:
-			buyRoom(player, "abandoned", "hut")
-		else if index of event-slot is 28:
-			buyRoom(player, "skyscraper", "abandoned")
-		else if index of event-slot is 29:
-			buyRoom(player, "park", "skyscraper")
-		else if index of event-slot is 30:
-			buyRoom(player, "beach", "park")
-		else if index of event-slot is 31:
-			buyRoom(player, "ship", "beach")
-		else if index of event-slot is 32:
-			buyRoom(player, "lighthouse", "ship")
-		else if index of event-slot is 33:
-			buyRoom(player, "graveyard", "lighthouse")
-		else if index of event-slot is 34:
-			buyRoom(player, "church", "graveyard")
-#		else if index of event-slot is 37:
-#			buyRoom(player, "trainstation", "church")
+		if {suffix::%{_p}'s uuid%} is "&dLirre":
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&dChicken":
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aBought - Click to equip":
+				equipSuffix(player, "&dLirre")
+		else:
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aClick to buy":
+				buySuffix(player, 65, "&dLirre")	
+		
+			
+		if {suffix::%{_p}'s uuid%} is "&aMock":
+			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&aMock":
+			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aBought - Click to equip":
+				equipSuffix(player, "&aMock")
+		else:
+			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aClick to buy":
+				buySuffix(player, 85, "&aMock")
+			
+
+		if {suffix::%{_p}'s uuid%} is "&5&lNerd":
+			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&5&lNerd":
+			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aBought - Click to equip":
+				equipSuffix(player, "&5&lNerd")
+		else:
+			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aClick to buy":
+				buySuffix(player, 100, "&5&lNerd")	
+		
+		
+		if {suffix::%{_p}'s uuid%} is "&e&l&nEGG":
+			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aEquipped"
+		else if {suffixes::%{_p}'s uuid%::*} contains "&e&l&nEGG":
+			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aBought - Click to equip":
+				equipSuffix(player, "&e&l&nEGG")
+		else:
+			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aClick to buy":
+				buySuffix(player, 400, "&e&l&nEGG")
+			
+	open the last gui for {_p}
+		
+function roomShop(p: player):
+	create a gui with virtual chest inventory with 6 rows named "Room Shop": 
+		format gui slot 0,2,4,6,8,18,26,36,44,46,48,50, and 52 with red stained glass pane named " "
+		format gui slot 1,3,5,7,9,17,27,35,45,47,49,51, and 53 with white stained glass pane named " "
+		set {_c} to 9
+		set {_nv::*} to 0,2,4,6,8,18,26,36,44,46,48,50,51,3,5,7,9,17,27,35,47,49,51, and 53
+		loop {rooms::*}:
+			if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
+				add 1 to {_c}
+				if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
+					add 1 to {_c}
+			set {_uuid} to uuid of {_p}	
+			set {_price} to {rooms::%loop-value%::price}
+			if {rooms::%loop-value%::id} is 1:
+				format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
+			else if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id} - 1:
+				if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id}:
+					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
+				else:
+					set {_lv} to loop-value
+					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%{_lv}%::epc})%" and "&dCost &7- &5%getNumberFormatted({rooms::%loop-value%::c})% Eggs" and "&aClick to buy!":
+						if {eggs::%{_uuid}%} is greater than or equal to {rooms::%{_lv}%::c}:
+							add {rooms::%{_lv}%::id} to {ul::%{_uuid}%::*}
+							remove {rooms::%{_lv}%::c} from {eggs::%{_uuid}%}
+							set {tag::%{_uuid}%} to {rooms::%{_lv}%::tag}
+							play sound "entity.player.levelup" to {_p}
+							loop {rooms::*}:
+								if {rooms::%loop-value%::id} is {rooms::%{_lv}%::id} + 1:
+									set {_nc} to {rooms::%loop-value%::c}
+							if {_nc} is set:
+								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
+							else:
+								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b." to {_p}
+							roomShop({_p})
+						else:
+							send "&cYou do not have enough eggs to purchase this room!" to {_p}
+							play sound "entity.villager.no" to {_p}
+			else:
+				loop {rooms::*}:
+					if {rooms::%loop-value-2%::id} is {rooms::%loop-value-1%::id} - 1:
+						format gui slot {rooms::%loop-value-1%::id} + {_c} with {rooms::%loop-value-1%::it} named "&b%{rooms::%loop-value-1%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value-1%::epc})%" and "&7Requires &e%{rooms::%loop-value-2%::u}% &7to purchase!"
+				
+			
+	open the last gui for {_p}
+		
+on join:
+	if {ul::%player's uuid%::*} is not set:
+		add 1 to {ul::%player's uuid%::*}
+		
+
+		
 command /shop:
 	trigger:
-		loadShopMenu(player)
-		open metadata tag "shopMenu" of player to player
-
-on join:
-	if {%player's uuid%::roomtag} is not set:
-		set {%player's uuid%::roomtag} to {areas::eggclicker_spawn::tag} 
-
-function buyRoom(p: player, id: text, previous: text):
-	set {_uuid} to uuid of {_p}
-	if {%{_uuid}%::area::eggclicker_%{_previous}%} is true:
-		if {%{_uuid}%::area::eggclicker_%{_id}%} is false:
-			set {_price} to ({areas::eggclicker_%{_id}%::price} * ({%{_uuid}%::prestiges} / 10 + 1))
-			if {%{_uuid}%::eggs} is not greater than or equal to {_price}:
-				send "&cYou do not have enough eggs to purchase this room!" to {_p}
-				play sound "entity.villager.no" to {_p}
-			else:
-				set {%{_uuid}%::area::eggclicker_%{_id}%} to true
-				set {%{_uuid}%::eggs} to {%{_uuid}%::eggs} - {areas::eggclicker_%{_id}%::price}
-				execute console command "/rg addmember eggclicker_%{_id}% %{_p}% -w EggClicker"
-				set {%{_uuid}%::roomtag} to {areas::eggclicker_%{_id}%::tag}
-				if {_id} is "mine":
-					execute console command "/rg addmember eggclicker_mine2 %{_p}% -w EggClicker"
-				play sound "entity.player.levelup" to {_p}
-				loadShop({_p})
-				open metadata tag "shop" of {_p} to {_p}
-		else if {%{_uuid}%::area::eggclicker_%{_id}%} is not set:
-			set {%{_uuid}%::area::eggclicker_%{_id}%} to false
-			buyRoom({_p}, {_id}, {_previous})
-	else:
-		send action bar "&cYou have the unlocked the previous area!" to {_p}
-		play sound "entity.villager.no" to {_p}
-
-command /newtestprofile: #egg, tokens, multi, prestige, clicks
-	permission: op
-	trigger:
-		set {%player's uuid%::eggs} to random integer between 0 and 100000000
-		set {%player's uuid%::tokens} to random integer between 0 and 750
-		set {%player's uuid%::multiplier} to (random integer between 4 and 200) * 0.25
-		set {%player's uuid%::prestiges} to random integer between 0 and 500
-		set {%player's uuid%::clicks} to random integer between 0 and 100000
-		send "&aGenerated a new test profile!"
-
+		shop(player)
+		
+		
+on offhand switch:
+	cancel event
+	shop(player)
+		

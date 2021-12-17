@@ -1,25 +1,24 @@
-on right click:
-	add 1 to {totalclicks}
-	add 1 to {%player's uuid%::clicks}
+function refreshScoreBoard(p: player):
+	wipe {_p}'s sidebar
+	set name of sidebar of {_p} to "&e&lEggClicker &8〡&7[S5&7]"
+	set score "&7 &6" in sidebar of {_p} to 15
+	set score "&6&l%{_p}%" in sidebar of {_p} to 14
+	set score "&8✦ &eEggs: &f%getNumberFormatted({eggs::%{_p}'s uuid%})%" in sidebar of {_p} to 14
+	set score "&8✦ &eTokens: &f⛁%getNumberFormatted({tokens::%{_p}'s uuid%})%" in sidebar of {_p} to 14
+	set score "&8✦ &ePrestige: &f✫%getNumberFormatted({prestige::%{_p}'s uuid%})%" in sidebar of {_p} to 12
+	set score "&8✦ &eMultiplier: &fx%{multiplier::%{_p}'s uuid%}%" in sidebar of {_p} to 11
+	set score "&8✦ &ePlayer Clicks: &f%getNumberFormatted({clicks::%{_p}'s uuid%})%" in sidebar of {_p} to 10
+	set score "&8✦ &eTag: &f%{tag::%{_p}'s uuid%}%" in sidebar of {_p} to 9
+	set score "&8✦ &eSuffix: &f%{suffix::%{_p}'s uuid%}%" in sidebar of {_p} to 8
+	set score "&7 " in sidebar of {_p} to 7
+	set score "&6&lServer" in sidebar of {_p} to 6
+	set score "&8✦ &ePlayers: &f%number of all players%&f/%maximum amount of players%" in sidebar of {_p} to 5
+	set score "&8✦ &eUnique Joins: &f%getNumberFormatted(number of all offline players)%" in sidebar of {_p} to 4
+	set score "&8✦ &eServer Clicks: &f%getNumberFormatted({clicks})%" in sidebar of {_p} to 3
+	set score "&7" in sidebar of {_p} to 2
+	set score "&eThanks for playing <3" in sidebar of {_p} to 1
 
-on join:
-	while player is online:
-		set title of player's scoreboard to "&e&lEggClicker &8〡&7[v4.0.2]"
-		set line 16 of player's scoreboard to "&7"
-		set line 15 of player's scoreboard to "&6&l%player%"
-		set line 14 of player's scoreboard to "&8✦ &eEggs: &f%getNumberFormatted({%player's uuid%::eggs})%"
-		set line 13 of player's scoreboard to "&8✦ &eTokens: &f⛁%getNumberFormatted({%player's uuid%::tokens})%"
-		set line 12 of player's scoreboard to "&8✦ &ePrestige: &f✫%getNumberFormatted({%player's uuid%::prestiges})%"
-		set line 11 of player's scoreboard to "&8✦ &eMultiplier: &fx%{%player's uuid%::multiplier}%"
-		set line 10 of player's scoreboard to "&8✦ &ePlayer Clicks: &f%getNumberFormatted({%player's uuid%::clicks})%"
-		set line 9 of player's scoreboard to "&8✦ &eTag: %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}%" 
-		set line 8 of player's scoreboard to "&7"
-		set line 7 of player's scoreboard to "&6&lServer"
-		set line 6 of player's scoreboard to "&8✦ &ePlayers: &f%number of all players%&f/%maximum amount of players%"
-		set line 5 of player's scoreboard to "&8✦ &ePlayer Record: &f%getNumberFormatted({playerrecord})%"
-		set line 4 of player's scoreboard to "&8✦ &eUnique Joins: &f%getNumberFormatted(number of all offline players)%"
-		set line 3 of player's scoreboard to "&8✦ &eServer Clicks: &f%getNumberFormatted({totalclicks})%"
-		set line 2 of player's scoreboard to "&7"
-		set line 1 of player's scoreboard to "&eThanks for playing <3"
-		wait 1 tick
-		toggle player's scoreboard to on
+
+every 2 seconds:
+	loop all players:
+		refreshScoreBoard(loop-player)

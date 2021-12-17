@@ -5,7 +5,7 @@ command /tokenshop:
 function loadTokenShop(p: player):
 	set metadata tag "tokenShop" of {_p} to chest inventory with 3 rows named "Token Shop"
 	set slot 1,3,5,7,9,17,19,21,23, and 25 of metadata tag "tokenShop" of {_p} to orange stained glass pane named " "
-	set slot 0,2,4,6,8,20,22,24, and 26 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
+	set slot 0,2,4,6,8,20,22, and 24 of metadata tag "tokenShop" of {_p} to black stained glass pane named " " 
 	set slot 18 of metadata tag "tokenShop" of {_p} to arrow named "&7&oBack to Menu" 
 
 	set slot 10 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "chicken")
@@ -15,6 +15,8 @@ function loadTokenShop(p: player):
 	set slot 14 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "nerd")
 	set slot 15 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "egg")
 	set slot 16 of metadata tag "tokenShop" of {_p} to formatTokenShop({_p}, "tryhard")
+
+	set slot 26 of metadata tag "tokenShop" of {_p} to barrier named "&cComing Soon!" with lore "&7This menu is currently in development!"
 
 function buyTag(p: player, id: text):
 	set {_uuid} to uuid of {_p}
@@ -162,3 +164,11 @@ function resetPlayerTags(p: player):
 	set {%{_uuid}%::tag::egg} to false
 	set {%{_uuid}%::tag::tryhard} to false
 	set {%{_uuid}%::currentTag} to "none"
+
+function loadExtraTagMenu(p: player):
+	set {_uuid} to uuid of {_p}
+	set {_extrarows} to (floor(size of {%{_uuid}%::extratags} / 7) - 1
+	if {_extrarows} is less than 0:
+		set {_extrarows} to 0
+	set {_rows} to 3 + {_extrarows}
+	set metadata tag "extraTags" of {_p} to chest inventory with {_rows} rows named "Your Tags"

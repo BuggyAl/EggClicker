@@ -1,18 +1,27 @@
 on join:
 	set join message to "&7[&a+&7] %player%"
-	if number of all players is more than {playerrecord}:
-		send "&fNew players online record! &7(&b%number of all players%&7)" to all players
-		set {playerrecord} to number of all players
 
-on join:
-	if {%player's uuid%::clicks} is not set:
-		set {%player's uuid%::clicks} to 0
+
 on quit:
-     set quit message to "&7[&c-&7] %player%"
+     set quit message to ""
 
 on first join:
 	set join message to "&7[&aNEW JOIN&7] &f%player% &7(&b##%size of all offline players%&7)"
-
+command /sc [<text>]:
+    aliases: /staffchat
+    permission: sc.use
+    permission message: &e&lEGGCLICKER &8| &cYou are not permitted to preform this action.
+    trigger:
+        if arg-1 is set:
+            loop all players:
+                if {nick.%player's uuid%} is not set:
+                    set {dis.%player's uuid%} to player
+                else:
+                    set {dis.%player's uuid%} to {nick.%player's uuid%}
+                if loop-player has permission "sc.use":
+                    #set {w} to player's world
+                    send "&8(&e&l&nSTAFF&8) %colored player's prefix%%{dis.%player's uuid%}% &8&o• &f%arg-1%" to loop-player
+                    #delete {w}
 command chatcolor [<text>]:
 	permission: egg.chatcolor
 	trigger:
@@ -36,7 +45,10 @@ command chatcolor [<text>]:
 		else:
 			send "&9Blue, &bAqua, &cRed, &4DarkRed, &eYellow, &fWhite, &aLime, &dPink"
 
+
 on chat:
+
+
 	loop all players:
 		if message contains "%loop-player%":
 			replace all "@" with "" in message
@@ -52,10 +64,6 @@ on chat:
 	replace all "[multi]" and "[multiplier]" with "&e%{%player's uuid%::multiplier}% Multiplier&7" in message
 	replace all "[clicks]" with "&e%getNumberFormatted({%player's uuid%::clicks})% Clicks&7" in message
 
-on join:
-	if {%player's uuid%::currentTag} is not set:
-		set {%player's uuid%::currentTag} to "none"
-
 on chat:
 	replace all "nigger" with "****" in message
 	replace all "jackass" with "****" in message
@@ -66,23 +74,55 @@ on chat:
 	replace all "卍" with "****" in message
 	replace all "nazi" with "****" in message
 	replace all "kill yourself" with "****" in message
-	replace all "fuck" with "****" in message
-	replace all "nigga" with "****" in message
+	replace all " cock " with "****" in message
 
-	player has permission "whitechat":
-		if {%player's uuid%::currentTag} is not "none":
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &f%{chatcolor::%player's uuid%}%%colored message%"
-		else:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &f%colored message%"
+	if {prestige::%player's uuid%} is more than or equal to 1:
+		set {colorp::%player's uuid%} to "&f"
+	if {prestige::%player's uuid%} is more than or equal to 3:
+		set {colorp::%player's uuid%} to "&e"
+	if {prestige::%player's uuid%} is more than or equal to 5:
+		set {colorp::%player's uuid%} to "&e&l"
+	if {prestige::%player's uuid%} is more than or equal to 10:
+		set {colorp::%player's uuid%} to "&b"
+	if {prestige::%player's uuid%} is more than or equal to 20:
+		set {colorp::%player's uuid%} to "&b&l"
+	if {prestige::%player's uuid%} is more than or equal to 40:
+		set {colorp::%player's uuid%} to "&d"
+	if {prestige::%player's uuid%} is more than or equal to 70:
+		set {colorp::%player's uuid%} to "&d&l"
+	if {prestige::%player's uuid%} is more than or equal to 100:
+		set {colorp::%player's uuid%} to "&5"
+	if {prestige::%player's uuid%} is more than or equal to 150:
+		set {colorp::%player's uuid%} to "&5&l"
+	if {prestige::%player's uuid%} is more than or equal to 300:
+		set {colorp::%player's uuid%} to "&4"
+	if {prestige::%player's uuid%} is more than or equal to 500:
+		set {colorp::%player's uuid%} to "&4&l"
+	if {prestige::%player's uuid%} is more than or equal to 500:
+		set {colorp::%player's uuid%} to "&4&l"
+	
+	if {prestige::%player's uuid%} is less than or equal to 0:
+		set {colorp::%player's uuid%} to "&7"
+	
+	
+	#buyrank {player}  egg 1 100
+	if {nick.%player's uuid%} is not set:
+		set {dis.%player's uuid%} to player
 	else:
-		if {%player's uuid%::currentTag} is not "none":
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% %{tokenshop::tags::%{%player's uuid%::currentTag}%::display}% &8» &7%{chatcolor::%player's uuid%}%%colored message%"
+		set {dis.%player's uuid%} to {nick.%player's uuid%}
+	player has permission "whitechat":
+		if {suffix::%player's uuid%} is not "None": 
+			set chat format to "%{colorp::%player's uuid%}%[✫%getNumberFormatted({prestige::%player's uuid%})%%{colorp::%player's uuid%}%] &7[&b%{tag::%player's uuid%}%&7] %player's prefix%%{dis.%player's uuid%}% &7[%{suffix::%player's uuid%}%&7] &8» &f%colored message%"
 		else:
-			set chat format to "&7[✫%getNumberFormatted({%player's uuid%::prestiges})%&7] %{%player's uuid%::roomtag}% %player's prefix%%player% &8» &7%message%"
+			set chat format to "%{colorp::%player's uuid%}%[✫%getNumberFormatted({prestige::%player's uuid%})%%{colorp::%player's uuid%}%] &7[&b%{tag::%player's uuid%}%&7] %player's prefix%%{dis.%player's uuid%}% &8» &f%colored message%"
+	else:
+		if {suffix::%player's uuid%} is not "None": 
+			set chat format to "%{colorp::%player's uuid%}%[✫%getNumberFormatted({prestige::%player's uuid%})%%{colorp::%player's uuid%}%] &7[&b%{tag::%player's uuid%}%&7] %player's prefix%%{dis.%player's uuid%}% &7[%{suffix::%player's uuid%}%&7] &8» &7%message%"
+		else:
+			set chat format to "%{colorp::%player's uuid%}%[✫%getNumberFormatted({prestige::%player's uuid%})%%{colorp::%player's uuid%}%] &7[&b%{tag::%player's uuid%}%&7] %player's prefix%%{dis.%player's uuid%}% &8» &7%message%"
 
 command /bc <text>:
 	permission: click.broadcast
-	aliases: /broadcast
 	trigger:
 		broadcast ""
 		broadcast "&c&lEGGCLICKER BROADCAST &8>> &c%coloured arg-1%"
@@ -90,19 +130,22 @@ command /bc <text>:
 		play sound "block.note_block.bell" to all players
 		
 
-#every 2 minutes:
-#	broadcast ""
-#	broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
-#	broadcast ""
-#	wait 1 minute
-#	broadcast ""
-#	broadcast "&fDid you know you can press &eF &fto open the &eshop&f?"
-#	broadcast ""
+
 	
-#every 5 minutes:
-#	broadcast ""
-#	broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
-#	broadcast ""
+every 2 minutes:
+	set {_a} to random integer between 1 and 3
+	if {_a} is 1:
+		broadcast ""
+		broadcast "&fDid you know you can press &eF &fto open the &eshop&f?"
+		broadcast ""
+	if {_a} is 2:
+		broadcast ""
+		broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
+		broadcast ""
+	if {_a} is 3:
+		broadcast ""
+		broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
+		broadcast ""
 
 on command "/buy":
 	cancel event
@@ -120,7 +163,138 @@ command /discord:
 		send "" to player
 		play sound "block.honey_block.break" to player
 
-command /clearplrecord:
-	permission: op
-	trigger:
-		set {playerrecord} to 0
+
+
+command /eggtop:
+    aliases:et
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lEgg Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {eggs::*} from highest to lowest with format "@index"
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({eggs::%{_player}%})% &eeggs)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
+		
+command /tokentop:
+    aliases:tt
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lToken Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {tokens::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({tokens::%{_player}%})% &etokens)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
+		
+		
+command /prestigetop:
+    aliases:pt
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lPrestige Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {prestige::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({prestige::%{_player}%})% &eprestiges)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
+		
+command /multipliertop:
+    aliases:mt, multitop
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lMultiplier Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {multiplier::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(x%getNumberFormatted({multiplier::%{_player}%})% &emultiplier)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
+		
+command /clicktop:
+    aliases:ct
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lClick Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {clicks::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({clicks::%{_player}%})% &eclicks)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
+
+
+command /carpettop:
+    aliases:ct
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lCarpet Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {foundcarpets::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({foundcarpets::%{_player}%})% &ecarpets)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
