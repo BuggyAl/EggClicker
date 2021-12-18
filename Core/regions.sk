@@ -65,14 +65,17 @@ on right-click:
 				send action bar "&e+%getNumberFormatted(round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}))% Eggs &8(&f%getNumberFormatted({eggs::%player's uuid%})%&8)" to player
 			
 on region enter:
-	loop {rooms::*}:
-		if {rooms::%loop-value%::r} parsed as region is event-region:
-			if {ul::%player's uuid%::*} does not contain {rooms::%loop-value%::id}:
-				cancel event
-				send "&cYou have not unlocked this room, do &4/shop&c!" to player
-				if loop-value is "stronghold":
-					teleportPlayer(player, 40.5, 55, 327.5, 0, 0, "EggClicker") # testing to see if working
-
+	if {bypassroomentry::%player's uuid%} is not true:
+		loop {rooms::*}:
+			if {rooms::%loop-value%::r} parsed as region is event-region:
+				if {ul::%player's uuid%::*} does not contain {rooms::%loop-value%::id}:
+					if loop-value is "end":
+						if {ul::%player's uuid%::*} does not contain {rooms::end::id}:
+							teleportPlayer(player, 40.5, 54.5, 327.5, 0, -90, "EggClicker")
+							send action bar "&cYou have not unlocked this room, do &4/shop&c!" to player
+							stop
+					cancel event
+					send action bar "&cYou have not unlocked this room, do &4/shop&c!" to player
 			
 function price(n: number) :: number:
 	set {_a} to {_n}
@@ -124,3 +127,14 @@ function clickmoney(n: number) :: number:
 		return 2 * ((10 ^ round(({_n} / 3))) / 10)
 	else: 
 		return 1 * (10 ^ round(({_n} / 3))) 
+
+command /toggleroombypass:
+	permission: regions.bypassborder
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if {bypassroomentry::%player's uuid%} is true:
+			set {bypassroomentry::%player's uuid%} to false
+			send "&cYou are no longer bypassing room entry!" to player
+		else:
+			set {bypassroomentry::%player's uuid%} to true
+			send "&aYou are now bypassing room entry!" to player
