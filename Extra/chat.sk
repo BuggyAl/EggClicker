@@ -298,3 +298,10 @@ command /carpettop:
                 stop loop
 
         send ""
+
+command /playtime [<offline player>]:
+	trigger:
+		if arg-1 is not set:
+			send "&aYou have %player's time played% &aplaytime!" to player
+		else:
+			send "&e%arg-1% &ahas a playtime of %arg-1's time played%&a!" to player
