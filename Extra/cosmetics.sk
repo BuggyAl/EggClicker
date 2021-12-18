@@ -1,0 +1,33 @@
+function loadCosmetics():
+	set {cosmetics::ice_skates} to unbreakable chainmail boots named "&bIce Skates" 
+
+command /updatecosmetics:
+	permission: op
+	trigger:
+		loadCosmetics()
+		send "&aDone!"
+
+command /granticeskates [<offline player>]:
+	permission: cosmetics.grant
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if arg-1 is set:
+			add 1 to {cosmetics::ice_skates::amount}
+			set {_p} to arg-1
+			give {_p} 1 of {cosmetics::ice_skates} with lore "&7Stand on ice to go super fast!", "", "&8&oEdition ##%{cosmetics::ice_skates::amount}%", and "&aGranted to &e%arg-1% &aby &6%player%" with all flags hidden
+		else:
+			send "&cPlease specify a player!"
+
+on step on ice or packed ice or blue ice:
+	if boots of player is {cosmetics::ice_skates}:
+		remove swiftness from the player
+		apply swiftness 10 without any particles to the player for 1 second
+
+command /seticeskatesedition [<integer>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			set {cosmetics::ice_skates::amount} to arg-1
+			send "&aSet the ice skates edition number to &e%{cosmetics::ice_skates::amount}%&a!"
+		else:
+			send "&cPlease specify an integer!"
