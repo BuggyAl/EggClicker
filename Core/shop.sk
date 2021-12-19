@@ -117,7 +117,7 @@ function tokenShopOne(p: player):
 			format gui slot "f" with glowing egg named "&e&l&nEGG Tag" with lore "&fCost: &e⛁20000" and "&aClick to buy":
 				buySuffix({_p}, 20000, "&e&l&nEGG")
 			
-		format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (25000 * {multiplier::%{_p}'s uuid%})%":
+		format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (5000 * {multiplier::%{_p}'s uuid%})%":
 			if {tokens::%{_p}'s uuid%} is more than 500 + (5000 * {multiplier::%{_p}'s uuid%}):
 				remove 500 + (5000 * {multiplier::%{_p}'s uuid%}) from {tokens::%{_p}'s uuid%}
 				add 0.1 to {multiplier::%{_p}'s uuid%}
