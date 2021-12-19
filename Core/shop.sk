@@ -11,7 +11,7 @@ function buySuffix(p: player, cost: number, suf: text):
 		add {_suf} to {suffixes::%{_uuid}%::*}
 		play sound "block.note_block.pling" to {_p}
 		send title "&a&l&nSuffix Purchased" to {_p}
-		tokenShop({_p})
+		tokenShopOne({_p})
 	else:
 		send "&cNot enough tokens! &8(%{tokens::%{_uuid}%}%&8/%{_cost}%&8)" to {_p}
 		
@@ -20,101 +20,148 @@ function equipSuffix(p: player, suf: text):
 	set {suffix::%{_uuid}%} to {_suf}
 	play sound "block.note_block.pling" to {_p}
 	send title "&a&l&nSuffix Equipped" to {_p}
-	tokenShop({_p})
+	tokenShopOne({_p})
+		
+		
+		
+		
 		
 		
 #command sufco <number>:
 #	permission: op
 #	trigger:
 #		send "%suffixCost(player, arg-1)%"
-function shop(p: player):
-	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yxrxtxsxy", and "xyxyxyxyx":
+function menu(p: player):
+	create a gui with virtual chest inventory with 3 rows named "&eMenu" and shape "xyxyxyxyx", "yrytymysy", and "xyxyxyxyx":
 		format gui slot "x" with red stained glass pane named " "
 		format gui slot "y" with white stained glass pane named " "
 		format gui slot "r" with egg named "&6&lRoom Shop" with lore "&7Buy rooms here!":
 			roomShop({_p})
 		format gui slot "t" with sunflower named "&e&lToken Shop" with lore "&7Spend tokens here!":
-			tokenShop({_p})
+			tokenShopOne({_p})
+		format gui slot "m" with obsidian named "&b&lMinions" with lore "&7See yor minions that you have!":
+			close {_p}'s inventory
+			make {_p} say "/minions"
 		format gui slot "s" with emerald named "&a&lServer Store" with lore "&7Support the server!":
 			close {_p}'s inventory
 			make {_p} say "/buy"
+		
 	open the last gui for {_p}
 		
-function tokenShop(p: player):
-	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyx":
+		
+		
+			
+		
+function tokenShopOne(p: player):
+	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyn":
 		format gui slot "x" with red stained glass pane named " "
 		format gui slot "y" with white stained glass pane named " "
 		
 		if {suffix::%{_p}'s uuid%} is "&cChicken":
-			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aEquipped"
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&fCost: &e⛁50" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&cChicken":
-			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aBought - Click to equip":
-				equipSuffix(player, "&cChicken")
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&fCost: &e⛁50" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&cChicken")
 		else:
-			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&7Cost: &e⛁10" and "&aClick to buy":
-				buySuffix(player, 10, "&cChicken")
+			format gui slot "a" with chicken spawn egg named "&c&nChicken Tag" with lore "&fCost: &e⛁50" and "&aClick to buy":
+				buySuffix({_p}, 50, "&cChicken")
 		
 		
 		if {suffix::%{_p}'s uuid%} is "&eGamer":
-			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aEquipped"
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&fCost: &e⛁100" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&eGamer":
-			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aBought - Click to equip":
-				equipSuffix(player, "&eGamer")
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&fCost: &e⛁100" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&eGamer")
 		else:
-			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&7Cost: &e⛁20" and "&aClick to buy":
-				buySuffix(player, 20, "&eGamer")
+			format gui slot "b" with blaze spawn egg named "&e&nGamer Tag" with lore "&fCost: &e⛁100" and "&aClick to buy":
+				buySuffix({_p}, 100, "&eGamer")
 				
 				
 		if {suffix::%{_p}'s uuid%} is "&bPro":
-			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aEquipped"
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&fCost: &e⛁500" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&bPro":
-			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aBought - Click to equip":
-				equipSuffix(player, "&bPro")
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&fCost: &e⛁500" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&bPro")
 		else:
-			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&7Cost: &e⛁40" and "&aClick to buy":
-				buySuffix(player, 40, "&bPro")
+			format gui slot "c" with drowned spawn egg named "&b&nPro Tag" with lore "&fCost: &e⛁500" and "&aClick to buy":
+				buySuffix({_p}, 5000, "&bPro")
 		
 	
 		if {suffix::%{_p}'s uuid%} is "&dLirre":
-			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aEquipped"
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&fCost: &e⛁1000" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&dChicken":
-			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aBought - Click to equip":
-				equipSuffix(player, "&dLirre")
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&fCost: &e⛁1000" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&dLirre")
 		else:
-			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&7Cost: &e⛁65" and "&aClick to buy":
-				buySuffix(player, 65, "&dLirre")	
+			format gui slot "d" with shulker spawn egg named "&d&nLirre Tag" with lore "&fCost: &e⛁1000" and "&aClick to buy":
+				buySuffix({_p}, 1000, "&dLirre")	
 		
-			
-		if {suffix::%{_p}'s uuid%} is "&aMock":
-			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aEquipped"
-		else if {suffixes::%{_p}'s uuid%::*} contains "&aMock":
-			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aBought - Click to equip":
-				equipSuffix(player, "&aMock")
-		else:
-			format gui slot "e" with creeper spawn egg named "&a&nMock Tag" with lore "&7Cost: &e⛁85" and "&aClick to buy":
-				buySuffix(player, 85, "&aMock")
 			
 
 		if {suffix::%{_p}'s uuid%} is "&5&lNerd":
-			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aEquipped"
+			format gui slot "e" with strider spawn egg named "&5&l&nNerd Tag" with lore "&fCost: &e⛁5000" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&5&lNerd":
-			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aBought - Click to equip":
-				equipSuffix(player, "&5&lNerd")
+			format gui slot "e" with strider spawn egg named "&5&l&nNerd Tag" with lore "&fCost: &e⛁5000" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&5&lNerd")
 		else:
-			format gui slot "f" with strider spawn egg named "&5&l&nNerd Tag" with lore "&7Cost: &e⛁100" and "&aClick to buy":
-				buySuffix(player, 100, "&5&lNerd")	
+			format gui slot "e" with strider spawn egg named "&5&l&nNerd Tag" with lore "&fCost: &e⛁5000" and "&aClick to buy":
+				buySuffix({_p}, 5000, "&5&lNerd")	
 		
 		
 		if {suffix::%{_p}'s uuid%} is "&e&l&nEGG":
-			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aEquipped"
+			format gui slot "f" with glowing egg named "&e&l&nEGG Tag" with lore "&fCost: &e⛁20000" and "&aEquipped"
 		else if {suffixes::%{_p}'s uuid%::*} contains "&e&l&nEGG":
-			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aBought - Click to equip":
-				equipSuffix(player, "&e&l&nEGG")
+			format gui slot "f" with glowing egg named "&e&l&nEGG Tag" with lore "&fCost: &e⛁20000" and "&aBought - Click to equip":
+				equipSuffix({_p}, "&e&l&nEGG")
 		else:
-			format gui slot "g" with glowing egg named "&e&l&nEGG Tag" with lore "&7Cost: &e⛁400" and "&aClick to buy":
-				buySuffix(player, 400, "&e&l&nEGG")
+			format gui slot "f" with glowing egg named "&e&l&nEGG Tag" with lore "&fCost: &e⛁20000" and "&aClick to buy":
+				buySuffix({_p}, 20000, "&e&l&nEGG")
 			
+		format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (25000 * {multiplier::%{_p}'s uuid%})%":
+			if {tokens::%{_p}'s uuid%} is more than 500 + (5000 * {multiplier::%{_p}'s uuid%}):
+				remove 500 + (5000 * {multiplier::%{_p}'s uuid%}) from {tokens::%{_p}'s uuid%}
+				add 0.1 to {multiplier::%{_p}'s uuid%}
+				send "&bSuccessfully bought +0.1x Multiplier" to {_p}
+				play sound "block.note_block.pling" to {_p}
+				tokenShopOne({_p})
+				
+		format gui slot "n" with arrow named "&cComing Soon":
+			if player is op:
+				tokenShopTwo({_p})
 	open the last gui for {_p}
+command fixdoubleegg:
+	permission: op
+	trigger:
+		set {doubleegg::%player's uuid%} to 0.1
+function tokenShopTwo(p: player):
+	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyn":
+		format gui slot "x" with red stained glass pane named " "
+		format gui slot "y" with white stained glass pane named " "
+		{doubleegg::%{_p}'s uuid%} is not set:
+			set {doubleegg::%{_p}'s uuid%} to 0.1
+		format gui slot "q" with barrier named "&cBack":
+			tokenShopOne({_p})
+		
+		set {doubleegg::cost::%{_p}'s uuid%} to round(10 + ({doubleegg::%{_p}'s uuid%} * (21 + 3.14156)))
+		format gui slot "a" with 2 egg named "&e&l&nDouble Egg" with lore "&7Adds chance of doubling", "&7your eggs gained.", "" and "&fChance: &e%{doubleegg::%{_p}'s uuid%}%%%" and "&fPrice: &e⛁%{doubleegg::cost::%{_p}'s uuid%}%":
+			{doubleegg::%{_p}'s uuid%} is more than or equal to 100:
+				send title "&cMAX CHANCE" to {_p}
+				stop
+			if {tokens::%{_p}'s uuid%} is more than or equal to {doubleegg::cost::%{_p}'s uuid%}:
+				send title "&aUpgraded!" with subtitle "&a%{doubleegg::%{_p}'s uuid%}%%% &2> &a%{doubleegg::%{_p}'s uuid%} + 0.1%%%" to {_p}
+				add 0.1 to {doubleegg::%{_p}'s uuid%}
+				remove {doubleegg::cost::%{_p}'s uuid%} from {tokens::%{_p}'s uuid%}
+				tokenShopTwo(player)
+				
+	open the last gui for {_p}
+		
+		
+		
+command /settp <text>:
+	permission: op
+	trigger:
+		set {rooms::%arg-1%::tp} to player's location
+		
 		
 function roomShop(p: player):
 	create a gui with virtual chest inventory with 6 rows named "Room Shop": 
@@ -133,7 +180,9 @@ function roomShop(p: player):
 				format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
 			else if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id} - 1:
 				if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id}:
-					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
+					set {_lv} to loop-value
+					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED - Click to teleport!":
+						teleport {_p} to {rooms::%{_lv}%::tp}
 				else:
 					set {_lv} to loop-value
 					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%{_lv}%::epc})%" and "&dCost &7- &5%getNumberFormatted({rooms::%loop-value%::c})% Eggs" and "&aClick to buy!":
@@ -146,8 +195,10 @@ function roomShop(p: player):
 								if {rooms::%loop-value%::id} is {rooms::%{_lv}%::id} + 1:
 									set {_nc} to {rooms::%loop-value%::c}
 							if {_nc} is set:
+								set {nextarea::%{_uuid}%} to {_nc}
 								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
 							else:
+								set {nextarea::%{_uuid}%} to "&fPrestige"
 								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b." to {_p}
 							roomShop({_p})
 						else:
@@ -167,12 +218,13 @@ on join:
 		
 
 		
-command /shop:
+command /menu:
+	aliases: shop
 	trigger:
-		shop(player)
+		menu(player)
 		
 		
 on offhand switch:
 	cancel event
-	shop(player)
+	menu(player)
 		
