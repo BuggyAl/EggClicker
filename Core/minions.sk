@@ -38,29 +38,17 @@ command /fixminions:
 		loop all players:
 			set {tokenupdate::%loop-player's uuid%} to true
 	
-function updatePlayerCratePrices(p: player):
-	set {_uuid} to uuid of {_p}
-	if {tokens::%{_uuid}%} is greater than 0:
-		set {cratePrice::epic::%{_uuid}%} to ({tpm::%{_uuid}%} / 50) * 10000
-		set {cratePrice::rare::%{_uuid}%} to ({tpm::%{_uuid}%} / 50) * 2000
-		set {cratePrice::common::%{_uuid}%} to ({tpm::%{_uuid}%} / 50) * 500
-	else:
-		set {cratePrice::epic::%{_uuid}%} to 10000
-		set {cratePrice::rare::%{_uuid}%} to 2000
-		set {cratePrice::common::%{_uuid}%} to 500		
-
 on right-click:
 	if event-block is in region "crates" parsed as region:
-		updatePlayerCratePrices(player)
 		if event-block is white concrete or white stained glass or white carpet:
 			create a gui with virtual chest inventory with 3 rows named "&eMinion Crate &7- &fCommon" and shape "xyxyxyxyx", "yxyxaxyxy", and "xyxyxyxyx":
 				format gui slot "x" with red stained glass pane named " "
 				format gui slot "y" with white stained glass pane named " "
-				format gui slot "a" with white concrete named "&eBuy &f&nCommon Minion Crate" with lore "" and "&fCost: &e%getNumberFormatted({cratePrice::common::%player's uuid%})% Tokens" and "" and "&e90%% &7- &fCommon Minion" and "&e9%% &7- &bRare Minion" and "&e1%% &7- &5Epic Minion":
+				format gui slot "a" with white concrete named "&eBuy &f&nCommon Minion Crate" with lore "" and "&fCost: &e1 Prestige Coin" and "" and "&e90%% &7- &fCommon Minion" and "&e9%% &7- &bRare Minion" and "&e1%% &7- &5Epic Minion":
 					close player's inventory
-					if {tokens::%player's uuid%} is more than or equal to {cratePrice::common::%player's uuid%}:
+					if {prestigecoins::%player's uuid%} is more than or equal to 1:
 						set {_n} to random integer between 1 and 100
-						remove {cratePrice::common::%player's uuid%} from {tokens::%player's uuid%}
+						remove 1 from {prestigecoins::%player's uuid%}
 						if {_n} is between 1 and 90:
 							giveCommon(player)
 						else if {_n} is between 91 and 99:
@@ -74,11 +62,11 @@ on right-click:
 			create a gui with virtual chest inventory with 3 rows named "&eMinion Crate &7- &bRare" and shape "xyxyxyxyx", "yxyxaxyxy", and "xyxyxyxyx":
 				format gui slot "x" with red stained glass pane named " "
 				format gui slot "y" with white stained glass pane named " "
-				format gui slot "a" with light blue concrete named "&eBuy &b&nRare Minion Crate" with lore "" and "&fCost: &e%getNumberFormatted({cratePrice::rare::%player's uuid%})% Tokens" and "" and "&e25%% &7- &fCommon Minion" and "&e70%% &7- &bRare Minion" and "&e5%% &7- &5Epic Minion":
+				format gui slot "a" with light blue concrete named "&eBuy &b&nRare Minion Crate" with lore "" and "&fCost: 5 Prestige Coins" and "" and "&e25%% &7- &fCommon Minion" and "&e70%% &7- &bRare Minion" and "&e5%% &7- &5Epic Minion":
 					close player's inventory
-					if {tokens::%player's uuid%} is more than or equal to {cratePrice::rare::%player's uuid%}:
+					if {prestigecoins::%player's uuid%} is more than or equal to 5:
 						set {_n} to random integer between 1 and 100
-						remove {cratePrice::rare::%player's uuid%} from {tokens::%player's uuid%}
+						remove 5 from {prestigecoins::%player's uuid%}
 						if {_n} is between 1 and 25:
 							giveCommon(player)
 						else if {_n} is between 26 and 95:
@@ -92,11 +80,11 @@ on right-click:
 			create a gui with virtual chest inventory with 3 rows named "&eMinion Crate &7- &5Epic" and shape "xyxyxyxyx", "yxyxaxyxy", and "xyxyxyxyx":
 				format gui slot "x" with red stained glass pane named " "
 				format gui slot "y" with white stained glass pane named " "
-				format gui slot "a" with purple concrete named "&eBuy &5&nEpic Minion Crate" with lore "" and "&fCost: %getNumberFormatted({cratePrice::epic::%player's uuid%})% &eTokens" and "" and "&e10%% &7- &fCommon Minion" and "&e70%% &7- &bRare Minion" and "&e20%% &7- &5Epic Minion":
+				format gui slot "a" with purple concrete named "&eBuy &5&nEpic Minion Crate" with lore "" and "&fCost: 10 Prestige Coins" and "" and "&e10%% &7- &fCommon Minion" and "&e70%% &7- &bRare Minion" and "&e20%% &7- &5Epic Minion":
 					close player's inventory
-					if {tokens::%player's uuid%} is more than or equal to {cratePrice::epic::%player's uuid%}:
+					if {prestigecoins::%player's uuid%} is more than or equal to 10:
 						set {_n} to random integer between 1 and 100
-						remove 10000 from {tokens::%player's uuid%}
+						remove 10 from {prestigecoins::%player's uuid%}
 						if {_n} is between 1 and 10:
 							giveCommon(player)
 						else if {_n} is between 11 and 80:

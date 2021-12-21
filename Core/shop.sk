@@ -23,9 +23,13 @@ function equipSuffix(p: player, suf: text):
 	tokenShopOne({_p})
 		
 		
-		
-		
-		
+command /fixstatcaps:
+	permission: op
+	trigger:
+		loop {multiplier::*}:	
+			if loop-value is greater than 100:
+				set {multiplier::%loop-index%} to 100
+		send "&aAll stats have been recapped!"
 		
 #command sufco <number>:
 #	permission: op
@@ -47,11 +51,7 @@ function menu(p: player):
 			make {_p} say "/buy"
 		
 	open the last gui for {_p}
-		
-		
-		
 			
-		
 function tokenShopOne(p: player):
 	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyn":
 		format gui slot "x" with red stained glass pane named " "
@@ -116,23 +116,28 @@ function tokenShopOne(p: player):
 		else:
 			format gui slot "f" with glowing egg named "&e&l&nEGG Tag" with lore "&fCost: &e⛁20000" and "&aClick to buy":
 				buySuffix({_p}, 20000, "&e&l&nEGG")
-			
-		format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (5000 * {multiplier::%{_p}'s uuid%})%":
-			if {tokens::%{_p}'s uuid%} is more than 500 + (5000 * {multiplier::%{_p}'s uuid%}):
-				remove 500 + (5000 * {multiplier::%{_p}'s uuid%}) from {tokens::%{_p}'s uuid%}
-				add 0.1 to {multiplier::%{_p}'s uuid%}
-				send "&bSuccessfully bought +0.1x Multiplier" to {_p}
-				play sound "block.note_block.pling" to {_p}
-				tokenShopOne({_p})
+		
+		if {multiplier::%{_p}'s uuid%} + 0.1 is greater than 100:
+			format gui slot "g" with barrier named "&b+0.1x Multiplier" with lore "&7You have maxed out your multiplier!"
+		else:
+			format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (60 * {tpm::%{_p}'s uuid%})%":
+				if {tokens::%{_p}'s uuid%} is more than 500 + (60 * {tpm::%{_p}'s uuid%}):
+					remove 500 + (60 * {tpm::%{_p}'s uuid%}) from {tokens::%{_p}'s uuid%}
+					add 0.1 to {multiplier::%{_p}'s uuid%}
+					send "&bSuccessfully bought +0.1x Multiplier" to {_p}
+					play sound "block.note_block.pling" to {_p}
+					tokenShopOne({_p})
 				
 		format gui slot "n" with arrow named "&cComing Soon":
 			if player is op:
 				tokenShopTwo({_p})
 	open the last gui for {_p}
+	
 command fixdoubleegg:
 	permission: op
 	trigger:
 		set {doubleegg::%player's uuid%} to 0.1
+
 function tokenShopTwo(p: player):
 	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyn":
 		format gui slot "x" with red stained glass pane named " "
@@ -154,14 +159,12 @@ function tokenShopTwo(p: player):
 				tokenShopTwo(player)
 				
 	open the last gui for {_p}
-		
-		
+			
 		
 command /settp <text>:
 	permission: op
 	trigger:
-		set {rooms::%arg-1%::tp} to player's location
-		
+		set {rooms::%arg-1%::tp} to player's location		
 		
 function roomShop(p: player):
 	create a gui with virtual chest inventory with 6 rows named "Room Shop": 
@@ -216,15 +219,34 @@ on join:
 	if {ul::%player's uuid%::*} is not set:
 		add 1 to {ul::%player's uuid%::*}
 		
+command /modifystat [<text>] [<offline player>] [<number>]:
+	permission: op
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if arg-1 is not set:
+			send "Please enter a stat to modify!" to player
+			stop
+		else:
+			if arg-1 is "eggs" or "prestige" or "tokens" or "tpm" or "prestigecoins" or "multiplier" or "clicks":
+				set {_uuid} to uuid of arg-2
+				set {_temp} to {%arg-1%::%{_uuid}%}
+				add arg-3 to {%arg-1%::%{_uuid}%}
+				send "&aYou have successfully modified &b%arg-1%&a for &b%arg-2%&a from &b%{_temp}% to &b%{%arg-1%::%{_uuid}%}%&a." to player
 
-		
 command /menu:
 	aliases: shop
 	trigger:
 		menu(player)
-		
-		
+			
 on offhand switch:
 	cancel event
 	menu(player)
-		
+
+command /fixnegativetokens:
+	permission: op
+	trigger:
+		loop {tokens::*}:
+			if loop-value is less than 0:
+				set {tokens::%loop-index%} to (loop-value * -1)
+				send "&aTokens of &e%loop-index parsed as player% &ahave been fixed!"
+		send "Done!"
