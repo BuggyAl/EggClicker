@@ -1,0 +1,38 @@
+command /checkcps [<offline player>] [<integer>]:
+	permission: staff
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if arg-1 is not set:
+			send "&cPlease specify a player to check!"
+			stop
+		else:
+			if arg-2 is not set:
+				send "&cPlease specify a duration in seconds!" 
+				stop
+			else:
+				set {countclicks::%uuid of arg-1%} to true
+				set {checkclicks::%uuid of arg-1%} to 0
+				send "&aChecking clicks for &e%arg-1% &afor &e%arg-2% &aseconds..."
+				set {_wait} to "%arg-2% seconds" parsed as timespan
+				wait {_wait}
+				send "&aPlayer &e%arg-1% &ahas clicked &e%{checkclicks::%uuid of arg-1%}% &atimes in &e%arg-2% &aseconds! &7(%{checkclicks::%uuid of arg-1%} / arg-2% &7CPS)"
+				set {countclicks::%uuid of arg-1%} to false
+				delete {checkclicks::%uuid of arg-1%}
+				delete {countclicks::%uuid of arg-1%}
+
+on right click:
+	if {countclicks::%player's uuid%} is true:
+		add 1 to {checkclicks::%player's uuid%}
+
+command /info [<offline player>]:
+	permission: player.info
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if arg-1 is not set:
+			send "&cPlease specify a player!"
+			stop
+		else:
+			set {_uuid} to arg-1's uuid
+			message centered "", "&6&lStats of %arg-1%", "&7---", "&eEggs &7- &e%getNumberFormatted({eggs::%{_uuid}%})%", "&eTokens &7- &e%getNumberFormatted({tokens::%{_uuid}%})%", "&eMultiplier &7- &e%{multiplier::%{_uuid}%}%", and "&ePrestige &7- &e%{prestige::%{_uuid}%}%" to player
+			message centered "&ePrestige Coins &7- &e%getNumberFormatted({prestigecoins::%{_uuid}%})%", "&eTPM &7- &e%{tpm::%{_uuid}%}%", "&eClicks &7- &e%{clicks::%{_uuid}%}%",  and "" to player
+
