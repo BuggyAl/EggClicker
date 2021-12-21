@@ -173,7 +173,7 @@ every 2 minutes:
 		broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
 		broadcast ""
 	wait 30 seconds
-	play sound "block.note_block.pling" at volume 10 to all players
+	play sound "block.note_block.bell" at volume 10 to all players
 	broadcast ""
 	broadcast "&fThere is currently a &e&l25%% Christmas Sale &fin our store! &fCheck it out at &e&l/buy"
 	broadcast ""
@@ -354,6 +354,27 @@ command /tpmtop:
 
         send ""
 
+command /pctop:
+    aliases: pct, prestigecointop, pcointop
+    trigger:
+        set {_top} to 10
+
+        send ""
+        send " &e&lPrestige Coin Top &f(Top 10)"
+        send ""
+        set {_top::*} to sorted {prestigecoins::*} from highest to lowest with format "@index" 
+        loop {_top::*}:
+            add 1 to {_n}
+
+            set {_p} to "%loop-value%" parsed as offline player
+            set {_player} to {_p}'s uuid
+
+            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({prestigecoins::%{_player}%})% &ePrestige Coins)"
+
+            if {_n} is {_top}:
+                stop loop
+
+        send ""
 
 command /playtimetop:
     aliases:ptt
