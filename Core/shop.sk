@@ -120,9 +120,10 @@ function tokenShopOne(p: player):
 		if {multiplier::%{_p}'s uuid%} + 0.1 is greater than 100:
 			format gui slot "g" with barrier named "&b+0.1x Multiplier" with lore "&7You have maxed out your multiplier!"
 		else:
-			format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%500 + (60 * {tpm::%{_p}'s uuid%})%":
-				if {tokens::%{_p}'s uuid%} is more than 500 + (60 * {tpm::%{_p}'s uuid%}):
-					remove 500 + (60 * {tpm::%{_p}'s uuid%}) from {tokens::%{_p}'s uuid%}
+			set {_multicost} to (500 + ((60 * {tpm::%{_p}'s uuid%}) * {multiplier::%{_p}'s uuid%})) * 10
+			format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%{_multicost}%":
+				if {tokens::%{_p}'s uuid%} is more than {_multicost}:
+					remove {_multicost} from {tokens::%{_p}'s uuid%}
 					add 0.1 to {multiplier::%{_p}'s uuid%}
 					send "&bSuccessfully bought +0.1x Multiplier" to {_p}
 					play sound "block.note_block.pling" to {_p}
