@@ -1,0 +1,39 @@
+Options:
+    iconLocked: coal
+    iconUnlocked: diamond
+    secretIconLocked: coal block
+    secretIconUnlocked: diamond block
+
+function registerAcheivement(id: text, displayName: text, lore: text, secret: boolean): # use \n\ to make a new line in lore!
+    set {acheivements::%{_id}%::displayName} to {_displayName}
+    set {acheivements::%{_id}%::iconlore::*} to {_lore} split at "\n\"
+    set {acheivements::%{_id}%::secret} to {_secret}
+
+function loadAchevementMenu(p: player):
+    set {_uuid} to uuid of {_p}
+    set {_acheivementTotal} to size of {acheivements::*}
+    set {_pages} to ceil({_unlockedAdvancements} / 28)
+    if {_pages} is less than 1:
+        set {_pages} to 1
+    set metadata tag "acheivementMenu" of {_p} to chest inventory with 6 rows named "Your Acheivements"
+    loop integers between 0 and 44:
+        set slot loop-integer to black stained glass pane named " "
+    
+function acheivementIcon(id: text, p: player) :: item:
+    set {_uuid} to uuid of {_p}
+    if {acheivements::%{_id}%::secret} is not true:
+        if {%{_uuid}%::acheivements::%{_id}%::unlocked} is true:
+            return 1 {@iconUnlocked} named "&a%{acheivements::%{_id}%::displayName}%" with lore {acheivements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&4Coming Soon!", "", and "&aAcheivement Unlocked!"
+        else:
+            return 1 {@iconLocked} named "&a%{acheivements::%{_id}%::displayName}%" with lore {acheivements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&4Coming Soon!", "", and "&cAcheivement Locked!"
+    else:    
+        if {%{_uuid}%::acheivements::%{_id}%::unlocked} is true:
+            return 1 {@secreticonUnlocked} named "&a%{acheivements::%{_id}%::displayName}%" with lore {acheivements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&4Coming Soon!", "", and "&aAcheivement Unlocked!"
+        else:
+            return 1 {@secretIconLocked} named "&a%{acheivements::%{_id}%::displayName}%" with lore {acheivements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&4Coming Soon!", "", and "&cAcheivement Locked!"
+
+
+on inventory click:
+    if event-inventory = (metadata tag "acheivementMenu" of player):
+        cancel event
+    

@@ -46,22 +46,7 @@ command chatcolor [<text>]:
 			send "&9Blue, &bAqua, &cRed, &4DarkRed, &eYellow, &fWhite, &aLime, &dPink"
 
 
-command /chatgame <text> <text>:
-	permission: op
-	trigger:
-		set {word} to arg-1
-		set {scrambled} to arg-2
-		
-		send "&fUnscramble &e%{scrambled}% &fto get &e+0.05 multiplier&f!" to all players
-		
-
-
-
 on chat:
-	if message is {word}:
-		send "&e%player% &fhas successfully unscrambled the word &e%{word}% &fand got some multiplier!" to all players
-		add 0.05 to {multiplier::%player's uuid%}
-		clear {word}
 
 
 	loop all players:
@@ -73,14 +58,11 @@ on chat:
 				replace all "%loop-player%" with "&e&o@%loop-player%&f" in message
 			play sound "block.note_block.pling" to loop-player
 
-	replace all "[eggs]" with "&e%getNumberFormatted({eggs::%player's uuid%})% Eggs&7" in message
-	replace all "[tokens]" with "&e%{tokens::%player's uuid%}% Tokens&7" in message
-	replace all "[prestige]" and "[prestiges]" with "&e%{prestige::%player's uuid%}% Prestiges&7" in message
-	replace all "[multi]" and "[multiplier]" with "&ex%{multiplier::%player's uuid%}% Multiplier&7" in message
-	replace all "[clicks]" with "&e%getNumberFormatted({clicks::%player's uuid%})% Clicks&7" in message
-	replace all "[clicks]" with "&e%getNumberFormatted({clicks::%player's uuid%})% Clicks&7" in message
-	replace all "[tpm]" with "&e%getNumberFormatted({tpm::%player's uuid%})% Tokens Per Minute&7" in message
-	replace all "[tps]" with "&e%getNumberFormatted({tpm::%player's uuid%} / 60)% Tokens Per Second&7" in message
+	replace all "[eggs]" with "&e%getNumberFormatted({%player's uuid%::eggs})% Eggs&7" in message
+	replace all "[tokens]" with "&e%{%player's uuid%::tokens}% Tokens&7" in message
+	replace all "[prestige]" and "[prestiges]" with "&e%{%player's uuid%::prestiges}% Prestiges&7" in message
+	replace all "[multi]" and "[multiplier]" with "&e%{%player's uuid%::multiplier}% Multiplier&7" in message
+	replace all "[clicks]" with "&e%getNumberFormatted({%player's uuid%::clicks})% Clicks&7" in message
 
 on chat:
 	replace all "nigger" with "****" in message
@@ -116,20 +98,13 @@ on chat:
 		set {colorp::%player's uuid%} to "&4"
 	if {prestige::%player's uuid%} is more than or equal to 500:
 		set {colorp::%player's uuid%} to "&4&l"
-	if {prestige::%player's uuid%} is more than or equal to 1000:
-		set {colorp::%player's uuid%} to "&a"
-	if {prestige::%player's uuid%} is more than or equal to 1500:
-		set {colorp::%player's uuid%} to "&a&l"
-	if {prestige::%player's uuid%} is more than or equal to 2000:
-		set {colorp::%player's uuid%} to "&6"
-	if {prestige::%player's uuid%} is more than or equal to 2500:
-		set {colorp::%player's uuid%} to "&6&l"
-	if {prestige::%player's uuid%} is more than or equal to 10000:
-		set {colorp::%player's uuid%} to "&1"		
-	if {prestige::%player's uuid%} is more than or equal to 100000:
-		set {colorp::%player's uuid%} to "&3"	
-	if {prestige::%player's uuid%} is less than or equal to 1:
+	if {prestige::%player's uuid%} is more than or equal to 500:
+		set {colorp::%player's uuid%} to "&4&l"
+	
+	if {prestige::%player's uuid%} is less than or equal to 0:
 		set {colorp::%player's uuid%} to "&7"
+	
+	
 	#buyrank {player}  egg 1 100
 	if {nick.%player's uuid%} is not set:
 		set {dis.%player's uuid%} to player
@@ -155,11 +130,6 @@ command /bc <text>:
 		play sound "block.note_block.bell" to all players
 		
 
-#every 2 minutes:
-#	broadcast ""
-#	broadcast "&fThere is an ongoing event where you can win &eEGG+ Rank&f! &e/discord &ffor more info."
-#	broadcast ""
-
 
 	
 every 2 minutes:
@@ -172,13 +142,10 @@ every 2 minutes:
 		broadcast ""
 		broadcast "&fJoin our &ediscord &ffor &egiveaways&f, &epolls &fand a &ecommunity&f! &e&l/discord"
 		broadcast ""
-	wait 30 seconds
-	play sound "block.note_block.bell" at volume 10 to all players
-	broadcast ""
-	broadcast "&fThere is currently a &e&l25%% Christmas Sale &fin our store! &fCheck it out at &e&l/buy"
-	broadcast ""
-
-
+	if {_a} is 3:
+		broadcast ""
+		broadcast "&fGet &eperks&f and &esupport&f the server! &e&l/buy"
+		broadcast ""
 
 on command "/buy":
 	cancel event
@@ -331,86 +298,10 @@ command /carpettop:
                 stop loop
 
         send ""
-		
-command /tpmtop:
-    aliases:ct
-    trigger:
-        set {_top} to 10
 
-        send ""
-        send " &e&lTPM Top &f(Top 10)"
-        send ""
-        set {_top::*} to sorted {tpm::*} from highest to lowest with format "@index" 
-        loop {_top::*}:
-            add 1 to {_n}
+on join:
+	set {_jointime::%player's uuid%} to now
 
-            set {_p} to "%loop-value%" parsed as offline player
-            set {_player} to {_p}'s uuid
-
-            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({tpm::%{_player}%})% &eTokens Per Minute)"
-
-            if {_n} is {_top}:
-                stop loop
-
-        send ""
-
-command /pctop:
-    aliases: pct, prestigecointop, pcointop
-    trigger:
-        set {_top} to 10
-
-        send ""
-        send " &e&lPrestige Coin Top &f(Top 10)"
-        send ""
-        set {_top::*} to sorted {prestigecoins::*} from highest to lowest with format "@index" 
-        loop {_top::*}:
-            add 1 to {_n}
-
-            set {_p} to "%loop-value%" parsed as offline player
-            set {_player} to {_p}'s uuid
-
-            send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({prestigecoins::%{_player}%})% &ePrestige Coins)"
-
-            if {_n} is {_top}:
-                stop loop
-
-        send ""
-
-command /playtimetop:
-    aliases:ptt
-    trigger:
-        send "&cThis command is currently disabled." to player
-        # set {_top} to 10
-        # send ""
-        # send " &e&lPlaytime Top &f(Top 10)"
-        # send ""
-        # set {_top::*} to sorted {playtime::*} from highest to lowest with format "@index" 
-        # loop {_top::*}:
-        #     add 1 to {_n}
-
-        #     set {_p} to "%loop-value%" parsed as offline player
-        #     set {_player} to {_p}'s uuid
-
-        #     send " &e(##%{_n}%&e) &f%{_p}% &e(%getNumberFormatted({playtime::%{_player}%})%)"
-
-        #     if {_n} is {_top}:
-        #         stop loop
-
-        # send ""
-
-every minute:
-	loop all players:
-		set {playtime::%loop-player's uuid%} to loop-player's time played
-
-command /fixplaytimething:
-	permission: op
-	trigger:
-		clear {playtime::*}
-
-
-command /playtime [<offline player>]:
-	trigger:
-		if arg-1 is not set:
-			send "&aYou have %player's time played% &aplaytime!" to player
-		else:
-			send "&e%arg-1% &ahas a playtime of %arg-1's time played%&a!" to player
+on quit:
+	set {_timeplayed::%player's uuid%} to difference between now and {_jointime::%player's uuid%}
+	add {_timeplayed::%player's uuid%} to {playtime::%player's uuid%}
