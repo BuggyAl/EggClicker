@@ -22,7 +22,6 @@ function equipSuffix(p: player, suf: text):
 	send title "&a&l&nSuffix Equipped" to {_p}
 	tokenShopOne({_p})
 		
-		
 command /fixstatcaps:
 	permission: op
 	trigger:
