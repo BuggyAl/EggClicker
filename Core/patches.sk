@@ -1,6 +1,8 @@
 on load:
 	set {spawn} to location at (69.5, 65, 326) in world "EggClicker"
 	set yaw of {spawn} to 90
+	set level progress of player to {xp::%player's uuid%} / {neededxp::%player's uuid%}
+	set level of player to {level::%player's uuid%}
 	
 command /spawn:
 	trigger:
@@ -19,20 +21,54 @@ on right click:
 
 
 on join:
-	if {season5::%player's uuid%} is not set:
+	if {season6::%player's uuid%} is not set:
 		clear player's inventory
 		set {eggs::%player's uuid%} to 0
 		set {tokens::%player's uuid%} to 0
+		set {nextarea::%player's uuid%} to 450
 		set {prestige::%player's uuid%} to 0
 		set {multiplier::%player's uuid%} to 1
 		set {clicks::%player's uuid%} to 0
 		set {tag::%player's uuid%} to "Clicker"
 		set {suffix::%player's uuid%} to "None"
+		set {neededxp::%player's uuid%} to 100
+		set {xp::%player's uuid%} to 0
+		set {level::%player's uuid%} to 1
+		set level progress of player to {xp::%player's uuid%} / {neededxp::%player's uuid%}
+		set level of player to {level::%player's uuid%}
+		set {keys::common::%player's uuid%} to 0
+		set {keys::rare::%player's uuid%} to 0
+		set {keys::epic::%player's uuid%} to 0
 		clear {ul::%player's uuid%::*}
 		add 1 to {ul::%player's uuid%::*}
+		set {minions::%player's uuid%::wood} to 0
+		set {minions::%player's uuid%::stone} to 0
+		set {minions::%player's uuid%::coal} to 0
+		set {minions::%player's uuid%::iron} to 0
+		set {minions::%player's uuid%::copper} to 0
+		set {minions::%player's uuid%::gold} to 0
+		set {minions::%player's uuid%::redstone} to 0
+		set {minions::%player's uuid%::lapis} to 0
+		set {minions::%player's uuid%::diamond} to 0
+		set {minions::%player's uuid%::emerald} to 0
+		set {minions::%player's uuid%::obsidian} to 0
+		set {tpm::%player's uuid%} to 0
+		set {quests::%player's uuid%} to 0
+		set {quest::%player's uuid%} to 0
+		set {q2::%player's uuid%} to false
+		set {q4::%player's uuid%} to false 
+		set {q6::%player's uuid%} to false
+		set {q7::%player's uuid%} to false 
+		set {q9::%player's uuid%} to false
+		set {q11::%player's uuid%} to false 
+		set {doubleegg::%player's uuid%} to 0.1
+		set {doubleegg::cost::%player's uuid%} to 11
+		set {autoprestige::%player's uuid%} to "&c&l&nLOCKED"
+		set {autobuy::%player's uuid%} to "&c&l&nLOCKED"
+		set {multicost::%player's uuid%} to 5000
 		wait 1 tick
 		make player say "/spawn"
-		set {season5::%player's uuid%} to true
+		set {season6::%player's uuid%} to true
 		
 function checkClick(type: block, p: player, loc: location) :: boolean:
 	if {_type} is any bed:
