@@ -1,0 +1,11 @@
+function reloadAchievements():
+	delete {achievements::*}
+#   registerAchievement("achievementID", "Example Achievement Name", "&fLore Line 1\n\&fLore Line 2\n\&fLore Line 3", false) (the last argument specifies if it is secret or not)
+#   Secret Achievements do not show how to get the achievement or what it is for.
+	registerAchievement("firstJoin", "First Join", "&fJoin the server for\n\&fthe first time!", false) # Complete
+	registerAchievement("prestiged", "Prestiged", "&fGain &e1 &fPrestige", false) # Complete
+	registerAchievement("masterClicker", "Master Clicker", "&fClick &e250K &ftimes", false) # Complete
+	registerAchievement("tokenator", "Tokenator", "&fGain &e100K &fTokens", false) # Complete
+	registerAchievement("staffRoom", "Staff Room", "&fVisit the Staff Room", true) # Complete
+	registerAchievement("crateEnthusiast", "Crate Enthusiast", "&fOpen an &5Epic &fCrate", false) 
+	registerAchievement("afkGrind", "AFK Grind", "&fHave a total playtime of &e1 &fWeek", false) # Needs Testing

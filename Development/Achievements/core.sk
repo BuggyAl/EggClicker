@@ -1,0 +1,9 @@
+on join:
+	if {%player's uuid%::achievements::firstJoin::unlocked} is not true:
+		wait 3 seconds
+		unlockAchievement("firstJoin", player)
+
+on region enter:
+	if event-region is "staffroom" parsed as region:
+		if {%player's uuid%::achievements::staffRoom::unlocked} is not true:
+			unlockAchievement("staffRoom", player)

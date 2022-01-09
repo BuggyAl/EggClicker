@@ -63,14 +63,19 @@ function achievementIcon(id: text, p: player) :: item:
 		if {%{_uuid}%::achievements::%{_id}%::unlocked} is true:
 			return 1 of {@iconUnlocked} named "&a%{achievements::%{_id}%::displayName}%" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&aAchievement Unlocked!"
 		else:
-			return 1 of {@iconLocked} named "&a%{achievements::%{_id}%::displayName}%" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&cAchievement Locked!"
+			return 1 of {@iconLocked} named "&c%{achievements::%{_id}%::displayName}%" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&cAchievement Locked!"
 	else:    
 		if {%{_uuid}%::achievements::%{_id}%::unlocked} is true:
-			return 1 of {@secretIconUnlocked} named "&a%{achievements::%{_id}%::displayName}%" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&aAchievement Unlocked!"
+			return 1 of {@secretIconUnlocked} named "&a%{achievements::%{_id}%::displayName}% &7(Secret)" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&aAchievement Unlocked!"
 		else:
-			return 1 of {@secretIconLocked} named "&a%{achievements::%{_id}%::displayName}%" with lore {achievements::%{_id}%::iconlore::*}, " ", "&7Reward:", "&8Coming Soon!", "", and "&cAchievement Locked!"
+			return 1 of {@secretIconLocked} named "&cSecret Achievement" with lore "&f???", " ", "&7Reward:", "&8Unlock to find out!", "", and "&cAchievement Locked!"
 
 on inventory click:
 	if event-inventory = (metadata tag "achievementMenu" of player):
 		cancel event
 	
+function unlockAchievement(id: text, p: player):
+	set {_uuid} to uuid of {_p}
+	set {%{_uuid}%::achievements::%{_id}%::unlocked} to true
+	play sound "entity.experience_orb.pickup" to {_p}
+	send "&a>>  Achievement Unlocked: &6%{achievements::%{_id}%::displayName}%  &a<<" to {_p}

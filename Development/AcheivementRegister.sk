@@ -1,7 +1,0 @@
-function reloadAchievements():
-	delete {achievements::*}
-#   registerAchievement("achievementID", "Example Achievement Name", "&fLore Line 1\n\&fLore Line 2\n\&fLore Line 3", false) (the last argument specifies if it is secret or not)
-	registerAchievement("firstJoin", "First Join", "&fJoin the server for\n\&fthe first time!", false)
-	registerAchievement("reborn", "Reborn", "&fGain &e1 &fRebirth", false)
-	registerAchievement("masterClicker", "Master Clicker", "&fClick &e250K &ftimes", false)
-	registerAchievement("tokenator", "Tokenator", "&fCGain &e100K &fTokens", false)
