@@ -16,19 +16,24 @@ command buyrank <player> <text> <number> [<number>]:
 			play sound "block.note_block.pling" to all players
 			wait 1 tick
 			
+command buytokens <offline player> <number>:
+	permission: op
+	trigger:
+		add arg-2 to {tokens::%arg-1's uuid%}
+			
 command /admsg:
 	aliases: ad
 	trigger:
 		send ""
-		send "<suggest command:/ad EggClicker &8| &f&lChristmas &c&lThemed &8| &bAreas, &3Upgrades, &cPrestiges &8| &aSEASON 5>Click me to copy the ad message!<reset>"
+		send "<suggest command:/ad EggClicker &6&lSeason 6 &8| &cRooms, &eQuests, &aMinions, &dand more!>Click me to copy the ad message!<reset>"
 		send ""
 
 					
 command nick <text>:
 	trigger:
 		if player has permission "egg.nick":
-			if length of arg-1 is more than 32:
-				send "&cNickname too long! (Need a longer name because of color codes? Contact eggeggeggeggegge/mussla.)"
+			if length of arg-1 is more than 240:
+				send "&cMax character is 240! (%length of arg-1%)."
 			else:
 				set {nick.%player's uuid%} to colored arg-1
 				send "&6Success."
