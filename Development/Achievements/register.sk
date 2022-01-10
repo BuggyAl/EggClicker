@@ -7,5 +7,11 @@ function reloadAchievements():
 	registerAchievement("masterClicker", "Master Clicker", "&fClick &e250K &ftimes", false) # Complete
 	registerAchievement("tokenator", "Tokenator", "&fGain &e100K &fTokens", false) # Complete
 	registerAchievement("staffRoom", "Staff Room", "&fVisit the Staff Room", true) # Complete
-	registerAchievement("crateEnthusiast", "Crate Enthusiast", "&fOpen an &5Epic &fCrate", false) 
-	registerAchievement("afkGrind", "AFK Grind", "&fHave a total playtime of &e1 &fWeek", false) # Needs Testing
+	registerAchievement("crateEnthusiast", "Crate Enthusiast", "&fOpen an &5Epic &fCrate", false) # Complete
+	registerAchievement("afkGrind", "AFK Grind", "&fHave a total playtime of &e1 &fWeek", false) # Complete
+	registerAchievement("multiMadness" "Multiplier Madness", "&fReach the maximum &emultiplier (100x)", true)
+	registerAchievement("darkDownHere", "Dark Down Here", "&fFall into the void in &eThe End", false)
+	registerAchievement("buttonHunter", "Button Hunter", "&fFind the button in the park", true)
+	registerAchievement("underTheSea", "Under the Sea", "&fStand on the ocean floor", false)
+	registerAchievement("longWindedQuest", "Long Winded Quest", "&fComplete &eIkbal's &fquests", false)
+	registerAchievement("annoying", "Annoying", "&fPing a player in chat", false)
