@@ -1,20 +1,30 @@
 command /prestige:
 	trigger:
+		#set {e} to 1
 		if size of {ul::%player's uuid%::*} is greater than or equal to size of {rooms::*}:
 			set {_cost} to price(clickmoney(size of {rooms::*} + 1)) * {multiplier::%player's uuid%}
 			if {eggs::%player's uuid%} is more than or equal to {_cost}:
 				play "block_note_block_pling" to player at volume 1
 				set {nextarea::%player's uuid%} to 450
 				add 1 to {prestige::%player's uuid%}
-				add 1 to {prestigecoins::%player's uuid%}
+				set {_s} to random integer between 1 and 3
+				{_s} is 1:
+					add 1 to {keys::common::%player's uuid%}
+				{_s} is 2:
+					add 1 to {keys::rare::%player's uuid%}
+				{_s} is 3:
+					add 1 to {keys::epic::%player's uuid%}
 				if {multiplier::%player's uuid%} + 0.25 is less than or equal to 100:
 					add 0.25 to {multiplier::%player's uuid%}
 				else:
 					send "&aYou have reached the maximum multiplier!" to player
 				set {eggs::%player's uuid%} to 0
+				set {nextarea::%{_uuid}%} to 450
 				send title "&a&lPrestige" with subtitle "&e+1 Prestige &8(&bx%{prestige::%player's uuid%}%&8)" to player
 				send "&b%player% &fhas prestiged to &b✫%{prestige::%player's uuid%}%" to all players
 				set {tag::%player's uuid%} to "Clicker"
+				if {%player's uuid%::achievements::prestiged::unlocked} is not true:
+					unlockAchievement("prestiged", player)
 				make player say "/spawn"
 				loop {rooms::*}:
 					remove {rooms::%loop-value%::id} from {ul::%player's uuid%::*}

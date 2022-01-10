@@ -22,6 +22,7 @@ function equipSuffix(p: player, suf: text):
 	send title "&a&l&nSuffix Equipped" to {_p}
 	tokenShopOne({_p})
 		
+		
 command /fixstatcaps:
 	permission: op
 	trigger:
@@ -39,7 +40,7 @@ function menu(p: player):
 		format gui slot "x" with red stained glass pane named " "
 		format gui slot "y" with white stained glass pane named " "
 		format gui slot "r" with egg named "&6&lRoom Shop" with lore "&7Buy rooms here!":
-			roomShop({_p})
+			roomShop({_p}, 1)
 		format gui slot "t" with sunflower named "&e&lToken Shop" with lore "&7Spend tokens here!":
 			tokenShopOne({_p})
 		format gui slot "m" with obsidian named "&b&lMinions" with lore "&7See yor minions that you have!":
@@ -119,43 +120,46 @@ function tokenShopOne(p: player):
 		if {multiplier::%{_p}'s uuid%} + 0.1 is greater than 100:
 			format gui slot "g" with barrier named "&b+0.1x Multiplier" with lore "&7You have maxed out your multiplier!"
 		else:
-			set {_multicost} to (500 + ((60 * {tpm::%{_p}'s uuid%}) * {multiplier::%{_p}'s uuid%})) * 10
-			format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%{_multicost}%":
-				if {tokens::%{_p}'s uuid%} is more than {_multicost}:
-					remove {_multicost} from {tokens::%{_p}'s uuid%}
+			format gui slot "g" with paper named "&b+0.1x Multiplier" with lore "&fCost: &e⛁%{multicost::%{_p}'s uuid%}%":
+				if {tokens::%{_p}'s uuid%} is more than {multicost::%player's uuid%}:
+					remove {multicost::%player's uuid%} from {tokens::%{_p}'s uuid%}
 					add 0.1 to {multiplier::%{_p}'s uuid%}
+					set {multicost::%player's uuid%} to round({multicost::%player's uuid%} * 1.5)
 					send "&bSuccessfully bought +0.1x Multiplier" to {_p}
 					play sound "block.note_block.pling" to {_p}
 					tokenShopOne({_p})
 				
-		format gui slot "n" with arrow named "&cComing Soon":
-			if player is op:
-				tokenShopTwo({_p})
+		format gui slot "n" with arrow named "&eNext Page":
+			tokenShopTwo({_p})
 	open the last gui for {_p}
 	
-command fixdoubleegg:
-	permission: op
-	trigger:
-		set {doubleegg::%player's uuid%} to 0.1
+
 
 function tokenShopTwo(p: player):
 	create a gui with virtual chest inventory with 3 rows named "Shop" and shape "xyxyxyxyx", "yabcdefgy", and "xyxyxyxyn":
 		format gui slot "x" with red stained glass pane named " "
 		format gui slot "y" with white stained glass pane named " "
-		{doubleegg::%{_p}'s uuid%} is not set:
-			set {doubleegg::%{_p}'s uuid%} to 0.1
 		format gui slot "q" with barrier named "&cBack":
 			tokenShopOne({_p})
-		
-		set {doubleegg::cost::%{_p}'s uuid%} to round(10 + ({doubleegg::%{_p}'s uuid%} * (21 + 3.14156)))
-		format gui slot "a" with 2 egg named "&e&l&nDouble Egg" with lore "&7Adds chance of doubling", "&7your eggs gained.", "" and "&fChance: &e%{doubleegg::%{_p}'s uuid%}%%%" and "&fPrice: &e⛁%{doubleegg::cost::%{_p}'s uuid%}%":
-			{doubleegg::%{_p}'s uuid%} is more than or equal to 100:
+		format gui slot "a" with glowing egg named "&e&l&nGolden Egg" with lore "&7Adds chance of doubling", "&7your eggs gained.", "" and "&fChance: &e%{doubleegg::%{_p}'s uuid%}%%%" and "&fPrice: &e⛁%{doubleegg::cost::%{_p}'s uuid%}%":
+			{doubleegg::%{_p}'s uuid%} is more than or equal to 50:
 				send title "&cMAX CHANCE" to {_p}
 				stop
 			if {tokens::%{_p}'s uuid%} is more than or equal to {doubleegg::cost::%{_p}'s uuid%}:
 				send title "&aUpgraded!" with subtitle "&a%{doubleegg::%{_p}'s uuid%}%%% &2> &a%{doubleegg::%{_p}'s uuid%} + 0.1%%%" to {_p}
 				add 0.1 to {doubleegg::%{_p}'s uuid%}
 				remove {doubleegg::cost::%{_p}'s uuid%} from {tokens::%{_p}'s uuid%}
+				set {doubleegg::cost::%{_p}'s uuid%} to round({doubleegg::cost::%{_p}'s uuid%} * 1.1)
+				tokenShopTwo(player)
+		format gui slot "b" with paper named "&b&l&nAuto Prestige" with lore "&7Automatically purchases", "&7prestige when ready.", "" and "&fStatus: %{autoprestige::%{_p}'s uuid%}%" and "&fPrice: &e⛁10K":
+			if {tokens::%{_p}'s uuid%} is more than or equal to 10000:
+				send title "&aPurchased!" to {_p}
+				set {autoprestige::%{_p}'s uuid%} to "&a&l&nUNLOCKED"
+				tokenShopTwo(player)
+		format gui slot "c" with bamboo named "&c&l&nAuto Buy" with lore "&7Automatically purchases", "&7next area when ready.", "" and "&fStatus: %{autobuy::%{_p}'s uuid%}%" and "&fPrice: &e⛁100K":
+			if {tokens::%{_p}'s uuid%} is more than or equal to 100000:
+				send title "&aPurchased!" to {_p}
+				set {autobuy::%{_p}'s uuid%} to "&a&l&nUNLOCKED"
 				tokenShopTwo(player)
 				
 	open the last gui for {_p}
@@ -164,54 +168,107 @@ function tokenShopTwo(p: player):
 command /settp <text>:
 	permission: op
 	trigger:
-		set {rooms::%arg-1%::tp} to player's location		
+		set {tploc::%arg-1%} to player's location		
 		
-function roomShop(p: player):
+function roomShop(p: player, pg: number):
 	create a gui with virtual chest inventory with 6 rows named "Room Shop": 
 		format gui slot 0,2,4,6,8,18,26,36,44,46,48,50, and 52 with red stained glass pane named " "
-		format gui slot 1,3,5,7,9,17,27,35,45,47,49,51, and 53 with white stained glass pane named " "
+		format gui slot 1,3,5,7,9,17,27,35,45,47,49,51 and 53 with white stained glass pane named " "
+		if {_pg} is less than 2:
+			format gui slot 53 with arrow named "&eNext Page":
+				roomShop({_p}, {_pg} + 1)
+		if {_pg} is more than 1:
+			format gui slot 45 with barrier named "&ePrevious Page":
+				roomShop({_p}, {_pg} - 1)
 		set {_c} to 9
 		set {_nv::*} to 0,2,4,6,8,18,26,36,44,46,48,50,51,3,5,7,9,17,27,35,47,49,51, and 53
+		set {_rc} to 0
 		loop {rooms::*}:
-			if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
-				add 1 to {_c}
-				if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
-					add 1 to {_c}
-			set {_uuid} to uuid of {_p}	
-			set {_price} to {rooms::%loop-value%::price}
-			if {rooms::%loop-value%::id} is 1:
-				format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
-			else if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id} - 1:
-				if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id}:
-					set {_lv} to loop-value
-					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED - Click to teleport!":
-						teleport {_p} to {rooms::%{_lv}%::tp}
-				else:
-					set {_lv} to loop-value
-					format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%{_lv}%::epc})%" and "&dCost &7- &5%getNumberFormatted({rooms::%loop-value%::c})% Eggs" and "&aClick to buy!":
-						if {eggs::%{_uuid}%} is greater than or equal to {rooms::%{_lv}%::c}:
-							add {rooms::%{_lv}%::id} to {ul::%{_uuid}%::*}
-							remove {rooms::%{_lv}%::c} from {eggs::%{_uuid}%}
-							set {tag::%{_uuid}%} to {rooms::%{_lv}%::tag}
-							play sound "entity.player.levelup" to {_p}
-							loop {rooms::*}:
-								if {rooms::%loop-value%::id} is {rooms::%{_lv}%::id} + 1:
-									set {_nc} to {rooms::%loop-value%::c}
-							if {_nc} is set:
-								set {nextarea::%{_uuid}%} to {_nc}
-								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
-							else:
-								set {nextarea::%{_uuid}%} to "&fPrestige"
-								send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b." to {_p}
-							roomShop({_p})
+			add 1 to {_rc}
+			if {_pg} is 1:
+				if {_rc} is less than or equal to 28:
+					if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
+						add 1 to {_c}
+						if {_nv::*} contains {rooms::%loop-value%::id} + {_c}:
+							add 1 to {_c}
+					set {_uuid} to uuid of {_p}	
+					set {_price} to {rooms::%loop-value%::price}
+					if {rooms::%loop-value%::id} is 1:
+						format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
+					else if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id} - 1:
+						if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id}:
+							set {_lv} to loop-value
+							format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED - Click to teleport!":
+								teleport {_p} to {tploc::%{_lv}%}
 						else:
-							send "&cYou do not have enough eggs to purchase this room!" to {_p}
-							play sound "entity.villager.no" to {_p}
-			else:
-				loop {rooms::*}:
-					if {rooms::%loop-value-2%::id} is {rooms::%loop-value-1%::id} - 1:
-						format gui slot {rooms::%loop-value-1%::id} + {_c} with {rooms::%loop-value-1%::it} named "&b%{rooms::%loop-value-1%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value-1%::epc})%" and "&7Requires &e%{rooms::%loop-value-2%::u}% &7to purchase!"
+							set {_lv} to loop-value
+							format gui slot {rooms::%loop-value%::id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%{_lv}%::epc})%" and "&dCost &7- &5%getNumberFormatted({rooms::%loop-value%::c})% Eggs" and "&aClick to buy!":
+								if {eggs::%{_uuid}%} is greater than or equal to {rooms::%{_lv}%::c}:
+									add {rooms::%{_lv}%::id} to {ul::%{_uuid}%::*}
+									remove {rooms::%{_lv}%::c} from {eggs::%{_uuid}%}
+									set {tag::%{_uuid}%} to {rooms::%{_lv}%::tag}
+									play sound "entity.player.levelup" to {_p}
+									loop {rooms::*}:
+										if {rooms::%loop-value%::id} is {rooms::%{_lv}%::id} + 1:
+											set {_nc} to {rooms::%loop-value%::c}
+											set {nextareacost::%{_p}'s uuid%} to {_nc}
+									if {_nc} is set:
+										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
+									else:
+										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b." to {_p}
+										set {nextareacost::%{_p}'s uuid%} to "&fPrestige"
+									roomShop({_p}, 1)
+								else:
+									send "&cYou do not have enough eggs to purchase this room!" to {_p}
+									play sound "entity.villager.no" to {_p}
 				
+					else:
+						loop {rooms::*}:
+							if {rooms::%loop-value-2%::id} is {rooms::%loop-value-1%::id} - 1:
+								format gui slot {rooms::%loop-value-1%::id} + {_c} with {rooms::%loop-value-1%::it} named "&b%{rooms::%loop-value-1%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value-1%::epc})%" and "&7Requires &e%{rooms::%loop-value-2%::u}% &7to purchase!"
+			else if {_pg} is 2:
+				if {_rc} is more than 28:
+					set {_id} to {rooms::%loop-value%::id} - 28
+					if {_nv::*} contains {_id} + {_c}:
+						add 1 to {_c}
+						if {_nv::*} contains {_id} + {_c}:
+							add 1 to {_c}
+					set {_uuid} to uuid of {_p}	
+					set {_price} to {rooms::%loop-value%::price}
+					if {rooms::%loop-value%::id} is 1:
+						format gui slot {_id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED"
+					else if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id} - 1:
+						if {ul::%{_uuid}%::*} contains {rooms::%loop-value%::id}:
+							set {_lv} to loop-value
+							format gui slot {_id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value%::epc})%" and "&a&lUNLOCKED - Click to teleport!":
+								teleport {_p} to {rooms::%{_lv}%::tp}
+						else:
+							set {_lv} to loop-value
+							format gui slot {_id} + {_c} with {rooms::%loop-value%::it} named "&b%{rooms::%loop-value%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%{_lv}%::epc})%" and "&dCost &7- &5%getNumberFormatted({rooms::%loop-value%::c})% Eggs" and "&aClick to buy!":
+								if {eggs::%{_uuid}%} is greater than or equal to {rooms::%{_lv}%::c}:
+									add {rooms::%{_lv}%::id} to {ul::%{_uuid}%::*}
+									remove {rooms::%{_lv}%::c} from {eggs::%{_uuid}%}
+									set {tag::%{_uuid}%} to {rooms::%{_lv}%::tag}
+									play sound "entity.player.levelup" to {_p}
+									loop {rooms::*}:
+										if {rooms::%loop-value%::id} is {rooms::%{_lv}%::id} + 1:
+											set {_nc} to {rooms::%loop-value%::c}
+									if {_nc} is set:
+										set {nextarea::%{_uuid}%} to {_nc}
+										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
+									else:
+										set {nextarea::%{_uuid}%} to price(clickmoney(size of {rooms::*} + 1)) * {multiplier::%player's uuid%}
+										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b. &7&o(%getNumberFormatted({nextarea::%{_uuid}%})%&7&o) to {_p}
+									roomShop({_p}, 2)
+								else:
+									send "&cYou do not have enough eggs to purchase this room!" to {_p}
+									play sound "entity.villager.no" to {_p}
+				
+					else:
+						loop {rooms::*}:
+							if {rooms::%loop-value-2%::id} is {rooms::%loop-value-1%::id} - 1:
+								format gui slot {_id} + {_c} with {rooms::%loop-value-1%::it} named "&b%{rooms::%loop-value-1%::u}%" with lore "&dEggs Per Click &7- &5%getNumberFormatted({rooms::%loop-value-1%::epc})%" and "&7Requires &e%{rooms::%loop-value-2%::u}% &7to purchase!"
+					
 			
 	open the last gui for {_p}
 		
