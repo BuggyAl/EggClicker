@@ -2,13 +2,12 @@ function refreshScoreBoard(p: player):
 	wipe {_p}'s sidebar
 	if {nextarea::%{_p}'s uuid%} is not set:
 		set {nextarea::%{_p}'s uuid%} to 450
-	set name of sidebar of {_p} to "&e&lEggClicker &8〡&7[S5&7]"
+	set name of sidebar of {_p} to "&e&lEggClicker &8〡&7[S6&7]"
 	set score "&7 &6" in sidebar of {_p} to 17
 	set score "&6&l%{_p}%" in sidebar of {_p} to 16
 	set score "&8✦ &eEggs: &f%getNumberFormatted({eggs::%{_p}'s uuid%})%" in sidebar of {_p} to 15
 	set score "&8✦ &eTokens: &f⛁%getNumberFormatted({tokens::%{_p}'s uuid%})%" in sidebar of {_p} to 14
 	set score "&8✦ &eTokens Per Minute: &f⛁%getNumberFormatted({tpm::%{_p}'s uuid%})%" in sidebar of {_p} to 13
-	set score "&8✦ &ePrestige Coins: &f⛁%{prestigecoins::%{_p}'s uuid%}%" in sidebar of {_p} to 13
 	set score "&8✦ &ePrestige: &f✫%getNumberFormatted({prestige::%{_p}'s uuid%})%" in sidebar of {_p} to 12
 	set score "&8✦ &eMultiplier: &fx%{multiplier::%{_p}'s uuid%}%" in sidebar of {_p} to 11
 	set score "&8✦ &ePlayer Clicks: &f%getNumberFormatted({clicks::%{_p}'s uuid%})%" in sidebar of {_p} to 10
@@ -26,6 +25,6 @@ function refreshScoreBoard(p: player):
 	set score "&eThanks for playing <3" in sidebar of {_p} to 1 
 
 
-every 3 seconds:
+every second:
 	loop all players:
 		refreshScoreBoard(loop-player)
