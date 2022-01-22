@@ -127,6 +127,8 @@ function tokenShopOne(p: player):
 					set {multicost::%player's uuid%} to round({multicost::%player's uuid%} * 1.5)
 					send "&bSuccessfully bought +0.1x Multiplier" to {_p}
 					play sound "block.note_block.pling" to {_p}
+					if {multiplier::%player's uuid%} is greater than or equal to 100:
+						unlockAchievement("multiMadness", player)
 					tokenShopOne({_p})
 				
 		format gui slot "n" with arrow named "&eNext Page":

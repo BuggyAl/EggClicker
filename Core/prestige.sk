@@ -16,6 +16,8 @@ command /prestige:
 					add 1 to {keys::epic::%player's uuid%}
 				if {multiplier::%player's uuid%} + 0.25 is less than or equal to 100:
 					add 0.25 to {multiplier::%player's uuid%}
+					if {multiplier::%player's uuid%} is greater than or equal to 100:
+						unlockAchievement("multiMadness", player)
 				else:
 					send "&aYou have reached the maximum multiplier!" to player
 				set {eggs::%player's uuid%} to 0

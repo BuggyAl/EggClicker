@@ -7,7 +7,12 @@ on right click on entity:
 			add 1 to {keys::rare::%player's uuid%}
 					
 		else if createQuest(player, 3, "Once upon a time there was a competition about getting to 2000 clicks. That time is over but you can still do it and get a prize from me. Come back when you have 2000 clicks.", "&Good job! Here you can have +0.05x Multiplier.", "You haven't got 2000 clicks yet!", (true if {clicks::%player's uuid%} is more than or equal to 2000 else false)):	
-			add 0.05 to {multiplier::%player's uuid%}
+			if {multiplier::%player's uuid%} + 0.05 is less than or equal to 100:
+				add 0.05 to {multiplier::%player's uuid%}
+				if {multiplier::%player's uuid%} is greater than or equal to 100:
+					unlockAchievement("multiMadness", player)				
+			else:
+				unlockAchievement("multiMadness", player)
 			
 		else if createQuest(player, 4, "I lost my stone button again... A friend of mine told me he might have seen it in the backyard. Find it for me and as usual, you will get a gift.", "Good job! My neighbour brought me 20K Eggs, take them.", "You haven't found the button in the backyard!", {q4::%player's uuid%}):
 			add 20000 to {eggs::%player's uuid%}
@@ -25,7 +30,12 @@ on right click on entity:
 			add 300000000 to {eggs::%player's uuid%}
 			
 		else if createQuest(player, 9, "NOOOOOO!! I seriously lost my stone button in the park. THE BIGGEST MAP!! I will never forgive myself for this. Can you please find it, pleeeease?", "Thank you, you are the best! Take +0.05x multiplier for it!", "You haven't found the stone button in the park yet!", {q9::%player's uuid%}):
-			add 0.05 to {multiplier::%player's uuid%}
+			if {multiplier::%player's uuid%} + 0.05 is less than or equal to 100:
+				add 0.05 to {multiplier::%player's uuid%}
+				if {multiplier::%player's uuid%} is greater than or equal to 100:
+					unlockAchievement("multiMadness", player)
+			else:
+				send "", "&eHmm, you seem to have the max multiplier already!", and "", to player
 			
 		else if createQuest(player, 10, "Hi there! I'm sooo excited, i'm gonna be having an egg eating party with my friends. Unfortunately, I don't have enough eggs, would you be able to get me 50B Eggs?", "Thanks, but my friends actually brought 75B Eggs, so you can have 25B.", "You haven't got 50B Eggs!", (true if {eggs::%player's uuid%} is more than or equal to 50000000000 else false)):
 			add 25000000000 to {eggs::%player's uuid%}
@@ -34,7 +44,12 @@ on right click on entity:
 			add 1 to {keys::epic::%player's uuid%}
 			
 		else if createQuest(player, 12, "Hi!! Did you know that when you unlocked all areas, you can prestige and get some multiplier, but your eggs and rooms reset? Actually, i'm gonna give you some extra multiplier when you have prestiged for the first time, so come back to me when you have prestiged!", "Good job! Here's your multiplier!", "You haven't prestiged yet!", (true if {prestige::%player's uuid%} is more than or equal to 1 else false)):
-			add 0.1 to {multiplier::%player's uuid%}
+			if {multiplier::%player's uuid%} + 0.1 is less than or equal to 100:
+				add 0.1 to {multiplier::%player's uuid%}
+				if {multiplier::%player's uuid%} is greater than or equal to 100:
+					unlockAchievement("multiMadness", player)				
+			else:
+				send "", "&eHmm, you seem to have the max multiplier already!", and "", to player
 			unlockAchievement("longWindedQuest", player) # keep at end of quest list
 
 
