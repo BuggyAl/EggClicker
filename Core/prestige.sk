@@ -23,8 +23,7 @@ command /prestige:
 				send title "&a&lPrestige" with subtitle "&e+1 Prestige &8(&bx%{prestige::%player's uuid%}%&8)" to player
 				send "&b%player% &fhas prestiged to &b✫%{prestige::%player's uuid%}%" to all players
 				set {tag::%player's uuid%} to "Clicker"
-				if {%player's uuid%::achievements::prestiged::unlocked} is not true:
-					unlockAchievement("prestiged", player)
+				unlockAchievement("prestiged", player)
 				make player say "/spawn"
 				loop {rooms::*}:
 					remove {rooms::%loop-value%::id} from {ul::%player's uuid%::*}

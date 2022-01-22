@@ -71,8 +71,7 @@ on right-click:
 					if {keys::epic::%player's uuid%} is more than or equal to 1:
 						set {_n} to random integer between 1 and 100
 						remove 1 from {keys::epic::%player's uuid%}
-						if {%player's uuid%::achievements::crateEnthusiast::unlocked} is not true:
-							unlockAchievement("crateEnthusiast", player)
+						unlockAchievement("crateEnthusiast", player)
 						if {_n} is between 1 and 10:
 							giveCommon(player)
 						else if {_n} is between 11 and 80:
@@ -151,5 +150,7 @@ function giveEpic(p: player):
 every minute:
 	loop all players:
 		add {tpm::%loop-player's uuid%} to {tokens::%loop-player's uuid%}
+		if {tokens::%player's uuid%} is greater than 100000:
+			unlockAchievement("tokenator", player)
 		if {tpm::%loop-player's uuid%} is more than 0:
 			send action bar "&b+%getNumberFormatted({tpm::%loop-player's uuid%})% Tokens &8(&f%getNumberFormatted({tokens::%loop-player's uuid%})%&8)" to loop-player

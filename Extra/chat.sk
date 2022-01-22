@@ -66,6 +66,7 @@ on chat:
 
 	loop all players:
 		if message contains "%loop-player%":
+			unlockAchievement("annoying", player)
 			replace all "@" with "" in message
 			player's group is "default":
 				replace all "%loop-player%" with "&e&o@%loop-player%&7" in message
@@ -378,8 +379,7 @@ every minute:
 	loop all players:
 		set {playtime::%loop-player's uuid%} to loop-player's time played
 		if {playtime::%loop-player's uuid%} is greater than or equal to 168 hours:
-			if {%loop-player's uuid%::achievements::afkGrind::unlocked} is not true:
-				unlockAchievement("afkGrind", loop-player)
+			unlockAchievement("afkGrind", loop-player)
 
 command /fixplaytimething:
 	permission: op

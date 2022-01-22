@@ -75,7 +75,8 @@ on inventory click:
 		cancel event
 	
 function unlockAchievement(id: text, p: player):
-	set {_uuid} to uuid of {_p}
-	set {%{_uuid}%::achievements::%{_id}%::unlocked} to true
-	play sound "entity.experience_orb.pickup" to {_p}
-	send "&a>>  Achievement Unlocked: &6%{achievements::%{_id}%::displayName}%  &a<<" to {_p}
+	if {%{_uuid}%::achievements::%{_id}%::unlocked} is not true:
+		set {_uuid} to uuid of {_p}
+		set {%{_uuid}%::achievements::%{_id}%::unlocked} to true
+		play sound "entity.experience_orb.pickup" to {_p}
+		send "&a>>  Achievement Unlocked: &6%{achievements::%{_id}%::displayName}%  &a<<" to {_p}

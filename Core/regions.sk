@@ -127,14 +127,12 @@ on right-click:
 					add 1 to {tokens::%player's uuid%}
 					play sound "block.amethyst_block.hit" to player
 				if {tokens::%player's uuid%} is greater than 100000:
-					if {%player's uuid%::achievements::tokenator::unlocked} is not true:
-						unlockAchievement("tokenator", player)
+					unlockAchievement("tokenator", player)
 				#clicks
 				add 1 to {clicks::%player's uuid%}
 				add 1 to {clicks}
-				if {clicks::%player's uuid%} is greater than 250000:
-					if {%player's uuid%::achievements::masterClicker::unlocked} is not true:
-						unlockAchievement("masterClicker", player)
+				if {clicks::%player's uuid%} is greater than or equal to 250000:
+					unlockAchievement("masterClicker", player)
 				#actionbar
 				if {_de} is false:
 					send action bar "&e+%getNumberFormatted(round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}))% Eggs &8(&f%getNumberFormatted({eggs::%player's uuid%})%&8)" to player
