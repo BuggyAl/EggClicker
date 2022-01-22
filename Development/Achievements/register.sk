@@ -9,7 +9,7 @@ function reloadAchievements():
 	registerAchievement("staffRoom", "Staff Room", "&fVisit the Staff Room", true) # Core.sk
 	registerAchievement("crateEnthusiast", "Crate Enthusiast", "&fOpen an &5Epic &fCrate", false) # Minions.sk
 	registerAchievement("afkGrind", "AFK Grind", "&fHave a total playtime of &e1 &fWeek", false) # Chat.sk
-	registerAchievement("multiMadness" "Multiplier Madness", "&fReach the maximum &emultiplier (100x)", true) # Shop.sk, Prestige.sk, and Quests.sk
+	registerAchievement("multiMadness", "Multiplier Madness", "&fReach the maximum &emultiplier (100x)", true) # Shop.sk, Prestige.sk, and Quests.sk
 	registerAchievement("darkDownHere", "Dark Down Here", "&fFall into the void in &eThe End", false) # Core.sk
 	registerAchievement("buttonHunter", "Button Hunter", "&fFind the button in the park", true) # Quests.sk
 	registerAchievement("underTheSea", "Under the Sea", "&fStand on the ocean floor", false) # Core.sk

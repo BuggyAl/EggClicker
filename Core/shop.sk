@@ -260,7 +260,7 @@ function roomShop(p: player, pg: number):
 										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to {_p}
 									else:
 										set {nextarea::%{_uuid}%} to price(clickmoney(size of {rooms::*} + 1)) * {multiplier::%player's uuid%}
-										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b. &7&o(%getNumberFormatted({nextarea::%{_uuid}%})%&7&o) to {_p}
+										send "&bYou successfully unlocked &9%{rooms::%{_lv}%::u}%&b! Now prestige using &9/prestige&b. &7&o(%getNumberFormatted({nextarea::%{_uuid}%})%&7&o)" to {_p}
 									roomShop({_p}, 2)
 								else:
 									send "&cYou do not have enough eggs to purchase this room!" to {_p}

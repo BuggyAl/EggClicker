@@ -150,7 +150,7 @@ function giveEpic(p: player):
 every minute:
 	loop all players:
 		add {tpm::%loop-player's uuid%} to {tokens::%loop-player's uuid%}
-		if {tokens::%player's uuid%} is greater than 100000:
-			unlockAchievement("tokenator", player)
+		if {tokens::%loop-player's uuid%} is greater than or equal to 100000:
+			unlockAchievement("tokenator", loop-player)
 		if {tpm::%loop-player's uuid%} is more than 0:
 			send action bar "&b+%getNumberFormatted({tpm::%loop-player's uuid%})% Tokens &8(&f%getNumberFormatted({tokens::%loop-player's uuid%})%&8)" to loop-player

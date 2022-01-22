@@ -12,6 +12,7 @@ on right click on entity:
 				if {multiplier::%player's uuid%} is greater than or equal to 100:
 					unlockAchievement("multiMadness", player)				
 			else:
+				send "", "&eHmm, you seem to have the max multiplier already!", and "" to player
 				unlockAchievement("multiMadness", player)
 			
 		else if createQuest(player, 4, "I lost my stone button again... A friend of mine told me he might have seen it in the backyard. Find it for me and as usual, you will get a gift.", "Good job! My neighbour brought me 20K Eggs, take them.", "You haven't found the button in the backyard!", {q4::%player's uuid%}):
@@ -35,7 +36,7 @@ on right click on entity:
 				if {multiplier::%player's uuid%} is greater than or equal to 100:
 					unlockAchievement("multiMadness", player)
 			else:
-				send "", "&eHmm, you seem to have the max multiplier already!", and "", to player
+				send "", "&eHmm, you seem to have the max multiplier already!", and "" to player
 			
 		else if createQuest(player, 10, "Hi there! I'm sooo excited, i'm gonna be having an egg eating party with my friends. Unfortunately, I don't have enough eggs, would you be able to get me 50B Eggs?", "Thanks, but my friends actually brought 75B Eggs, so you can have 25B.", "You haven't got 50B Eggs!", (true if {eggs::%player's uuid%} is more than or equal to 50000000000 else false)):
 			add 25000000000 to {eggs::%player's uuid%}
@@ -49,7 +50,7 @@ on right click on entity:
 				if {multiplier::%player's uuid%} is greater than or equal to 100:
 					unlockAchievement("multiMadness", player)				
 			else:
-				send "", "&eHmm, you seem to have the max multiplier already!", and "", to player
+				send "", "&eHmm, you seem to have the max multiplier already!", and "" to player
 			unlockAchievement("longWindedQuest", player) # keep at end of quest list
 
 

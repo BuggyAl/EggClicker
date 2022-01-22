@@ -126,8 +126,8 @@ on right-click:
 				chance of 1%:
 					add 1 to {tokens::%player's uuid%}
 					play sound "block.amethyst_block.hit" to player
-				if {tokens::%player's uuid%} is greater than 100000:
-					unlockAchievement("tokenator", player)
+					if {tokens::%player's uuid%} is greater than or equal to 100000:
+						unlockAchievement("tokenator", player)
 				#clicks
 				add 1 to {clicks::%player's uuid%}
 				add 1 to {clicks}
