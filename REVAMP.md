@@ -1,4 +1,4 @@
-# EggClicker Code Revamp [1.0]
+# EggClicker Code Revamp [1.0.0]
 
 This file will contain live updates on the EggClicker code revamp. The version in the top of the file is the current update version.
 
@@ -15,4 +15,4 @@ This file will contain live updates on the EggClicker code revamp. The version i
 
 ## Changelog
 
-1.0 - Initial branch release
+1.0.0 - Initial branch release
