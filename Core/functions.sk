@@ -1,20 +1,15 @@
 on script load:
- 
 	set {_letters} to "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz"
 	set {_letter-pairs::*} to {_letters} split at " "
- 
 	loop {_letter-pairs::*}:
- 
 		set {_pair::*} to loop-value split at ""
- 
 		set {_uppercase} to {_pair::1}
 		set {_lowercase} to {_pair::2}
- 
 		set {letters::uppercase::%{_lowercase}%} to {_uppercase}
 		set {letters::lowercase::%{_uppercase}%} to {_lowercase}
  
+
 on script unload:
- 
 	delete {letters::*}
  
 
@@ -25,41 +20,35 @@ on script unload:
  # loop {_viewers::*}: #show peeps the new block
  #   send loop-value packet {_packet}
 
+
 function switchCaseFor(text: text, to-uppercase: boolean) :: text:
- 
 	set {_characters::*} to {_text} split at ""
 	set {_new} to ""
- 
 	loop {_characters::*}:
- 
 		set {_char} to loop-value
- 
 		if {_to-uppercase} is true:
 			set {_char} to {letters::uppercase::%loop-value%}
 		else:
 			set {_char} to {letters::lowercase::%loop-value%}
- 
 		set {_new} to "%{_new}%%{_char}%"
- 
 	return {_new}
  
+
 function uppercase(text: text) :: text:
- 
 	return switchCaseFor({_text}, true)
  
+
 function lowercase(text: text) :: text:
- 
 	return switchCaseFor({_text}, false)
  
+
 function capitalize(text: text) :: text:
- 
 	set {_char} to the first character of {_text}
 	set {_char} to {letters::uppercase::%{_char}%}
- 
 	set {_remaining} to ""
 	set {_remaining} to the last (length of {_text} - 1) characters of {_text}
- 
 	return "%{_char}%%{_remaining}%"
+
 
 function getNumberFormatted(n: number) :: text:
 	set {_data} to "Sx,21|Qi,18|Qa,15|T,12|B,9|M,6|K,3"
@@ -70,10 +59,12 @@ function getNumberFormatted(n: number) :: text:
 		return "%{_result}%%{_s::1}%"
 	return "%{_n}%"
 	
+
 command /testformatter <number>:
 	permission: op
 	trigger:
 		send getNumberFormatted(arg-1) to player
+
 
 function contains(list: objects, check: object) :: boolean:
 	loop {%{_list}%::*}:
@@ -81,26 +72,23 @@ function contains(list: objects, check: object) :: boolean:
 			return true
 	return false
 
+
 function teleportPlayer(p: player, x: number, y: number, z: number, pitch: number, yaw: number, world: text):
 	teleport {_p} to location({_x}, {_y}, {_z}, {_world}, {_yaw}, {_pitch})
 
-function getGUIBorders(rows: integer) :: objects: # get the border slots in a GUI with a pecified number of rows
 
+function getGUIBorders(rows: integer) :: objects: # get the border slots in a GUI with a specified number of rows
 	clear {_borders::*}
-
 	loop integers between 0 and 9: # first row and front of 2nd row
 		add loop-integer to {_borders::*}
-
 	set {_lastSlot} to ({_rows} * 9) - 1 # end of 2nd to last row and last row
 	set {_finalFillStart} to {_lastSlot} - 9
 	loop integers between {_finalFillStart} and {_lastSlot}:
 		add loop-integer to {_borders::*}	
-
 	set {_edgeLoopStart} to {_finalFillStart} - 8 # edges of GUI
 	loop integers between 2 and {_edgeLoopStart}:
 		loop-integer is divisible by 9:
 			set {_baseNum} to loop-integer
 			add {_baseNum} to {_borders::*}
-			add {_baseNum} - 1 to {_borders::*}
-	
+			add {_baseNum} - 1 to {_borders::*}	
 	return {_borders::*}

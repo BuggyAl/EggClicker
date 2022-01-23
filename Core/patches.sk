@@ -4,13 +4,11 @@ on load:
 	set level progress of player to {xp::%player's uuid%} / {neededxp::%player's uuid%}
 	set level of player to {level::%player's uuid%}
 	
+	
 command /spawn:
 	trigger:
 		teleport player to {spawn}
-		
-#on join:
-	#wait 1 tick
-	#make player say "/spawn"
+
 
 on right click:
 	if event-block is in region "discord" parsed as region:
