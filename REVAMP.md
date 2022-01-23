@@ -11,7 +11,8 @@ This file will contain live updates on the EggClicker code revamp. The version i
 
 ### Current To-Do List
 
-- Coming Soon
+- Reorganize code into respective files
+- Moves files into folders 
 
 ## Changelog
 
