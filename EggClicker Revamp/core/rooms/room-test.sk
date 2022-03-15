@@ -1,0 +1,25 @@
+on load:
+	loadRooms()
+
+command /reloadrooms:
+	aliases: loadrooms
+	permission: op
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		loadRooms()
+		send "&aDone!"
+
+every minute:
+	loadRooms()
+
+function loadRooms():
+	clear {rooms::*}
+
+	# Test Room
+	registerRoom("test", 0, 1) 
+	addEggs("test", 1)	
+	
+	# Test Room Extension 1
+	registerRoom("test-e1", 1, 2)
+	addEggs("test-e1", 2)
+	addExtension("test-e1", "test")

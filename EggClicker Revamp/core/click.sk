@@ -1,0 +1,41 @@
+on rightclick:
+	if event-block is set:
+		loop {rooms::*}:
+			if region("room-%loop-index%") is region at event-block:
+				if {player::%player's uuid%::unlocked::*} contains loop-index:
+					click(player, loop-index)
+					stop
+				else:
+					send action bar "&cRegion not Unlocked!" to player
+					stop
+		send action bar "&cNo region Found!" to player
+
+
+function click(p: player, region: text):
+
+	set {_uuid} to uuid of {_p}
+
+	# Eggs
+
+	set {_multi} to getValue({_p}, "multiplier")
+	set {_eggs} to {rooms::%{_region}%::eggs} * {_multi}
+	modifyValue({_p}, "eggs", {_eggs})
+	if {_eggs} is 1:
+		send action bar "&e+1 Egg &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+	else:	
+		send action bar "&e+%{_eggs}% Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+
+	# Tokens
+
+	chance of 1%:
+		modifyValue({_p}, "tokens", 1)
+
+	# Leveling
+
+	add 1 to {player::%{_uuid}%::xp}
+	if {player::%{_uuid}%::xp} >= {player::%{_uuid}%::xpneeded}:
+		set {player::%{_uuid}%::xp} to {player::%{_uuid}%::xp} - {player::%{_uuid}%::xpneeded}
+		add 1 to {player::%{_uuid}%::level}
+		set {player::%{_uuid}%::xpneeded} to ({player::%{_uuid}%::level} ^ 2.75) + 100
+	set level progress of {_p} to {player::%{_uuid}%::xp} / {player::%{_uuid}%::xpneeded}
+	set level of {_p}  to {player::%{_uuid}%::level}
