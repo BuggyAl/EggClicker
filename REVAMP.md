@@ -11,6 +11,7 @@ This file will contain live updates on the EggClicker code revamp. The version i
 - Move scoreboard to SkBee
 - Figure out price system
 - Move variables to following format: {uuid::datatype::extrainfo}
+- New number system (support for nums above 9.22e18 limit)
 
 ### Current To-Do List
 
