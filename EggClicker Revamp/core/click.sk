@@ -1,0 +1,55 @@
+on rightclick:
+	if event-block is not set:
+		stop
+	loop {rooms::*}:
+		if region("room-%loop-index%") is region at event-block:
+			if {player::%player's uuid%::unlocked::*} contains loop-index:
+				if checkClick(event-block, player, location of event-block) is true:
+					regionTrigger(player, "rightclick")
+					click(player, loop-index)
+					stop
+			else:
+				if {player::%player's uuid%::bypassborders} is true:
+					if checkClick(event-block, player, location of event-block) is true:
+						regionTrigger(player, "rightclick")
+						click(player, loop-index)
+						stop
+
+function click(p: player, region: text):
+
+	set {_uuid} to uuid of {_p}
+
+	# Eggs
+
+	if {rooms::%{_region}%::eggs} is not set:
+		send action bar "&e+0 Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+		stop
+
+	set {_multi} to stat({_p}, "multiplier")
+
+	set {_eggs} to round({rooms::%{_region}%::eggs} * ({_multi} + {player::%{_uuid}%::multibuff}) * {player::%{_uuid}%::eggboost})
+	modifyValue({_p}, "eggs", {_eggs})
+	if {_eggs} is 1:
+		send action bar "&e+1 Egg &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+	else:	
+		send action bar "&e+%{_eggs}% Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+
+	# Tokens
+
+	chance of {player::%{_uuid}%::tokenchance}%:
+		modifyValue({_p}, "tokens", 1)
+
+	# Leveling
+
+	add 1 to {player::%{_uuid}%::xp}
+	set level progress of {_p} to {player::%{_uuid}%::xp} / {player::%{_uuid}%::xpneeded}
+	checkXP({_p})
+
+function checkXP(p: player):
+	set {_uuid} to uuid of {_p}
+	if {player::%{_uuid}%::xp} >= {player::%{_uuid}%::xpneeded}:
+		add 1 to {player::%{_uuid}%::level}
+		set level of {_p} to {player::%{_uuid}%::level}
+		set {player::%{_uuid}%::xp} to {player::%{_uuid}%::xp} - {player::%{_uuid}%::xpneeded}
+		set {player::%{_uuid}%::xpneeded} to (1.079 ^ {player::%{_uuid}%::level}) * 250
+		set level progress of {_p} to {player::%{_uuid}%::xp} / {player::%{_uuid}%::xpneeded}

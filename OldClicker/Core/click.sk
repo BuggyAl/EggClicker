@@ -1,0 +1,82 @@
+on right-click:
+	#add xp
+	add 1 to {xp::%player's uuid%}
+	
+	#autobuy
+	if {autobuy::%player's uuid%} is "&a&l&nUNLOCKED":
+		loop {rooms::*}:
+			if {rooms::%loop-value%::id} is last element of {ul::%player's uuid%::*} + 1:
+				set {_r} to loop-value
+		if {_r} is set:
+			if {eggs::%player's uuid%} is greater than or equal to {rooms::%{_r}%::c}:
+				set {_uuid} to player's uuid
+				add {rooms::%{_r}%::id} to {ul::%{_uuid}%::*}
+				remove {rooms::%{_r}%::c} from {eggs::%{_uuid}%}
+				set {tag::%{_uuid}%} to {rooms::%{_r}%::tag}
+				play sound "entity.player.levelup" to player
+				set {_a} to false
+					
+				loop {rooms::*}:
+					if {rooms::%loop-value%::id} is {rooms::%{_r}%::id} + 1:
+						set {_nc} to {rooms::%loop-value%::c}
+				if {_nc} is set:
+					set {nextarea::%{_uuid}%} to {_nc}
+					send "&e&lAUTOBUY &8| &bYou successfully unlocked &9%{rooms::%{_r}%::u}%&b! Next room costs &9%getNumberFormatted({_nc})%&b." to player
+				else:
+					set {nextarea::%{_uuid}%} to price(clickmoney(size of {rooms::*} + 1)) * {multiplier::%{_uuid}%}
+					send "&e&lAUTOBUY &8| &bYou successfully unlocked &9%{rooms::%{_r}%::u}%&b! Now prestige using &9/prestige&b." to player
+	
+	#autoprestige
+	if {autoprestige::%player's uuid%} is "&a&l&nUNLOCKED":
+		set {_cost} to price(clickmoney(size of {rooms::*} + 1)) * {multiplier::%player's uuid%}			
+		if {eggs::%player's uuid%} is more than or equal to {_cost}:
+			if size of {ul::%player's uuid%::*} is greater than or equal to size of {rooms::*}:
+				make player say "/prestige"
+	
+	#levels
+	if {xp::%player's uuid%} is more than or equal to {neededxp::%player's uuid%}:
+		add 1 to {level::%player's uuid%}
+		set {xp::%player's uuid%} to 0
+		set {neededxp::%player's uuid%} to round({neededxp::%player's uuid%} * 1.25)
+		play sound "minecraft:entity.player.levelup" to player
+		if mod({level::%player's uuid%}, 20) is 0:
+			send title "&e&lLEVEL UP" with subtitle "&f+1 &5Epic Crate Key" to player
+			add 1 to {keys::epic::%player's uuid%}
+		else if mod({level::%player's uuid%}, 5) is 0:
+			send title "&e&lLEVEL UP" with subtitle "&f+1 &bRare Crate Key" to player
+			add 1 to {keys::rare::%player's uuid%}
+		else:
+			send title "&e&lLEVEL UP" with subtitle "&f+1 &fCommon Crate Key" to player
+			add 1 to {keys::common::%player's uuid%}
+	set level progress of player to {xp::%player's uuid%} / {neededxp::%player's uuid%}
+	set level of player to {level::%player's uuid%}
+	
+	#eggs
+	loop {rooms::*}:
+		if region at player is {rooms::%loop-value%::r} parsed as region:
+			if {ul::%player's uuid%::*} contains {rooms::%loop-value%::id}:
+				#doubleeggs
+				set {_de} to false
+				chance of {doubleegg::%player's uuid%}%:
+					set {_de} to true
+				#eggs
+				if {_de} is false:
+					add round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}) to {eggs::%player's uuid%}
+				else:
+					add round(({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}) * 2) to {eggs::%player's uuid%}
+				#tokens
+				chance of 1%:
+					add 1 to {tokens::%player's uuid%}
+					play sound "block.amethyst_block.hit" to player
+					if {tokens::%player's uuid%} is greater than or equal to 100000:
+						unlockAchievement("tokenator", player)
+				#clicks
+				add 1 to {clicks::%player's uuid%}
+				add 1 to {clicks}
+				if {clicks::%player's uuid%} is greater than or equal to 250000:
+					unlockAchievement("masterClicker", player)
+				#actionbar
+				if {_de} is false:
+					send action bar "&e+%getNumberFormatted(round({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}))% Eggs &8(&f%getNumberFormatted({eggs::%player's uuid%})%&8)" to player
+				else if {_de} is true:
+					send action bar "&6&lGOLDEN EGG &7- &e+%getNumberFormatted(round(({rooms::%loop-value%::epc} * {multiplier::%player's uuid%}) * 2))% Eggs &8(&f%getNumberFormatted({eggs::%player's uuid%})%&8)" to player

@@ -1,0 +1,13 @@
+function regionTrigger(p: player, type: text):
+
+	if {_type} is "rightclick":
+		stop # add stuff here
+	
+	else if {_type} is "entry":
+		stop # add stuff here
+
+	else if {_type} is "exit":
+		stop # add stuff here
+	
+	else:
+		stop # add stuff here

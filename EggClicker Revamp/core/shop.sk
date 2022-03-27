@@ -1,0 +1,93 @@
+command /shop:
+	trigger:
+		loadShopMenu(player)
+
+function loadShopMenu(p: player):
+	loadGUI({_p}, "shopMenu", 3, "Shop Menu")
+	set {_fill} to black stained glass pane named " "
+	loop integers between 0 and 26:
+		formatGUISlot({_p}, "shopMenu", loop-integer, {_fill})
+	formatGUISlot({_p}, "shopMenu", 10, oak door named "&a&lRoom Shop" with lore "&7Unlock new rooms and areas!")
+	formatGUISlot({_p}, "shopMenu", 12, sunflower named "&e&lToken Shop" with lore "&7Purchase buffs and tags!")
+	formatGUISlot({_p}, "shopMenu", 14, nether star named "&d&lPrestige Shop" with lore "&7&oCurrently not Available")
+	formatGUISlot({_p}, "shopMenu", 16, emerald named "&b&lSupport the Server" with lore "&7Purchase ranks on our store!")
+	openGUI({_p}, "shopMenu")
+
+on inventory click:
+
+	if event-inventory = (metadata tag "shopMenu" of player):
+		cancel event
+		if event-slot is 10:
+			loadRoomShop(player)
+		else if event-slot is 12:
+			loadTokenShop(player)
+		else if event-slot is 14:
+			loadPrestigeShop(player)
+		else if event-slot is 16:
+			execute player command "/buy"
+	
+	else if event-inventory = (metadata tag "roomShop" of player):
+		cancel event
+
+		if event-slot is 11:
+			buyRoom(player, "library")
+		else if event-slot is 12:
+			buyRoom(player, "garden")
+		else if event-slot is 13:
+			buyRoom(player, "cellar")
+		else if event-slot is 14:
+			buyRoom(player, "mine")
+		else if event-slot is 15:
+			send action bar "&cSorry, this room is currently unavailable!" to player
+			play sound "entity.villager.no" to player
+
+	else if event-inventory = (metadata tag "prestigeShop" of player):
+		cancel event
+
+
+function loadRoomShop(p: player):
+	loadGUI({_p}, "roomShop", 6, "Room Shop")
+	set {_fill} to black stained glass pane named " "
+	set {_borders::*} to getGUIBorders(6)
+	loop integers between 0 and 53:
+		if {_borders::*} contains loop-integer:
+			formatGUISlot({_p}, "roomShop", loop-integer, {_fill})
+
+	formatGUISlot({_p}, "roomShop", 10, roomIcon({_p}, "spawn", "Spawn", beacon))
+	formatGUISlot({_p}, "roomShop", 11, roomIcon({_p}, "library", "The Library", bookshelf))
+	formatGUISlot({_p}, "roomShop", 12, roomIcon({_p}, "garden", "The Garden", tulip))
+	formatGUISlot({_p}, "roomShop", 13, roomIcon({_p}, "cellar", "The Cellar", barrel))
+	formatGUISlot({_p}, "roomShop", 14, roomIcon({_p}, "mine", "The Mines", iron pickaxe))
+	formatGUISlot({_p}, "roomShop", 15, netherrack named "&bThe Nether" with lore "&7&oCurrently not Available")
+
+	openGUI({_p}, "roomShop")
+
+
+function buyRoom(p: player, room: text):
+	set {_uuid} to uuid of {_p}
+
+	if {player::%{_uuid}%::unlocked::*} contains {_room}:
+		stop
+
+	set {_eggs} to stat({_p}, "eggs")
+
+	if {_eggs} is greater than or equal to {rooms::%{_room}%::cost}:
+		add {_room} to {player::%{_uuid}%::unlocked::*}
+		loop {rooms::%{_room}%::extensions::*}:
+			add loop-value to {player::%{_uuid}%::unlocked::*}
+		remove {rooms::%{_room}%::cost} from {player::%{_uuid}%::eggs}
+		send action bar "&aYou purchased a new room!" to {_p}
+		play sound "block.note_block.chime" to {_p}
+		loadRoomShop({_p})
+
+	else:
+		send action bar "&cYou don't have enough eggs!" to {_p}
+		play sound "entity.villager.no" to {_p}
+
+
+function loadPrestigeShop(p: player):
+	send "&cThis shop is currently unavailable!" to {_p}
+	close inventory of {_p}
+
+on offhand switch:
+	execute player command "/shop"
