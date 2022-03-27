@@ -20,6 +20,8 @@ This file will contain live updates on the EggClicker code revamp. The version i
 
 ## Changelog
 
+1.0.2 - Oh cool we finished
+
 1.0.1 - Added to revamp TODO, archived old code, split files, and organized code
 
 1.0.0 - Initial branch release
