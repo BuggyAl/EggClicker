@@ -36,6 +36,10 @@ function getHighestRoomID() :: integer:
 			set {_highestID} to loop-value
 	return {_highestID}
 
+function getRoomEggs(id: integer) :: number:
+	set {_room} to getRoom({_id})
+	return {rooms::%{_room}%::eggs}
+	
 function addEggs(room: text, eggs: integer): # can be used for multiple bonuses in future!!!
 	if {rooms::%{_room}%} exists:
 		set {rooms::%{_room}%::eggs} to {_eggs}
