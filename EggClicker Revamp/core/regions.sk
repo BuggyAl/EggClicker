@@ -2,7 +2,10 @@ on region enter:
 	loop {rooms::*}:
 		if region("room-%loop-index%") is event-region:
 			if {player::%player's uuid%::unlocked::*} doesn't contain loop-index:
-				cancel event
+				if {player::%player's uuid%::bypassborders} is not true:
+					cancel event
+					send action bar "&cYou have not unlocked this room yet!" to player
+					play sound "block.note_block.bass" with volume 0.3 and pitch 0 to player
 
 # Room Types:
 # 1. room
@@ -33,15 +36,20 @@ function getHighestRoomID() :: integer:
 			set {_highestID} to loop-value
 	return {_highestID}
 
+function addEggs(room: text, eggs: integer): # can be used for multiple bonuses in future!!!
+	if {rooms::%{_room}%} exists:
+		set {rooms::%{_room}%::eggs} to {_eggs}
+
 function addExtension(extension: text, main: text):
 	if {rooms::%{_main}%} exists: 
 		if {rooms::%{_main}%::type} is 1:
 			if {rooms::%{_extension}%::type} is 2:
 				add {_extension} to {rooms::%{_main}%::extensions::*}
 
-function addEggs(room: text, eggs: integer): # can be used for multiple bonuses in future!!!
+function setRoomCost(room: text, cost: integer):
 	if {rooms::%{_room}%} exists:
-		set {rooms::%{_room}%::eggs} to {_eggs}
+		set {rooms::%{_room}%::cost} to {_cost}
+
 
 command /toggleroomaccess [<text>] [<offline player>]:
 	permission: dev.toggleroomaccess
@@ -65,6 +73,18 @@ command /toggleroomaccess [<text>] [<offline player>]:
 			set {_unlocked} to isUnlocked(player, arg-1)
 			send "&aSet your room access in region &e%arg-1% &ato &e%{_unlocked}%&a!" to player
 
+command /togglebuildbypass:
+	permission: dev.togglebuildbypass
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		set {_uuid} to uuid of player
+		if {player::%player's uuid%::bypassborders} is true:
+			set {player::%{_uuid}%::bypassborders} to false
+			send "&aYou will no longer be able to bypass borders!" to player
+		else:
+			set {player::%{_uuid}%::bypassborders} to true
+			send "&aYou will now be able to bypass borders!" to player
+
 command /viewmyrooms:
 	permission: op
 	trigger:
@@ -78,7 +98,6 @@ function toggleRoomAccess(p: player, room: text):
 			remove {_room} from {player::%{_uuid}%::unlocked::*}
 			loop {rooms::%{_room}%::extensions::*}:
 				remove loop-value from {player::%{_uuid}%::unlocked::*}
-
 		else:
 			add {_room} to {player::%{_uuid}%::unlocked::*}
 			loop {rooms::%{_room}%::extensions::*}:
@@ -90,10 +109,6 @@ function isUnlocked(p: player, room: text) :: boolean:
 		return true
 	else:
 		return false
-
-command /stuck:
-	trigger:
-		push player upwards at speed 0.2
 
 on tab complete of "/toggleroomaccess":
 	set tab completions for position 1 to (indexes of {rooms::*})

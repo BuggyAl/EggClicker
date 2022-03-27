@@ -1,0 +1,71 @@
+command /setprestige [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {player::%arg-2's uuid%::prestige} to arg-1
+				send "&aDone!" to player
+				send "&aYour prestige has been modified by an staff member!" to arg-2
+			else:
+				set {player::%player's uuid%::prestige} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a prestige amount!"
+
+command /settokens [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {player::%arg-2's uuid%::tokens} to arg-1
+				send "&aDone!" to player
+				send "&aYour tokens have been modified by an staff member!" to arg-2
+			else:
+				set {player::%player's uuid%::tokens} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter a token amount!"
+
+command /seteggs [<integer>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {player::%arg-2's uuid%::eggs} to arg-1
+				send "&aDone!" to player
+				send "&aYour eggs have been modified by an staff member!" to arg-2
+			else:
+				set {player::%player's uuid%::eggs} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter an egg amount!"
+
+command /setmulti [<number>] [<offline player>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {player::%arg-2's uuid%::multiplier} to arg-1
+				send "&aDone!" to player
+				send "&aYour multiplier has been modified by an staff member!" to arg-2
+			else:
+				set {player::%player's uuid%::multiplier} to arg-1
+				send "&aDone!"
+		else:
+			send "&cPlease enter an egg amount!"
+
+command /setvar [<text>] [<text>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				if arg-2 parsed as number is a number:
+					set {%arg-1%} to arg-2 parsed as number
+				else:
+					set {%arg-1%} to arg-2
+				send "&aSet &e{%arg-1%&e} &ato &e%arg-2%&a!"
+			else:
+				send "&aDeleted variable &e{%arg-1%}&a! &7(Value: %{%arg-1%}%&7)"
+				delete {%arg-1%}
+		else:
+			send "&cPlease input a variable! &7(This command sets or wipes ANY variable!"

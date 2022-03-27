@@ -1,12 +1,19 @@
 on join:
+
 	set {_status} to {player::%player's uuid%::status}
 
 	if {_status} is 0:
+		execute player command "/spawn"
 		stop
+
+	else if {_status} is -1:
+		execute player command "/spawn"
+		send "&aYour account has been reset by a staff member!"
 
 	if {_status} is not set:
 		resetPlayer(player)
-#		set {player::%player's uuid%::status} to 0
+		execute player command "/spawn"
+		set {player::%player's uuid%::status} to 0
 
 
 function resetPlayer(p: player):
@@ -17,5 +24,41 @@ function resetPlayer(p: player):
 	set {player::%{_uuid}%::prestige} to 0
 	set {player::%{_uuid}%::xp} to 0
 	set {player::%{_uuid}%::level} to 0
-	set {player::%{_uuid}%::xpneeded} to 1000
-	clear {player::%{_uuid}%::unlocked}
+	set level of {_p} to 0
+	set level progress of {_p} to 0
+	set {player::%{_uuid}%::xpneeded} to (1.079 ^ {player::%{_uuid}%::level}) * 250
+	clear {player::%{_uuid}%::unlocked::*}
+	add "spawn" to {player::%{_uuid}%::unlocked::*}
+	clear {player::%{_uuid}%::buffs::*}
+	set {player::%{_uuid}%::eggboost} to 1 # multiplicative
+	set {player::%{_uuid}%::multibuff} to 0 # additive
+	set {player::%{_uuid}%::tokenchance} to 1 # multiplicative
+	set {player::%{_uuid}%::overflowMultiBought} to 0
+
+
+command /resetplayer [<offline player>]:
+	usage: /resetplayer <player> [<reason>]
+	permission: op
+	permission message: &cYou do not have permission to use this command.
+	trigger:
+		if arg-1 is set:
+			resetPlayer(arg-1)
+			send "&e%arg-1% &a has been reset!" to player
+		else:
+			resetPlayer(player)
+			teleport player to spawn
+
+command /spawn:
+	trigger:
+		if {spawn} is set:
+			teleport player to {spawn}
+			send action bar "&aSending you to spawn..." to player
+			play sound "entity.enderman.teleport" to player
+		else:
+			send "&cSpawn is not set! Please report this to an admin." to player
+
+command /setspawn:
+	permission: op
+	trigger:
+		set {spawn} to location of player
+		send "&aSpawn has been set to &b%{spawn}%&a!" to player
