@@ -53,12 +53,14 @@ function loadRoomShop(p: player):
 		if {_borders::*} contains loop-integer:
 			formatGUISlot({_p}, "roomShop", loop-integer, {_fill})
 
-	formatGUISlot({_p}, "roomShop", 10, roomIcon({_p}, "spawn", "Spawn", beacon))
+	formatGUISlot({_p}, "roomShop", 10, roomIcon({_p}, "spawn", "Spawn", nether star))
 	formatGUISlot({_p}, "roomShop", 11, roomIcon({_p}, "library", "The Library", bookshelf))
 	formatGUISlot({_p}, "roomShop", 12, roomIcon({_p}, "garden", "The Garden", tulip))
 	formatGUISlot({_p}, "roomShop", 13, roomIcon({_p}, "cellar", "The Cellar", barrel))
 	formatGUISlot({_p}, "roomShop", 14, roomIcon({_p}, "mine", "The Mines", iron pickaxe))
 	formatGUISlot({_p}, "roomShop", 15, netherrack named "&bThe Nether" with lore "&7&oCurrently not Available")
+
+	formatGUISlot({_p}, "roomShop", 16, prestigeIcon({_p}))
 
 	openGUI({_p}, "roomShop")
 

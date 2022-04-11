@@ -46,7 +46,7 @@ command /resetplayer [<offline player>]:
 			send "&e%arg-1% &a has been reset!" to player
 		else:
 			resetPlayer(player)
-			teleport player to spawn
+			teleport player to {spawn}
 
 command /spawn:
 	trigger:

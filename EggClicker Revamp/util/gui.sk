@@ -38,6 +38,10 @@ function roomIcon(p: player, id: text, name: text, icon: item) :: item:
 	else:
 		return 1 of {_icon} named "&b%{_name}%" with lore "&dEggs Per Click &7- &5%{rooms::%{_id}%::eggs}%", "&dCost &7- &5%{rooms::%{_id}%::cost}% Eggs", and "&aClick to buy!"
 
+function prestigeIcon(p: player) :: item:
+	set {_uuid} to uuid of {_p}
+	set {_prestige} to {player::%{_uuid}%::prestige}
+	return 1 of beacon named "&a&lPrestige" with lore "&7(%{_prestige}% &7→ %{_prestige} + 1%&7)", "&dCost &7- &5%formatNum(prestigePrice({_p}))% Eggs", and "&aClick to buy!"
 
 function tokenBuffIcon(p: player, buff: text, name: text, lore: text, icon: item) :: item:
 	set {_uuid} to uuid of {_p}

@@ -24,7 +24,7 @@ function getRoomID(name: text) :: integer:
 function getRoom(id: integer) :: text:
 	loop {rooms::*}:
 		if loop-value is {_id}:
-			return loop-value
+			return loop-index
 
 function getHighestRoom(id: integer) :: text:
 	return getRoom({_id})

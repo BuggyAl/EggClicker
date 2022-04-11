@@ -1,6 +1,9 @@
 command /prestige:
 	trigger:
-		prestige(player)
+		if player has permission "staff":
+			prestige(player)
+		else:
+			send "&cThis command is currently disabled."
 
 
 function prestigePrice(p: player) :: number:
@@ -10,22 +13,27 @@ function prestigePrice(p: player) :: number:
 	set {_topRoomEggs} to getRoomEggs(getHighestRoomID())
 	return 72000 * (1.5 ^ {_prestige}) * {_topRoomEggs} # (72000 * 1.5^x)
 
+command /testprices:
+	trigger:
+		send prestigePrice(player) 
+
 function prestige(p: player):
 	set {_uuid} to uuid of {_p}
 
-	# set {_eggs} to {player::%{_uuid}%::eggs}
-	# set {_multi} to {player::%{_uuid}%::multiplier}
+	set {_eggs} to {player::%{_uuid}%::eggs}
+	set {_multi} to {player::%{_uuid}%::multiplier}
 
-	# if {_eggs} < prestigePrice({_p}):
-	# 	send action bar "&cYou do not have enough eggs to prestige." to {_p}
-	# 	play sound "entity.villager.no" to {_p}
-	# 	stop
+	if {_eggs} < prestigePrice({_p}):
+		send action bar "&cYou do not have enough eggs to prestige." to {_p}
+		play sound "entity.villager.no" to {_p}
+		stop
 
-	# clear {player::%{_uuid}%::unlocked::*}
-	# add "spawn" to {player::%{_uuid}%::unlocked::*}
-	# set {player::%{_uuid}%::eggs} to 0
+	clear {player::%{_uuid}%::unlocked::*}
+	add "spawn" to {player::%{_uuid}%::unlocked::*}
+	set {player::%{_uuid}%::eggs} to 0
 	
-	# add 1 to {player::%{_uuid}%::prestige}
+	add 1 to {player::%{_uuid}%::prestige}
+
 	teleport {_p} to {spawn}
 	send title "&a&lPrestige" with subtitle "&e+1 Prestige &8(&b%{player::%{_uuid}%::prestige}%&8)" to {_p}
 	set {_pitch} to random number between 0 and 2
