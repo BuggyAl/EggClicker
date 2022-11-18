@@ -1,0 +1,7 @@
+on skript start:
+    loadCollectorItems()
+    reloadSuffixes()
+
+every hour:
+    loadCollectorItems()
+    reloadSuffixes()

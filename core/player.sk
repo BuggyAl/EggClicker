@@ -1,0 +1,70 @@
+on join:
+	if {player::%player's uuid%::hasReset} is not true:
+		resetPlayer(player)
+		set {player::%player's uuid%::hasReset} to true
+	set {player::%player's uuid%::inConversation} to false
+	execute player command "/spawn"
+
+function resetPlayer(p: player):
+	set {_uuid} to uuid of {_p}
+	set {player::%{_uuid}%::eggs} to 0
+	set {player::%{_uuid}%::tokens} to 0
+	set {player::%{_uuid}%::multiplier} to 1
+	set {player::%{_uuid}%::clicks} to 0
+	set {player::%{_uuid}%::prestige} to 0
+	set {player::%{_uuid}%::progression} to 0
+	set {player::%{_uuid}%::collectorProgression} to 0
+	set {player::%{_uuid}%::suffix} to "none"
+
+command /resetplayer [<offline player>]:
+	usage: /resetplayer <player> [<reason>]
+	permission: op
+	permission message: &cYou do not have permission to use this command.
+	trigger:
+		if arg-1 is set:
+			resetPlayer(arg-1)
+			send "&e%arg-1% &ahas been reset!" to player
+		else:
+			resetPlayer(player)
+			teleport player to {spawn}
+
+function getHighestPlayerRoom(p: player) :: text:
+	set {_uuid} to uuid of {_p}
+	set {_highest} to 0
+	loop indices of {rooms::*}:
+		{rooms::%loop-value%::progression} > {_highest}
+		{player::%{_uuid}%::prestige} >= {rooms::%loop-value%::prestigeReq}
+		set {_highest} to {rooms::%loop-value%::progression}
+	set {_highestRoom} to progressionToID({_highest})
+	return {_highestRoom}
+
+command /spawn:
+	trigger:
+		if {spawn} is set:
+			teleport player to {spawn}
+			send action bar "&aSending you to spawn..." to player
+			play sound "entity.enderman.teleport" to player
+		else:
+			send "&cSpawn is not set! Please report this to an admin." to player
+
+command /setspawn:
+	permission: op
+	permission message: &cYou do not have permission to use this command.	
+	trigger:
+		set {spawn} to location of player
+		send "&aSpawn has been set to &b%{spawn}%&a!" to player
+
+command /setstat [<text>] [<text>]:
+	permission: op
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				set {player::%uuid of player%::%arg-1%} to arg-2
+				send "&aSet %arg-1% to %arg-2%!" to player
+			else:
+				send "&cYou must specify a value!" to player
+		else:
+			send "&cYou must specify a stat!" to player
+
+on tab complete of "/setstat":
+	set tab completions for position 1 to indices of {player::%player's uuid%::*}

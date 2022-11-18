@@ -1,0 +1,62 @@
+command /shop:
+	trigger:
+		loadShopMenu(player)
+
+function loadShopMenu(p: player):
+	set {_uuid} to uuid of {_p}
+	loadGUI({_p}, "shopMenu", 3, "Shop Menu")
+	set {_fill} to black stained glass pane named " "
+	loop integers between 0 and 26:
+		setGUISlot({_p}, "shopMenu", loop-integer, {_fill})
+	setGUISlot({_p}, "shopMenu", 10, oak door named "&a&lRoom Shop" with lore "&7&oUnlock new rooms and areas!")
+	setGUISlot({_p}, "shopMenu", 12, sunflower named "&e&lToken Shop" with lore "&7&oPurchase buffs and tags!")
+	if {player::%{_uuid}%::collectorProgress} is 10:
+		setGUISlot({_p}, "shopMenu", 14, nether star named "&6&lThe Collector" with lore "&7&oPurchase powerful items!")
+	else:
+		setGUISlot({_p}, "shopMenu", 14, nether star named "&6&lThe Collector &c&l(LOCKED)" with lore "&7&oSpeak to The Collector to unlock!")
+	setGUISlot({_p}, "shopMenu", 16, emerald named "&b&lSupport the Server" with lore "&7&oPurchase ranks on our store!")
+	openGUI({_p}, "shopMenu")
+
+function loadShopMenu(p: player):
+	openGUI({_p},)
+
+on inventory click:
+	if event-inventory = (metadata tag "shopMenu" of player):
+		cancel event
+		if event-slot is 10:
+			loadRoomShop(player)
+		else if event-slot is 12:
+			loadTokenShop(player)
+		else if event-slot is 14:
+			if {player::%uuid of player%::collectorProgress} is 10:
+				loadCollectorShop(player)
+			else:
+				play sound "entity.villager.no" at pitch 0.75 to player
+				send action bar "&cYou have not unlocked this shop!" to player
+		else if event-slot is 16:
+			execute player command "/buy"
+
+command /roomshop:
+	permission: rank.egglord
+	permission message: &cYou must be an &c&lEGGLORD &cto run this command!
+	trigger:
+		loadRoomShop(player)
+
+command /tokenshop:
+	permission: rank.egglord
+	permission message: &cYou must be an &c&lEGGLORD &cto run this command!
+	trigger:
+		loadTokenShop(player)
+
+command /collectorshop:
+	permission: rank.egglord
+	permission message: &cYou must be an &c&lEGGLORD &cto run this command!
+	trigger:
+		if {player::%player's uuid%::collectorProgress} != 9:
+			sendCollectorMessage(player, "You may only access my shop once I deem you worthy!")
+		else:
+			loadCollectorShop(player)
+
+on swap held item:
+	player's gamemode is not creative
+	execute player command "/shop"

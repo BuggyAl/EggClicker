@@ -1,5 +1,0 @@
-function reloadSkillDatabase():
-    set {skilltree::icons::core::buyable} to beacon named "&6Prestige Tree &7(%{skilltree::prices::core}%&7)" with lore "&7Unlocks the prestige tree!", "", and "&7Cost: &d1 Fragment" 
-    
-on skript start:
-    reloadSkillDatabase()

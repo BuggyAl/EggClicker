@@ -1,0 +1,15 @@
+every 10 minutes:
+	set {_time} to unix timestamp of now
+	set {_clicks} to {analytics::clicks}
+	set {_eggs} to {analytics::eggs}
+	set {_tokens} to {analytics::tokens}
+	set {_prestiges} to {analytics::prestiges}
+	set {_firstJoins} to {analytics::firstJoins}
+	set {_joins} to {analytics::joins}
+	set {_quits} to {analytics::quits}
+	set {_roomsBought} to {analytics::roomsBought}
+ 	log "%{_time}%, %{_clicks}%, %{_eggs}%, %{_tokens}%, %{_prestiges}%, %{_instaClicks}%, %{_firstJoins}%, %{_joins}%, %{_quits}%, %{_roomsBought}%" to "analytics.log"
+	loop {analytics::*}:
+		set {analytics::%loop-index%} to 0
+	send "&e[Analytics] Data has been logged for &6%{_time}%&e!" to console
+	

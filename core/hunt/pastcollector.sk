@@ -1,0 +1,55 @@
+on right click on entity:
+	name of event-entity is "CIT-99f4882491bc"
+	set {_uuid} to uuid of player
+	{player::%{_uuid}%::inConversation} is false
+	set {player::%{_uuid}%::inConversation} to true
+	# if ({player::%{_uuid}%::rebirths} < 1) or ({player::%{_uuid}%::ascensions} < 1):
+	# 	sendCollectorMessage(player, "Come back once you have &crebirthed &fand &5ascended&f...")
+	# 	stop
+	set {_progress} to {player::%{_uuid}%::collectorProgress}
+	if {_progress} is 5:
+		pastCollectorIntroduction(player)
+	else if {_progress} is 6:
+		collectorEggSearch(player)
+	else if {_progress} is 7:
+		collectorReward(player)
+	else if {_progress} > 7:
+		sendCollectorMessage(player, "Again, thank you for your help! Stay safe out there!")
+		set {player::%{_uuid}%::inConversation} to false
+	else:
+		sendCollectorMessage(player, "...")
+		set {player::%{_uuid}%::inConversation} to false
+
+function pastCollectorIntroduction(p: player):
+	set {_uuid} to uuid of {_p}
+	sendCollectorMessage({_p}, "Hello &e%{_p}%&r! I have powerful resources available, but only to those worthy!")
+	wait 4 seconds
+	sendCollectorMessage({_p}, "How to be worthy you ask?")
+	wait 3 seconds
+	sendCollectorMessage({_p}, "Hmm... I know!")
+	wait 3.5 seconds
+	sendCollectorMessage({_p}, "Earlier, I ate breakfast down on &eEgg Street&r.")
+	wait 3 seconds 
+	sendCollectorMessage({_p}, "When I got home, I realised that &fmy &6Golden Egg &fwas missing!")
+	wait 3 seconds
+	sendCollectorMessage({_p}, "Find my &6Golden Egg &fand I will give you a reward!")
+	set {player::%{_uuid}%::collectorProgress} to 6
+	set {player::%{_uuid}%::inConversation} to false
+
+function collectorEggSearch(p: player):
+	set {_uuid} to uuid of {_p}
+	sendCollectorMessage({_p}, "I probably left the egg somewhere on &eEgg Street &fwhen I ate breakfast!")
+	wait 3 seconds
+	sendCollectorMessage({_p}, "Please hurry and bring it to me!")
+	set {player::%{_uuid}%::inConversation} to false
+
+function collectorReward(p: player):
+	set {_uuid} to uuid of {_p}
+	if inventory of {_p} contains 1 of {collectorItems::collectorEgg}:
+		remove 1 of {collectorItems::collectorEgg} from inventory of {_p}
+		sendCollectorMessage({_p}, "Wow, you found it! Take this token of gratitude for your efforts!")
+		give {_p} 1 of instaClick(1)
+		set {player::%uuid of {_p}%::collectorProgress} to 8
+		wait 2 seconds
+		sendCollectorMessage({_p}, "I suppose it is time to go our seperate ways. Stay safe out there!")
+		set {player::%{_uuid}%::inConversation} to false

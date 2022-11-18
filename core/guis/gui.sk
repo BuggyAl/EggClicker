@@ -1,0 +1,31 @@
+function loadGUI(p: player, id: text, rows: integer, display: text):
+	set {_uuid} to uuid of {_p}
+	if {_rows} is greater than 6:
+		stop
+	if {_rows} is less than 1:
+		stop
+	set metadata tag {_id} of {_p} to chest inventory with {_rows} rows named {_display}
+
+#open chest inventory with 4 rows named "&cLazy gurl." to player
+function loadGUI(p: player, type: inventory type, rows: int, display: text):
+	set {_uuid} to uuid of {_p}
+	open {_type} inventory with {_rows} rows named {_display} to {_p}
+
+
+function setGUISlot(p: player, slot: int, item: item):
+	set {_inventory} to current inventory of {_p}
+	set slot {_slot} of {_inventory} to {_item}
+
+function getGUIBorders(rows: integer) :: objects: # get the border slots in a GUI with a specified number of rows
+	loop integers between 0 and ({_rows} * 9 - 1):
+		if loop-integer is between 0 and 7:
+			add loop-integer to {_borders::*}
+		else if mod(loop-integer, 9) is 0:
+			add loop-integer to {_borders::*}
+			add loop-integer - 1 to {_borders::*}
+		else if (({_rows} * 9 - 1) - loop-integer) < 10:
+			add loop-integer to {_borders::*}
+	return {_borders::*}
+
+function openGUI(p: player, id: text):
+	open (metadata tag {_id} of {_p}) to {_p}

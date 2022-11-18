@@ -1,0 +1,19 @@
+on join:
+	while player is online:
+		set {_uuid} to uuid of player
+		set title of player's scoreboard to "&e&lEggClicker&8〡&7[S8]"
+		set line 13 of player's scoreboard to "&7"
+		set line 12 of player's scoreboard to "&6&l%player%"
+		set line 11 of player's scoreboard to "&8• &eEggs: &f%formatNum({player::%{_uuid}%::eggs})%"
+		set line 10 of player's scoreboard to "&8• &eTokens: &f⛁%formatNum({player::%{_uuid}%::tokens})%"
+		set line 9 of player's scoreboard to "&8• &ePrestige: &f✫%{player::%{_uuid}%::prestige}%"
+		set line 8 of player's scoreboard to "&8• &eMultiplier: &f%{player::%{_uuid}%::multiplier}%"
+		set line 7 of player's scoreboard to "&8• &eClicks: &f%formatNum({player::%{_uuid}%::tokens})%"
+		set line 6 of player's scoreboard to "&7"
+		set line 5 of player's scoreboard to "&6&lServer"
+		set line 4 of player's scoreboard to "&8• &ePlayers: &f%number of all players%&f/%maximum amount of players%"
+		set line 3 of player's scoreboard to "&8• &eUnique Joins: &f%number of all offline players%"
+		set line 2 of player's scoreboard to "&7"
+		set line 1 of player's scoreboard to " &7&nᴇɢɢᴄʟɪᴄᴋᴇʀ.ᴍɪɴᴇʜᴜᴛ.ɢɢ&7 "
+		wait 1 tick
+		toggle player's scoreboard to on

@@ -1,0 +1,121 @@
+function loadRoomShop(p: player):
+	loadGUI({_p}, "roomShop", 6, "Room Shop")
+	set {_borders::*} to getGUIBorders(6)
+	loop {_borders::*}:
+		setGUISlot({_p}, "roomShop", loop-value, black stained glass pane named " ")
+	setGUISlot({_p}, "roomShop", 10, roomIcon({_p}, "spawn"))
+	setGUISlot({_p}, "roomShop", 11, roomIcon({_p}, "library"))
+	setGUISlot({_p}, "roomShop", 12, roomIcon({_p}, "garden"))
+	setGUISlot({_p}, "roomShop", 13, roomIcon({_p}, "cellar"))
+	setGUISlot({_p}, "roomShop", 14, roomIcon({_p}, "mine"))
+	setGUISlot({_p}, "roomShop", 15, roomIcon({_p}, "nether"))
+	setGUISlot({_p}, "roomShop", 16, roomIcon({_p}, "desert"))
+	setGUISlot({_p}, "roomShop", 19, roomIcon({_p}, "monument"))
+	setGUISlot({_p}, "roomShop", 20, roomIcon({_p}, "end"))
+	setGUISlot({_p}, "roomShop", 21, roomIcon({_p}, "factory"))
+	setGUISlot({_p}, "roomShop", 22, roomIcon({_p}, "farm"))
+	setGUISlot({_p}, "roomShop", 23, roomIcon({_p}, "kitchen"))
+	setGUISlot({_p}, "roomShop", 24, roomIcon({_p}, "castle"))
+	setGUISlot({_p}, "roomShop", 25, roomIcon({_p}, "basement"))
+	setGUISlot({_p}, "roomShop", 28, roomIcon({_p}, "overgrown_cavern"))
+	setGUISlot({_p}, "roomShop", 29, roomIcon({_p}, "beach_alcove"))
+	setGUISlot({_p}, "roomShop", 30, roomIcon({_p}, "beach"))
+	setGUISlot({_p}, "roomShop", 31, roomIcon({_p}, "waterfall"))
+	setGUISlot({_p}, "roomShop", 32, roomIcon({_p}, "rick_passageway"))
+	setGUISlot({_p}, "roomShop", 33, roomIcon({_p}, "lush_cave"))
+	setGUISlot({_p}, "roomShop", 34, roomIcon({_p}, "eggstreet"))
+	setGUISlot({_p}, "roomShop", 37, roomIcon({_p}, "eggdonalds"))
+	setGUISlot({_p}, "roomShop", 38, roomIcon({_p}, "park"))
+	setGUISlot({_p}, "roomShop", 39, roomIcon({_p}, "abandoned_house"))
+	setGUISlot({_p}, "roomShop", 40, roomIcon({_p}, "bank"))
+	setGUISlot({_p}, "roomShop", 41, roomIcon({_p}, "skyscraper"))
+	setGUISlot({_p}, "roomShop", 49, prestigeIcon({_p}))
+	openGUI({_p}, "roomShop")
+
+function roomIcon(p: player, id: text) :: item:
+	set {_uuid} to uuid of {_p}
+	set {_icon} to {rooms::%{_id}%::icon}
+	if {player::%{_uuid}%::prestige} < {rooms::%{_id}%::prestigeReq}:
+		return 1 of air
+	else if {player::%{_uuid}%::progression} >= {rooms::%{_id}%::progression}:
+		set {_item} to {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%" and "&a&lUNLOCKED"
+		enchant {_item} with mending
+		return 1 of ({_item} with hidden enchants flag)
+	else if ({player::%{_uuid}%::progression} + 1) is {rooms::%{_id}%::progression}:
+		set {_cost} to {rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige})
+		return 1 of {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%", "&dCost &7- &5%{_cost}% Eggs", and "&aClick to purchase!"
+	else:
+		return 1 gray dye named "&c???" with lore "&7&oUnlock the previous room the view this one!"
+
+function buyRoom(p: player, id: text):
+	set {_uuid} to uuid of {_p}
+	{player::%{_uuid}%::progression} is ({rooms::%{_id}%::progression} - 1)
+	set {_cost} to {rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige})
+	if {player::%{_uuid}%::eggs} >= {_cost}:
+		remove {_cost} from {player::%{_uuid}%::eggs}
+		add 1 to {player::%{_uuid}%::progression}
+		play sound "block.note_block.chime" to {_p}
+		loadRoomShop({_p})
+		add 1 to {analytics::roomsBought}
+	else:
+		send action bar "&cYou don't have enough eggs!" to {_p}
+		play sound "entity.villager.no" to {_p}
+
+on inventory click:
+	if event-inventory = (metadata tag "roomShop" of player):
+		cancel event
+		if event-slot is 10:
+			buyRoom(player, "spawn")
+		else if event-slot is 11:
+			buyRoom(player, "library")
+		else if event-slot is 12:
+			buyRoom(player, "garden")
+		else if event-slot is 13:
+			buyRoom(player, "cellar")
+		else if event-slot is 14:
+			buyRoom(player, "mine")
+		else if event-slot is 15:
+			buyRoom(player, "nether")
+		else if event-slot is 16:
+			buyRoom(player, "desert")
+		else if event-slot is 19:
+			buyRoom(player, "monument")
+		else if event-slot is 20:
+			buyRoom(player, "end")
+		else if event-slot is 21:
+			buyRoom(player, "factory")
+		else if event-slot is 22:
+			buyRoom(player, "farm")
+		else if event-slot is 23:
+			buyRoom(player, "kitchen")
+		else if event-slot is 24:
+			buyRoom(player, "castle")
+		else if event-slot is 25:
+			buyRoom(player, "basement")
+		else if event-slot is 28:
+			buyRoom(player, "overgrown_cavern")
+		else if event-slot is 29:
+			buyRoom(player, "beach_alcove")
+		else if event-slot is 30:
+			buyRoom(player, "beach")
+		else if event-slot is 31:
+			buyRoom(player, "waterfall")
+		else if event-slot is 32:
+			buyRoom(player, "rick_passageway")
+		else if event-slot is 33:
+			buyRoom(player, "lush_cave")
+		else if event-slot is 34:
+			buyRoom(player, "eggstreet")
+		else if event-slot is 37:
+			buyRoom(player, "eggdonalds")
+		else if event-slot is 38:
+			buyRoom(player, "park")
+		else if event-slot is 39:
+			buyRoom(player, "abandoned_house")
+		else if event-slot is 40:
+			buyRoom(player, "bank")
+		else if event-slot is 41:
+			buyRoom(player, "skyscraper")
+		else if event-slot is 49:
+			prestige(player)
+

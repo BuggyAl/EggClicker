@@ -1,0 +1,12 @@
+function loadCollectorShop(p: player):
+	set {_uuid} to uuid of {_p}
+	loadGUI({_p}, "collectorShop", 6, "Collector Shop")
+	set {_borders::*} to getGUIBorders(6)
+	loop {_borders::*}:
+		setGUISlot({_p}, "collectorShop", loop-value, black stained glass pane named " ")
+	openGUI({_p}, "collectorShop")
+	play sound "entity.villager.ambient" at pitch 0.75 to {_p}
+
+on inventory click:
+	if event-inventory = (metadata tag "collectorShop" of player):
+		cancel event

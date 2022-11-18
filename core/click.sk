@@ -1,0 +1,74 @@
+on rightclick: # detects main click and sends to functions
+	event-block is set
+	set {_room} to getRoomAtPlayer(player)
+	{_room} is set
+	click(player, {_room}, 1)
+
+function getRoomAtPlayer(p: player) :: text: # gets the HIGHEST UNLOCKED room at the player
+	set {_uuid} to uuid of {_p}
+	set {_regions::*} to regions at location of {_p}
+	loop {_regions::*}:
+		"%loop-value%" starts with "room-"
+		set {_id} to roomToID(loop-value)
+		if indices of {rooms::*} does not contain {_id}:
+			loop indices of {rooms::*}:
+				{rooms::%loop-value-2%::extensions::*} contains {_id}
+				set {_id} to loop-value-2
+		if {_best} is not set:
+			set {_best} to {_id}
+		{rooms::%{_id}%::progression} > {rooms::%{_best}%::progression}
+		({player::%{_uuid}%::progression} >= {rooms::%{_id}%::progression}) or ({player::%{_uuid}%::clickBypass}) is true
+		set {_best} to {_id}
+	return {_best}
+
+function roomToID(region: region) :: text: # gets the room id from the region name
+	set {_id} to "%{_region}%"
+	replace "room-" in {_id} with ""
+	return first element of ({_id} split at " ")
+
+function click(p: player, room: text, amount: number) :: int: # handles the click
+	set {_uuid} to uuid of {_p}
+	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
+	add {_eggs} to {player::%{_uuid}%::eggs}
+	if {_eggs} is 1:
+		send action bar "&e+1 Egg &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+	else:	
+		send action bar "&e+%formatNum({_eggs})% Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+	chance of ({_amount} * {player::%{_uuid}%::tokenchance})%:
+		add 1 to {player::%{_uuid}%::tokens} # TODO add varying token amounts
+		add 1 to {analytics::tokens} # ANALYTICS
+	add 1 to {player::%{_uuid}%::clicks}
+	add 1 to {analytics::clicks} # ANALYTICS
+	add {_eggs} to {analytics::eggs} # ANALYTICS
+	return {_eggs}
+
+function instaClick(value: int) :: item: # creates an insta click item
+	set {_instaClick} to 1 of paper named "&eInsta-Click &8(&7%{_value}%&8)" with lore "&7&oInstantly clicks in your room!"
+	set tag "instaClickValue" of nbt compound of {_instaClick} to {_value}
+	return 1 of {_instaClick}
+
+on right click: # handles insta click
+	player's tool is paper 
+	nbt compound of player's tool has nbt tag "instaClickValue"
+	set {_clickValue} to tag "instaClickValue" of nbt compound of player's tool
+	set {_best} to getRoomAtPlayer(player)
+	if {_best} is set:
+		set {_eggs} to click(player, {_best}, {_clickValue})
+		remove 1 of player's tool from player's tool
+		if {_eggs} is 1:
+			send title "&e&lInsta-Click" with subtitle "&e+&61 &eEgg" to player for 3 seconds
+		else:
+			send title "&e&lInsta-Click" with subtitle "&e+&6%{_eggs}% &eEggs" to player for 3 seconds
+	else:
+		send "&cYou must be in a room to use this item!" to player
+
+command /getinstaclick [<int>]: # gives the player an insta click item
+	permission: op
+	permission message: "&cYou do not have permission to use this command!"
+	trigger:
+		if arg-1 is not set:
+			give player 1 of instaClick(100)
+			send "&eYou have been given an &eInsta-Click &aworth &e100" to player
+		else:
+			give player 1 of instaClick(arg-1)
+			send "&eYou have been given an &eInsta-Click &aworth &e%arg-1%" to player

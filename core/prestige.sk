@@ -1,0 +1,52 @@
+Options:
+	maxPrestige: 1000
+
+command /prestige:
+	trigger:
+		prestige(player)
+
+function prestigePrice(p: player) :: number:
+	return 1000000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
+	
+function prestige(p: player):
+	set {_uuid} to uuid of {_p}
+	if {player::%{_uuid}%::prestige} >= {@maxPrestige}:
+		send action bar "&cYou have reached the maximum prestige level!" to {_p}
+		play sound "entity.villager.no" to {_p}
+		stop
+	if {player::%{_uuid}%::progression} < {rooms::%getHighestPlayerRoom({_p})%::progression}:
+		send action bar "&cYou must complete all rooms to prestige!" to {_p}
+		play sound "entity.villager.no" to {_p}
+		stop
+	if {player::%{_uuid}%::eggs} < prestigePrice({_p}):
+		send action bar "&cYou do not have enough eggs to prestige!" to {_p}
+		play sound "entity.villager.no" to {_p}
+		stop
+
+	set {player::%{_uuid}%::progression} to 0
+	set {player::%{_uuid}%::eggs} to 0
+	add 1 to {player::%{_uuid}%::prestige}
+	set {player::%{_uuid}%::lastPrestige}  to now
+	add 1 to {analytics::prestiges}
+
+	# Rewards
+	add 0.25 to {player::%{_uuid}%::multiplier}
+
+	teleport {_p} to {spawn}
+	send title "&a&lPrestige" with subtitle "&e+1 Prestige &8(&b%{player::%{_uuid}%::prestige}%&8)" to {_p}
+	play sound "ui.toast.challenge_complete" at pitch (random number between 0.75 and 2) to {_p}
+
+function prestigeIcon(p: player) :: item:
+	set {_uuid} to uuid of {_p}
+	if {player::%{_uuid}%::prestige} >= {@maxPrestige}:
+		return 1 of beacon named "&a&lPrestige &b({@maxPrestige})" with lore "&7&oYou have reached the max prestige!" 
+	else if {player::%{_uuid}%::progression} is {rooms::%getHighestPlayerRoom({_p})%::progression}:
+		return 1 of beacon named "&a&lPrestige &7(%{player::%{_uuid}%::prestige}% &7→ %{player::%{_uuid}%::prestige} + 1%&7)" with lore "&dCost &7- &5%formatNum(prestigePrice({_p}))% Eggs", and "&aClick to purchase!"
+	else:
+		return 1 of beacon named "&c&lPrestige &7(%{player::%{_uuid}%::prestige}% &7→ %{player::%{_uuid}%::prestige} + 1%&7)" with lore "&cYou must unlock the previous room first!"
+
+command /setprestige <int>:
+	permission: op
+	trigger:
+		set {player::%player's uuid%::prestige} to arg-1
+		send "&aSet prestige to %arg-1%"

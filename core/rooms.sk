@@ -1,0 +1,97 @@
+function registerRoom(id: text, name: text, progression: int, icon: item, tag: text, prestigeReq: int):
+	clear {rooms::%{_id}%::*}
+	set {rooms::%{_id}%::name} to {_name}
+	set {rooms::%{_id}%::progression} to {_progression}
+	set {rooms::%{_id}%::prestigeReq} to {_prestigeReq}
+	set {rooms::%{_id}%::icon} to {_icon}
+	set {rooms::%{_id}%::tag} to {_tag}
+	set {rooms::%{_id}%::cost} to roomPrice({_progression})
+	set {rooms::%{_id}%::eggs} to roomEggs({_progression})
+
+function addExtension(extension: text, room: text):
+	if {rooms::%{_room}%::*} exists:
+		add {_extension} to {rooms::%{_room}%::extensions::*}
+
+function roomPrice(progression: integer) :: number:
+	return 140 * (2.5 ^ {_progression})
+
+function roomEggs(progression: integer) :: number:
+	set {_x} to mod({_progression}, 3)
+	if {_x} is 0: 
+		set {_firstNum} to 1
+	else if {_x} is 1:
+		set {_firstNum} to 2
+	else if {_x} is 2:
+		set {_firstNum} to 5
+	set {_num} to {_firstNum} * (10 ^ floor({_progression} / 3))
+	return {_num}
+
+function loadRooms():
+	registerRoom("spawn", "Spawn", 0, egg, "Clicker", 0)
+	registerRoom("library", "Library", 1, bookshelf, "Bookworm", 0)
+	registerRoom("garden", "Garden", 2, poppy, "Florist", 0)
+	registerRoom("cellar", "Cellar", 3, cobblestone, "Cellarman", 0)
+
+	registerRoom("mine", "Mine", 4, iron pickaxe, "Miner", 0)
+	addExtension("mine2", "mine")
+
+	registerRoom("nether", "Nether", 5, netherrack, "Piglin", 0)
+	registerRoom("desert", "Desert", 6, sand, "Camel", 0)
+	registerRoom("monument", "Monument", 7, prismarine, "Guardian", 0)
+	registerRoom("end", "End", 8, dragon egg, "Enderman", 0)
+	registerRoom("factory", "Factory", 9, anvil, "Worker", 0)
+	registerRoom("farm", "Farm", 10, wheat, "Farmer", 0)
+	registerRoom("kitchen", "Kitchen", 11, steak, "Chef", 0)
+	registerRoom("castle", "Castle", 12, lodestone, "King", 0)
+	registerRoom("basement", "Basement", 13, cracked stone bricks, "Mouse", 0)
+	registerRoom("overgrown_cavern", "Overgrown Cavern", 14, vine, "Fairy", 1)
+	registerRoom("beach_alcove", "Beach Alcove", 15, birch wood, "Vacationer", 2)
+	registerRoom("beach", "Beach", 16, sandstone wall, "Surfer", 5)
+	registerRoom("waterfall", "Waterfall", 17, water bucket, "Sightseer", 10)
+	registerRoom("rick_passageway", "Rick Passageway", 18, painting, "Trolled", 15)
+	registerRoom("lush_cave", "Lush Cave", 19, glow berry, "Axolotl", 20)
+	registerRoom("eggstreet", "Egg Street", 20, egg, "Egg", 25)
+	registerRoom("eggdonalds", "EggDonalds", 21, baked potato, "Fat", 25)
+	registerRoom("park", "Park", 22, grass, "Jogger", 25)
+	registerRoom("abandoned_house", "Abandoned House", 23, cobweb, "Ghost", 25)
+	registerRoom("bank", "Bank", 24, gold ingot, "Investor", 25)
+	registerRoom("skyscraper", "Skyscraper", 25, sea lantern, "Employee", 25)
+
+function getHighestRoom() :: text:
+	set {_highest} to 0
+	loop indices of {rooms::*}:
+		{rooms::%loop-value%::progression} > {_highest}
+		set {_highest} to {rooms::%loop-value%::progression}
+	set {_highestRoom} to progressionToID({_highest})
+	return {_highestRoom}
+
+function progressionToID(progression: integer) :: text:
+	loop indices of {rooms::*}:
+		{rooms::%loop-value%::progression} is {_progression}
+		return loop-value
+
+command /reloadrooms:
+	permission: op
+	trigger:
+		loadRooms()
+
+on region enter:
+	player's gamemode is not creative or spectator
+	{player::%player's uuid%::roomBypass} is not true
+	"%event-region%" starts with "room-"
+	set {_id} to roomToID(event-region)
+	{player::%player%::progression} < {rooms::%{_id}%::progression}
+	cancel event
+	send action bar "&cYou have not unlocked this room! Purchase it in &4/shop&c!" to player
+	play sound "block.note_block.bass" at pitch 0.5 to player
+
+command /bypassborders:
+	permission: rooms.bypass
+	permission message: &cYou do not have permission to use this command!
+	trigger:
+		if {player::%player%::roomBypass} is true:
+			set {player::%player%::roomBypass} to false
+			send "&cYou are no longer bypassing room borders!" to player
+		else:
+			set {player::%player%::roomBypass} to true
+			send "&aYou are now bypassing room borders!" to player
