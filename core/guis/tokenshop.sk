@@ -7,27 +7,15 @@ function loadTokenShop(p: player):
 	setGUISlot({_p}, "tokenShop", 11, sunflower named "&6&lToken &e&lUpgrades" with lore "&7&oUpgrade your stats!")
 	setGUISlot({_p}, "tokenShop", 15, nametag named "&b&lSuffixes" with lore "&7&oGreat for roleplaying!")
 
-	# setGUISlot({_p}, "tokenShop", 19, tokenBuffIcon({_p}, "eggFinder")) # +% more eggs on click 1-10%
-	# setGUISlot({_p}, "tokenShop", 20, tokenBuffIcon({_p}, "tokenator")) # +% chance to get tokens
-	# setGUISlot({_p}, "tokenShop", 21, tokenBuffIcon({_p}, "multiplicative")) # more multiplier 0.25-2.5
-
-	# setGUISlot({_p}, "tokenShop", 28, tokenBuffIcon({_p}, "discount")) # % discount on select shops
-	# setGUISlot({_p}, "tokenShop", 29, tokenBuffIcon({_p}, "lucky")) # chance to get extra tokens and eggs on click
-	# setGUISlot({_p}, "tokenShop", 30, barrel named "&eKey Finder" with lore "&7&oCrates are currently under development!")
-	# #setGUISlot({_p}, "tokenShop", 30, tokenBuffIcon({_p}, "keyFinder")) # small chance to find crate keys on click
-
-	# setGUISlot({_p}, "tokenShop", 37, beacon named "&eBenevolent Aura" with lore "&7&oThis buff is currently under development!")
-	# #setGUISlot({_p}, "tokenShop", 37, tokenBuffIcon({_p}, "benevolentAura")) # players within 5 blocks (including player) get buffs
-
-	setGUISlot({_p}, "tokenShop", 19, egg named "&eEgg Finder")
-	setGUISlot({_p}, "tokenShop", 20, gold nugget named "&eTokenator")
-	setGUISlot({_p}, "tokenShop", 21, nether star named "&eMultiplicative")
-	setGUISlot({_p}, "tokenShop", 28, emerald named "&eDiscount")
-	setGUISlot({_p}, "tokenShop", 29, big dripleaf named "&eLucky")
-	setGUISlot({_p}, "tokenShop", 30, {_comingSoon})
-	setGUISlot({_p}, "tokenShop", 37, {_comingSoon})
-	setGUISlot({_p}, "tokenShop", 38, {_comingSoon})
-	setGUISlot({_p}, "tokenShop", 39, {_comingSoon})
+	setGUISlot({_p}, "tokenShop", 19, egg named "&eEgg Finder") # eggBoostI
+	setGUISlot({_p}, "tokenShop", 20, gold nugget named "&eTokenator") # eggBoostII
+	setGUISlot({_p}, "tokenShop", 21, nether star named "&eMultiplicative") # eggBoostIII
+	setGUISlot({_p}, "tokenShop", 28, emerald named "&eDiscount") # tokenBoostI
+	setGUISlot({_p}, "tokenShop", 29, big dripleaf named "&eLucky") # tokenBoostII
+	setGUISlot({_p}, "tokenShop", 30, {_comingSoon}) # tokenBoostIII
+	setGUISlot({_p}, "tokenShop", 37, {_comingSoon}) # discount
+	setGUISlot({_p}, "tokenShop", 38, {_comingSoon}) # lucky
+	setGUISlot({_p}, "tokenShop", 39, {_comingSoon}) # benevolentAura
 
 	setGUISlot({_p}, "tokenShop", 23, suffixIcon({_p}, "chicken"))
 	setGUISlot({_p}, "tokenShop", 24, suffixIcon({_p}, "gamer"))
@@ -41,8 +29,23 @@ function loadTokenShop(p: player):
 	openGUI({_p}, "tokenShop")
 
 # registerTokenBuff(id, cost, name, lore, icon)
-function registerTokenBuff(id: text, cost: number, name: text, lore: text, icon: item, previous: text):
+function registerTokenBuff(id: text, cost: number, name: text, lore: text, icon: item):
 	set {tokenShop::buffs::%{_id}%::cost} to {_cost}
+	set {tokenShop::buffs::%{_id}%::name} to {_name}
+	set {tokenShop::buffs::%{_id}%::lore} to {_lore}
+	set {tokenShop::buffs::%{_id}%::icon} to {_icon}
+
+function reloadTokenBuffs():
+	registerTokenBuff("omlettes", 500, "&eOmlettes", "&7Grants &c10%% &7extra eggs per click!", egg)
+	registerTokenBuff("scrambledEggs", 500, "&eScrambled Eggs", "&7Grants &c10%% &7extra eggs per click!", turtle egg)
+	registerTokenBuff("eggFriedRice", 500, "&eEgg Fried Rice", "&7Grants &c10%% &7extra eggs per click!", chicken spawn egg)
+	registerTokenBuff("tokenator", 250, "&eTokenator", "&7Increases your token chance to &c5%%&7!", sunflower)
+	registerTokenBuff("tokeneer", 750, "&eTokeneer", "&7Increases the amount of tokens found to &c1-10&7!", gold nugget)
+	registerTokenBuff("tokenBundles" 1500 "&eToken Bundldes" "&7Grants a small chance to find a &etoken bundle&7!", bundle)
+	registerTokenBuff("discount", 1000, "&eDiscount", "&7Grants a &c5%% &7discount in the Room Shop!", emerald)
+	registerTokenBuff("lucky", 750, "&eLucky", "&7Grants a &cvery small &7chance to get big rewards!", big dripleaf)
+	registerTokenBuff("multiMadness", 10000 "&eMultiplier Madness", "&7Increases prestige multiplier to &c+0.25&7!")
+
 
 function tokenBuffIcon(p: player, buff: text) :: item:
 	set {_uuid} to uuid of {_p}
@@ -54,8 +57,7 @@ function tokenBuffIcon(p: player, buff: text) :: item:
 		enchant {_item} with mending
 		return 1 of ({_item} with hidden enchants flag)
 	else:
-		if {player::%{_uuid}%::tokens} >= {tokenShop::%{_buff}%::cost}:
-			return 1 of {_icon} named {_name} with lore "%{_lore}%" and "&dCost &7- &5%{tokenShop::%{_buff}%::cost}% Tokens", and "&aClick to purchase!"
+		return 1 of {_icon} named {_name} with lore "%{_lore}%" and "&dCost &7- &5%{tokenShop::%{_buff}%::cost}% Tokens", and "&aClick to purchase!"
 
 function suffixIcon(p: player, suffix: text) :: item:
 	set {_uuid} to uuid of {_p}
@@ -100,19 +102,19 @@ on inventory click:
 		cancel event
 		if event-slot is 23:
 			useSuffix(event-player, "chicken")
-		if event-slot is 24:
+		else if event-slot is 24:
 			useSuffix(event-player, "gamer")
-		if event-slot is 25:
+		else if event-slot is 25:
 			useSuffix(event-player, "hacker")
-		if event-slot is 32:
+		else if event-slot is 32:
 			useSuffix(event-player, "swedish")
-		if event-slot is 33:
+		else if event-slot is 33:
 			useSuffix(event-player, "drip")
-		if event-slot is 34:
+		else if event-slot is 34:
 			useSuffix(event-player, "pro")
-		if event-slot is 41:
+		else if event-slot is 41:
 			useSuffix(event-player, "noob")
-		if event-slot is 42:
+		else if event-slot is 42:
 			useSuffix(event-player, "nerd")
-		if event-slot is 43:	
+		else if event-slot is 43:	
 			useSuffix(event-player, "fairy")

@@ -28,6 +28,13 @@ function roomToID(region: region) :: text: # gets the room id from the region na
 
 function click(p: player, room: text, amount: number) :: int: # handles the click
 	set {_uuid} to uuid of {_p}
+	set {_eggBoost} to 0
+	if {player::%{_uuid}%::buffs::omlettes} is true:
+		add 10 to {_eggBoost}
+	if {player::%{_uuid}%::buffs::scrambledEggs} is true:
+		add 10 to {_eggBoost}
+	if {player::%{_uuid}%::buffs::eggFriedRice} is true:
+		add 10 to {_eggBoost}
 	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
 	add {_eggs} to {player::%{_uuid}%::eggs}
 	if {_eggs} is 1:
@@ -35,7 +42,7 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	else:	
 		send action bar "&e+%formatNum({_eggs})% Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
 	chance of ({_amount} * {player::%{_uuid}%::tokenchance})%:
-		add 1 to {player::%{_uuid}%::tokens} # TODO add varying token amounts
+		add 1 to {player::%{_uuid}%::tokens}
 		add 1 to {analytics::tokens} # ANALYTICS
 	add 1 to {player::%{_uuid}%::clicks}
 	add 1 to {analytics::clicks} # ANALYTICS
