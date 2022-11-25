@@ -16,10 +16,7 @@ function loadShopMenu(p: player):
 		setGUISlot({_p}, "shopMenu", 14, nether star named "&6&lThe Collector &c&l(LOCKED)" with lore "&7&oSpeak to The Collector to unlock!")
 	setGUISlot({_p}, "shopMenu", 16, emerald named "&b&lSupport the Server" with lore "&7&oPurchase ranks on our store!")
 	openGUI({_p}, "shopMenu")
-
-function loadShopMenu(p: player):
-	openGUI({_p},)
-
+	
 on inventory click:
 	if event-inventory = (metadata tag "shopMenu" of player):
 		cancel event

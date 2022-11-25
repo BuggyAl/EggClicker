@@ -6,15 +6,8 @@ function loadGUI(p: player, id: text, rows: integer, display: text):
 		stop
 	set metadata tag {_id} of {_p} to chest inventory with {_rows} rows named {_display}
 
-#open chest inventory with 4 rows named "&cLazy gurl." to player
-function loadGUI(p: player, type: inventory type, rows: int, display: text):
-	set {_uuid} to uuid of {_p}
-	open {_type} inventory with {_rows} rows named {_display} to {_p}
-
-
-function setGUISlot(p: player, slot: int, item: item):
-	set {_inventory} to current inventory of {_p}
-	set slot {_slot} of {_inventory} to {_item}
+function setGUISlot(p: player, id: text, slot: int, item: item):
+	set slot {_slot} of metadata tag {_id} of {_p} to {_item}
 
 function getGUIBorders(rows: integer) :: objects: # get the border slots in a GUI with a specified number of rows
 	loop integers between 0 and ({_rows} * 9 - 1):
