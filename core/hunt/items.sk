@@ -37,7 +37,7 @@ on drop:
 on right click on spore blossom:
 	{player::%player's uuid%::collectorProgress} >= 2
 	{player::%player's uuid%::suffix} is "fairy"
-	chance of 1/10000:
+	chance of 1/1800:
 		give player 1 of {collectorItems::magicDust}
 		play sound "entity.vex.charge" at pitch 2 to player
 		send "%nl%&7&oA bit of magic dust falls from the flower...%nl%" to player
@@ -46,7 +46,7 @@ on right click on bookshelf:
 	{player::%player's uuid%::collectorProgress} >= 3
 	{player::%player's uuid%::progression} is 1
 	regions at player contains ("room-library" parsed as region)
-	chance of 1/1: # 1/125000
+	chance of 1/18000:
 		give player 1 of {collectorItems::emptyScroll}
 		play sound "item.book.page_turn" to player
 		send "%nl%&7&oUpon moving a book, an empty scroll falls out of the bookshelf...%nl%"
@@ -60,7 +60,7 @@ on right click on block of raw gold:
 	difference between now and {player::%player's uuid%::lastPrestige} <= 1 hour
 	regions at player contains ("room-basement" parsed as region)
 	{player::%player's uuid%::eggs} >= {player::%player's uuid%::prestige} * 100000000000
-	chance of 1/75000:
+	chance of 1/36000:
 		give player 1 of {collectorItems::goldenClock}
 		send "%nl%&7&oAt last! After long hours of searching, you spot the shine of a Golden Clock in the piles of treasure!%nl%" to player
 		loop 4 times:
