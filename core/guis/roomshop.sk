@@ -42,21 +42,27 @@ function roomIcon(p: player, id: text) :: item:
 		enchant {_item} with mending
 		return 1 of ({_item} with hidden enchants flag)
 	else if ({player::%{_uuid}%::progression} + 1) is {rooms::%{_id}%::progression}:
-		set {_cost} to {rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige})
-		return 1 of {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%", "&dCost &7- &5%{_cost}% Eggs", and "&aClick to purchase!"
+		set {_cost} to round({rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
+		if {player::%{_uuid}%::buffs::discount} is true:
+			set {_discount} to (5 / 100) * {_cost}
+			remove {_discount} from {_cost}
+		return 1 of {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%", "&dCost &7- &5%formatNum({_cost})% Eggs", and "&aClick to purchase!"
 	else:
 		return 1 gray dye named "&c???" with lore "&7&oUnlock the previous room the view this one!"
 
 function buyRoom(p: player, id: text):
 	set {_uuid} to uuid of {_p}
 	{player::%{_uuid}%::progression} is ({rooms::%{_id}%::progression} - 1)
-	set {_cost} to {rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige})
+	set {_cost} to round({rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
+	if {player::%{_uuid}%::buffs::discount} is true:
+		set {_discount} to (5 / 100) * {_cost}
+		remove {_discount} from {_cost}
 	if {player::%{_uuid}%::eggs} >= {_cost}:
 		remove {_cost} from {player::%{_uuid}%::eggs}
 		add 1 to {player::%{_uuid}%::progression}
 		play sound "block.note_block.chime" to {_p}
 		loadRoomShop({_p})
-		add 1 to {analytics::roomsBought}
+		add 1 to {analytics::roomsBought} # ANALYTICS
 	else:
 		send action bar "&cYou don't have enough eggs!" to {_p}
 		play sound "entity.villager.no" to {_p}

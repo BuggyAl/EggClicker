@@ -1,7 +1,8 @@
 on right click on entity:
 	name of event-entity is "CIT-f20fb63116a0"
-	sendCollectorMessage(player, "Come back later and I may have something for you...")
-	stop
+	# if player is not op:
+	# 	sendCollectorMessage(player, "Come back later and I may have something for you...")
+	# 	stop
 	set {_uuid} to uuid of player
 	{player::%{_uuid}%::inConversation} is false
 	set {player::%{_uuid}%::inConversation} to true
@@ -36,7 +37,8 @@ on right click on entity:
 	else if {_progress} is 9:
 		collectorFinale(player)
 	else if {_progress} is 10:
-		loadCollectorShop(player)
+		sendCollectorMessage(player, "I don't have anything in my shop right now!")
+		# loadCollectorShop(player)
 		set {player::%{_uuid}%::inConversation} to false
 	else:
 		sendCollectorMessage(player, "...")
@@ -90,7 +92,7 @@ function collectorMagicDust(p: player):
 		sendCollectorMessage({_p}, "Please find me an &6Empty Scroll &fto continue.")
 		set {player::%{_uuid}%::inConversation} to false
 	else:
-		if difference between now and {player::%{_uuid}%::dustTimer} is less than 3 days:
+		if difference between now and {player::%{_uuid}%::dustTimer} is less than 2 days:
 			sendCollectorMessage({_p}, "Remember, I need &a5 &dMagic Dust &fto start. I am currently reasearching ways to obtain some. Come back later!")
 			set {player::%{_uuid}%::inConversation} to false
 		else:
@@ -159,7 +161,10 @@ function collectorGoldenClock(p: player):
 			play sound "ambient.cave" at volume 2.5 and pitch 0.5 to {_p}
 			set {player::%{_uuid}%::inConversation} to false
 		else:
-			sendCollectorMessage({_p}, "Someone needs to clean up that library...")
+			if (random integer between 1 and 2) is 1:
+				sendCollectorMessage({_p}, "Please bring me a &6Golden Clock&f!")
+			else:
+				sendCollectorMessage({_p}, "Someone needs to clean up that library...")
 			set {player::%{_uuid}%::inConversation} to false
 
 function collectorFinalHunt(p: player):
@@ -204,6 +209,10 @@ command /sethuntscompleted <int>:
 		set {collectorData::huntsCompleted} to arg-1
 		send "&aSet the number of hunts completed to %arg-1%."
 
-command /getegghat:
+command /getegghat <integer> <offline player>:
+	permission: op
 	trigger:
-		givePlayerEggHat(player)
+		if {collectorData::huntsCompleted} is not set:
+			set {collectorData::huntsCompleted} to 0
+		set {_eggHat} to 1 of {collectorItems::eggHat} with lore "&7&oA trophy of dedication for finding a long lost egg...", "", "&7From: The Collector", "&7To: %arg-2%", "", "&8Edition ##%arg-1%", and "&8%now formatted as "MM/dd/yyyy"%"
+		give player 1 of {_eggHat}

@@ -22,5 +22,9 @@ on break:
 	player's gamemode is not creative
 	cancel event
 
+on place:
+	player's gamemode is not creative
+	cancel event
+
 on portal:
 	cancel event

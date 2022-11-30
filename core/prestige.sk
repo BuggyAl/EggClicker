@@ -6,7 +6,7 @@ command /prestige:
 		prestige(player)
 
 function prestigePrice(p: player) :: number:
-	return 1000000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
+	return 180000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
 	
 function prestige(p: player):
 	set {_uuid} to uuid of {_p}
@@ -30,7 +30,10 @@ function prestige(p: player):
 	add 1 to {analytics::prestiges}
 
 	# Rewards
-	add 0.25 to {player::%{_uuid}%::multiplier}
+	set {_reward} to 0.1
+	if {player::%{_uuid}%::buffs::multiMadness} is true:
+		set {_reward} to 0.25
+	add {_reward} to {player::%{_uuid}%::multiplier}
 
 	teleport {_p} to {spawn}
 	send title "&a&lPrestige" with subtitle "&e+1 Prestige &8(&b%{player::%{_uuid}%::prestige}%&8)" to {_p}

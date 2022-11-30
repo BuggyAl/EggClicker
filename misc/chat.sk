@@ -17,6 +17,13 @@ on chat:
 	set {_roomTag} to {rooms::%progressionToID({player::%{_uuid}%::progression})%::tag}
 	set {_suffix} to {suffixes::%{player::%{_uuid}%::suffix}%}
 
+	if player has permission "chat.stats":
+		replace all "[eggs]" with "&e%formatNum({player::%player's uuid%::eggs})% Eggs&7" in message
+		replace all "[tokens]" with "&e%{player::%player's uuid%::tokens}% Tokens&7" in message
+		replace all "[prestige]" and "[prestiges]" with "&e%{player::%player's uuid%::prestige}% Prestiges&7" in message
+		replace all "[multi]" and "[multiplier]" with "&ex%{player::%player's uuid%::multiplier}% Multiplier&7" in message
+		replace all "[clicks]" with "&e%formatNum({players::%player's uuid%::clicks})% Clicks&7" in message
+
 	if player has permission "staff":
 		set chat format to "&7[&e✫%{_prestige}%&7] [&e%{_roomTag}%&7] &r%player's prefix% %player's name% %{_suffix}%&8» &f%formatted message%"
 	else if player has permission "chat.colorchat":		
@@ -26,13 +33,9 @@ on chat:
 	else:
 		set chat format to "&7[&e✫%{_prestige}%&7] [&e%{_roomTag}%&7] &r%player's prefix% %player's name% %{_suffix}%&8» &7%message%"
 
-on chat:
-	player has permission "chat.stats"
-	replace all "[eggs]" with "&e%formatNum({eggs::%player's uuid%})% Eggs&7" in message
-	replace all "[tokens]" with "&e%{tokens::%player's uuid%}% Tokens&7" in message
-	replace all "[prestige]" and "[prestiges]" with "&e%{prestige::%player's uuid%}% Prestiges&7" in message
-	replace all "[multi]" and "[multiplier]" with "&ex%{multiplier::%player's uuid%}% Multiplier&7" in message
-	replace all "[clicks]" with "&e%formatNum({clicks::%player's uuid%})% Clicks&7" in message
+command /buy:
+	trigger:
+		send formatted "<link:https://eggclicker.craftingstore.net/>&aClick on this message to support the server!" to player
 
 command /reloadsuffixes:
 	permission: op 
@@ -53,3 +56,7 @@ function reloadSuffixes():
 	set {suffixes::noob} to "&7[&9Noob&7] "
 	set {suffixes::nerd} to "&7[&5Nerd&7] "
 	set {suffixes::fairy} to "&7[&dFairy&7] "
+
+command /discord:
+	trigger:
+		send formatted "<link:https://discord.gg/TTZVZbXG7e>&bClick on this message to join the discord server!" to player

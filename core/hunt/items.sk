@@ -69,9 +69,9 @@ on right click on block of raw gold:
 
 on right click:
 	tool of player is {collectorItems::timeScroll}
-	if "%player's world%" is "world":
+	if "%player's world%" is "clicker":
 		send "%nl%&7&oThe world shifts and EggClicker seems to downgrade several generations...%nl%" to player
-		teleportPlayer(player, 466.5, 64, 657.5, 0, 90, "EggClickerOLD")
+		teleportPlayer(player, 466.5, 64, 657.5, 0, 90, "huntworld")
 		play sound "entity.enderman.teleport" to player
 	else:
 		send "%nl%&7&oThe world shifts and you are pulled back to reality...%nl%" to player

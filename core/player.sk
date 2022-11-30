@@ -5,6 +5,9 @@ on join:
 	set {player::%player's uuid%::inConversation} to false
 	execute player command "/spawn"
 
+on first join:
+	execute player command "/spawn"
+
 function resetPlayer(p: player):
 	set {_uuid} to uuid of {_p}
 	set {player::%{_uuid}%::eggs} to 0
@@ -15,6 +18,10 @@ function resetPlayer(p: player):
 	set {player::%{_uuid}%::progression} to 0
 	set {player::%{_uuid}%::collectorProgression} to 0
 	set {player::%{_uuid}%::suffix} to "none"
+	loop {player::%{_uuid}%::buffs::*}:
+		set {player::%{_uuid}%::buffs::%loop-index%} to false
+	loop {player::%{_uuid}%::suffixes::*}:
+		set {player::%{_uuid}%::suffixes::%loop-index%} to false
 
 command /resetplayer [<offline player>]:
 	usage: /resetplayer <player> [<reason>]
@@ -54,7 +61,7 @@ command /setspawn:
 		set {spawn} to location of player
 		send "&aSpawn has been set to &b%{spawn}%&a!" to player
 
-command /setstat [<text>] [<text>]:
+command /setstat [<text>] [<number>]:
 	permission: op
 	trigger:
 		if arg-1 is set:
@@ -62,9 +69,16 @@ command /setstat [<text>] [<text>]:
 				set {player::%uuid of player%::%arg-1%} to arg-2
 				send "&aSet %arg-1% to %arg-2%!" to player
 			else:
-				send "&cYou must specify a value!" to player
+				send "&cYou must specify a number!" to player
 		else:
 			send "&cYou must specify a stat!" to player
 
-on tab complete of "/setstat":
-	set tab completions for position 1 to indices of {player::%player's uuid%::*}
+command /toggleclickbypass:
+	permission: op
+	trigger:
+		if {player::%player's uuid%::clickBypass} is true:
+			set {player::%player's uuid%::clickBypass} to false
+			send "&cClick bypass has been disabled!" to player
+		else:
+			set {player::%player's uuid%::clickBypass} to true
+			send "&aClick bypass has been enabled!" to player

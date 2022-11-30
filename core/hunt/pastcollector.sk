@@ -1,5 +1,5 @@
 on right click on entity:
-	name of event-entity is "CIT-99f4882491bc"
+	name of event-entity is "CIT-61db9887cf59"
 	set {_uuid} to uuid of player
 	{player::%{_uuid}%::inConversation} is false
 	set {player::%{_uuid}%::inConversation} to true

@@ -49,10 +49,11 @@ command /collectorshop:
 	permission: rank.egglord
 	permission message: &cYou must be an &c&lEGGLORD &cto run this command!
 	trigger:
-		if {player::%player's uuid%::collectorProgress} != 9:
+		if {player::%player's uuid%::collectorProgress} < 10:
 			sendCollectorMessage(player, "You may only access my shop once I deem you worthy!")
 		else:
-			loadCollectorShop(player)
+			# loadCollectorShop(player)
+			sendCollectorMessage(player, "I don't have anything in my shop right now!")
 
 on swap held item:
 	player's gamemode is not creative

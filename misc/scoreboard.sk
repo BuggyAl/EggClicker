@@ -8,7 +8,7 @@ on join:
 		set line 10 of player's scoreboard to "&8• &eTokens: &f⛁%formatNum({player::%{_uuid}%::tokens})%"
 		set line 9 of player's scoreboard to "&8• &ePrestige: &f✫%{player::%{_uuid}%::prestige}%"
 		set line 8 of player's scoreboard to "&8• &eMultiplier: &f%{player::%{_uuid}%::multiplier}%"
-		set line 7 of player's scoreboard to "&8• &eClicks: &f%formatNum({player::%{_uuid}%::tokens})%"
+		set line 7 of player's scoreboard to "&8• &eClicks: &f%formatNum({player::%{_uuid}%::clicks})%"
 		set line 6 of player's scoreboard to "&7"
 		set line 5 of player's scoreboard to "&6&lServer"
 		set line 4 of player's scoreboard to "&8• &ePlayers: &f%number of all players%&f/%maximum amount of players%"
