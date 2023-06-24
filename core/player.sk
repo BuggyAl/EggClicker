@@ -24,16 +24,42 @@ function resetPlayer(p: player):
 		set {player::%{_uuid}%::suffixes::%loop-index%} to false
 
 command /resetplayer [<offline player>]:
-	usage: /resetplayer <player> [<reason>]
+	usage: /resetplayer <player>
 	permission: op
 	permission message: &cYou do not have permission to use this command.
 	trigger:
 		if arg-1 is set:
 			resetPlayer(arg-1)
+			teleport arg-1 to {spawn}
 			send "&e%arg-1% &ahas been reset!" to player
 		else:
 			resetPlayer(player)
 			teleport player to {spawn}
+
+command /playerdebug [<offline player>]:
+	permission: op
+	permission message: &cYou do not have permission to use this command.
+	trigger:
+		if arg-1 is not set:
+			set {_uuid} to uuid of player
+		else:
+			set {_uuid} to uuid of arg-1
+		
+		send ""
+		send "&b[PLAYER DEBUG] &f%arg-1%"
+		send "&7-------------------------"
+		send "&eEggs: &f{player::%{_uuid}%::eggs}"
+		send "&eTokens: &f{player::%{_uuid}%::tokens}"
+		send "&eMultiplier: &f{player::%{_uuid}%::multiplier}"
+		send "&eClicks: &f{player::%{_uuid}%::clicks}"
+		send "&ePrestige: &f{player::%{_uuid}%::prestige}"
+		send "&eProgression: &f{player::%{_uuid}%::progression}"
+		send "&eCollector Progression: &f{player::%{_uuid}%::collectorProgression}"
+		send "&eSuffix: &f{player::%{_uuid}%::suffix}"
+		send "&eBuffs: &f{player::%{_uuid}%::buffs::*}"
+		send "&eSuffixes: &f{player::%{_uuid}%::suffixes::*}"
+		send "&7-------------------------"
+		send ""
 
 function getHighestPlayerRoom(p: player) :: text:
 	set {_uuid} to uuid of {_p}

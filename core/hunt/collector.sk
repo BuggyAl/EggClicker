@@ -113,7 +113,7 @@ function collectorEmptyScroll(p: player):
 		sendCollectorMessage({_p}, "Please bring me a &6Golden Clock&f, and I will help you find the &6Golden Egg&f!")
 		set {player::%{_uuid}%::inConversation} to false
 	else:
-		if {player::%{_uuid}%::progression} is 1:
+		if (random integer between 1 and 100) is 69:
 			sendCollectorMessage({_p}, "Hmm... try checking the &2bookshelves &fbefore you leave the library.")
 			wait 2 seconds
 			sendCollectorMessage({_p}, "That room is very is messy and an &eEmpty Scroll &fwould be easy to miss!")

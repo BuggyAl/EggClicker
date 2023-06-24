@@ -62,7 +62,7 @@ function buyRoom(p: player, id: text):
 		add 1 to {player::%{_uuid}%::progression}
 		play sound "block.note_block.chime" to {_p}
 		loadRoomShop({_p})
-		add 1 to {analytics::roomsBought} # ANALYTICS
+		add 1 to {analytics::roomsBought}
 	else:
 		send action bar "&cYou don't have enough eggs!" to {_p}
 		play sound "entity.villager.no" to {_p}

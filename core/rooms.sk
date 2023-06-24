@@ -80,7 +80,7 @@ on region enter:
 	{player::%player's uuid%::roomBypass} is not true
 	"%event-region%" starts with "room-"
 	set {_id} to roomToID(event-region)
-	{player::%player%::progression} < {rooms::%{_id}%::progression}
+	{player::%player's uuid%::progression} < {rooms::%{_id}%::progression}
 	cancel event
 	send action bar "&cYou have not unlocked this room! Purchase it in &4/shop&c!" to player
 	play sound "block.note_block.bass" at pitch 0.5 to player
@@ -90,8 +90,8 @@ command /bypassborders:
 	permission message: &cYou do not have permission to use this command!
 	trigger:
 		if {player::%player%::roomBypass} is true:
-			set {player::%player%::roomBypass} to false
+			set {player::%player's uuid%::roomBypass} to false
 			send "&cYou are no longer bypassing room borders!" to player
 		else:
-			set {player::%player%::roomBypass} to true
+			set {player::%player's uuid%::roomBypass} to true
 			send "&aYou are now bypassing room borders!" to player
