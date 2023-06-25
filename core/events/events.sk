@@ -1,0 +1,73 @@
+#  EVENT BRAINSTORM
+# Teamwork Makes the Dreamwork (be near other players for buffs)
+# Clicker Bossfight (click to attack and kill to get rewards)
+# Eggstravaganza (double eggs)
+# Token Frenzy (double tokens)
+# Cyber Monday (discount on all shop items)
+# Witching Hour (ability to rob other players)
+
+function registerEvent(id: text, name: text):
+	clear {events::event::%{_id}%::*}
+	set {events::event::%{_id}%::name} to {_name}
+
+function reloadEvents():
+	clear {events::event::*}
+	registerEvent("teamwork", "Teamwork Makes the Dreamwork")
+	registerEvent("bossfight", "Clicker Boss")
+	registerEvent("eggstravaganza", "Eggstravaganza")
+	registerEvent("tokenfrenzy", "Token Frenzy")
+	registerEvent("cybermonday", "Cyber Monday")
+	registerEvent("witchinghour", "Witching Hour")
+
+command /reloadevents:
+	permission: op
+	trigger:
+		reloadEvents()
+		send "&aAll passive events reloaded!"	
+
+function init():
+	wait 30 minutes
+	while true:
+		wait 45 minutes
+		runEvent(random text out of indices of {events::event::*})
+
+command /eventdebug:
+	permission: op
+	trigger:
+		set {events::timeLeft} to 0
+		wait 1 second
+		runEvent(random text out of indices of {events::event::*})
+
+function runEvent(id: text):
+
+	set {events::currentEvent} to {_id}
+	set {_duration} to 900 # seconds
+	set {events::timeLeft} to {_duration}
+
+	set {events::bossbar} to boss bar named "eventBossbar"
+	add all players to bar players of {events::bossbar}
+	set bar color of {events::bossbar} to yellow
+	set bar style of {events::bossbar} to segmented 20
+	set bar progress of {events::bossbar} to 100
+	set {_timeLeft} to "%{events::timeLeft}% seconds" parsed as timespan
+	set bar title of {events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{events::event::%{_id}%::name}% &7(&f%{_timeLeft}%&7)"
+	add all players to bar players of {events::bossbar}
+
+	broadcast "&d&lEVENT STARTING &7- &a%{events::event::%{_id}%::name}% is starting!"
+	play sound "block.end_portal.spawn" to all players
+
+	while {events::timeLeft} > 0:
+		wait 1 second
+		remove 1 from {events::timeLeft}
+		set {_timeLeft} to "%{events::timeLeft}% seconds" parsed as timespan
+		set bar title of {events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{events::event::%{_id}%::name}% &7(&f%{_timeLeft}%&7)"
+		set bar progress of {events::bossbar} to {events::timeLeft} * (100 / {_duration})
+	
+	broadcast "&d&lEVENT ENDING &7- &a%{events::event::%{_id}%::name}% is ending!"
+	remove all players from bar players of {events::bossbar}
+	set {events::currentEvent} to "none"
+		
+command /stopevent:
+	permission: op
+	trigger:
+		set {events::timeLeft} to 0
