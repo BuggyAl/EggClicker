@@ -77,7 +77,9 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 		play sound "entity.vex.death" at volume 10 and pitch 0 to {_p}
 
 	add 1 to {player::%{_uuid}%::clicks} 
+	add 1 to {server::totalClicks}
 	add 1 to {analytics::clicks} # ANALYTICS
+	add 1 to {analytics::totalClicks} # ANALYTICS 
 	add {_eggs} to {analytics::eggs} # ANALYTICS
 	return {_eggs}
 
