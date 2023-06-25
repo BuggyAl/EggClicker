@@ -59,6 +59,7 @@ command /playerdebug [<offline player>]:
 		send "&eBuffs: &f%{player::%{_uuid}%::buffs::*}%"
 		send "&eSuffixes: &f%{player::%{_uuid}%::suffixes::*}%"
 		send "&7-------------------------"
+		send ""
 
 function getHighestPlayerRoom(p: player) :: text:
 	set {_uuid} to uuid of {_p}
@@ -70,14 +71,27 @@ function getHighestPlayerRoom(p: player) :: text:
 	set {_highestRoom} to progressionToID({_highest})
 	return {_highestRoom}
 
-command /spawn:
+command /spawn [<offline player>]:
 	trigger:
-		if {spawn} is set:
-			teleport player to {spawn}
-			send action bar "&aSending you to spawn..." to player
-			play sound "entity.enderman.teleport" to player
+		if arg-1 is not set:
+			spawn(player)
 		else:
-			send "&cSpawn is not set! Please report this to an admin." to player
+			if player does not have permission "staff":
+				send "&cYou do not have permission to use this command!" to player
+				stop
+			if arg-1 is not online:
+				send "&cThat player is not online!" to player
+				stop
+			send "&aSending &e%arg-1% &ato spawn..."
+			spawn(arg-1)
+
+function spawn(p: player):
+	if {spawn} is set:
+		teleport {_p} to {spawn}
+		send action bar "&aSending you to spawn..." to {_p}
+		play sound "entity.enderman.teleport" to {_p}
+	else:
+		send "&cSpawn is not set! Please report this to an admin." to {_p}
 
 command /setspawn:
 	permission: op
