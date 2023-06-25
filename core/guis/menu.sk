@@ -15,6 +15,7 @@ function loadShopMenu(p: player):
 	else:
 		setGUISlot({_p}, "shopMenu", 14, nether star named "&6&lThe Collector &c&l(LOCKED)" with lore "&7&oSpeak to The Collector to unlock!")
 	setGUISlot({_p}, "shopMenu", 16, emerald named "&b&lSupport the Server" with lore "&7&oPurchase ranks on our store!")
+	setGUISlot({_p}, "shopMenu", 22, barrier named "&c&lClose" with lore "&7&oClose The Shop.")
 	openGUI({_p}, "shopMenu")
 	
 on inventory click:
@@ -32,6 +33,8 @@ on inventory click:
 				send action bar "&cYou have not unlocked this shop!" to player
 		else if event-slot is 16:
 			execute player command "/buy"
+		else if event-slot is 22:
+			close player's inventory
 
 command /roomshop:
 	permission: rank.egglord
