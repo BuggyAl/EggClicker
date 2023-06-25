@@ -38,8 +38,14 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	if {player::%{_uuid}%::buffs::eggFriedRice} is true:
 		add 10 to {_eggBoost}
 	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
+
+	# EGG BOOST
 	set {_extraEggs} to ceil(({_eggboost} / 100) * {_eggs})
 	add {_extraEggs} to {_eggs}
+
+	# EGGSTRAVAGANZA
+	if {events::currentEvent} is "eggstravaganza":
+		set {_eggs} to round({_eggs} * 1.25)
 
 	add {_eggs} to {player::%{_uuid}%::eggs}
 	if {_eggs} is 1:
@@ -50,6 +56,11 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	set {_tokenChance} to 1
 	if {player::%{_uuid}%::buffs::tokenator} is true:
 		set {_tokenChance} to 5
+	
+	# TOKEN FRENZY
+	if {events::currentEvent} is "tokenfrenzy":
+		set {_tokenChance} to {_tokenChance} * 1.25
+
 	chance of ({_amount} * {_tokenChance})%:
 		set {_tokens} to 1
 		if {player::%{_uuid}%::buffs::tokeneer} is true:
