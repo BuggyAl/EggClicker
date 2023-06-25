@@ -2,7 +2,7 @@ on skript start:
 	loadCollectorItems()
 	reloadTokenBuffs()
 	reloadSuffixes()
-	reloadEvents
+	reloadEvents()
 
 every 15 minutes:
 	loadCollectorItems()
