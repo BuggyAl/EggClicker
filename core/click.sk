@@ -99,7 +99,7 @@ on right click: # handles insta click
 		else:
 			send title "&e&lInsta-Click" with subtitle "&e+&6%{_eggs}% &eEggs" to player for 3 seconds
 	else:
-		send "&cYou must be in a room to use this item!" to player
+		send "&cYou cannot use this item right now!" to player
 
 command /getinstaclick [<int>]: # gives the player an insta click item
 	permission: op

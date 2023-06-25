@@ -46,20 +46,19 @@ command /playerdebug [<offline player>]:
 			set {_uuid} to uuid of arg-1
 		
 		send ""
-		send "&b[PLAYER DEBUG] &f%arg-1%"
+		send "&b[PLAYER DEBUG] &f%{_uuid} parsed as an offline player%"
 		send "&7-------------------------"
-		send "&eEggs: &f{player::%{_uuid}%::eggs}"
-		send "&eTokens: &f{player::%{_uuid}%::tokens}"
-		send "&eMultiplier: &f{player::%{_uuid}%::multiplier}"
-		send "&eClicks: &f{player::%{_uuid}%::clicks}"
-		send "&ePrestige: &f{player::%{_uuid}%::prestige}"
-		send "&eProgression: &f{player::%{_uuid}%::progression}"
-		send "&eCollector Progression: &f{player::%{_uuid}%::collectorProgression}"
-		send "&eSuffix: &f{player::%{_uuid}%::suffix}"
-		send "&eBuffs: &f{player::%{_uuid}%::buffs::*}"
-		send "&eSuffixes: &f{player::%{_uuid}%::suffixes::*}"
+		send "&eEggs: &f%{player::%{_uuid}%::eggs}%"
+		send "&eTokens: &f%{player::%{_uuid}%::tokens}%"
+		send "&eMultiplier: &f%{player::%{_uuid}%::multiplier}%"
+		send "&eClicks: &f%{player::%{_uuid}%::clicks}%"
+		send "&ePrestige: &f%{player::%{_uuid}%::prestige}%"
+		send "&eProgression: &f%{player::%{_uuid}%::progression}%"
+		send "&eCollector Progression: &f%{player::%{_uuid}%::collectorProgression}%"
+		send "&eSuffix: &f%{player::%{_uuid}%::suffix}%"
+		send "&eBuffs: &f%{player::%{_uuid}%::buffs::*}%"
+		send "&eSuffixes: &f%{player::%{_uuid}%::suffixes::*}%"
 		send "&7-------------------------"
-		send ""
 
 function getHighestPlayerRoom(p: player) :: text:
 	set {_uuid} to uuid of {_p}
