@@ -6,20 +6,21 @@
 # Cyber Monday (discount on all shop items)
 # Witching Hour (ability to rob other players)
 
-function registerEvent(id: text, name: text, description: text):
+function registerEvent(id: text, name: text, start: text, end: text):
 	clear {events::event::%{_id}%::*}
 	set {events::event::%{_id}%::name} to {_name}
-	set {events::event::%{_id}%::description} to {_description}
+	set {events::event::%{_id}%::start} to {_start}
+	set {events::event::%{_id}%::end} to {_end}
 
 function reloadEvents():
 	stopEvent()
 	clear {events::event::*}
-	registerEvent("teamwork", "Teamwork Makes the Dreamwork", "You feel the urge to be near other players...")
+	registerEvent("teamwork", "Teamwork Makes the Dreamwork", "You feel the urge to be near other players and NPCs...", "You start to feel lonely...")
 #	registerEvent("bossfight", "Clicker Boss")
-	registerEvent("eggstravaganza", "Eggstravaganza", "Eggs begin to appear around you...")
-	registerEvent("tokenfrenzy", "Token Frenzy", "You spot some tokens appearing...")
-	registerEvent("cybermonday", "Cyber Monday", "You feel the urge to buy something...")
-#	registerEvent("witchinghour", "Witching Hour", "Be careful who you trust... they may rob you!")
+	registerEvent("eggstravaganza", "Eggstravaganza", "Eggs begin to appear around you...", "The eggs disappear...")
+	registerEvent("tokenfrenzy", "Token Frenzy", "You spot some tokens appearing...", "The tokens disappear...")
+	registerEvent("cybermonday", "Cyber Monday", "You feel the urge to buy something...", "You feel like you've spent too much money...")
+#	registerEvent("witchinghour", "Witching Hour", "Be careful who you trust... they may rob you!"
 
 command /reloadevents:
 	permission: op
@@ -44,6 +45,10 @@ command /forceevent [<text>]:
 			wait 1 second
 			runEvent(random text out of indices of {events::event::*})
 
+function triggerPassiveEvent():
+	{events::currentEvent} is "none"
+	runEvent(random text out of indices of {events::event::*})
+
 function runEvent(id: text):
 	set {events::currentEvent} to {_id}
 	set {_seconds} to 900 # 
@@ -61,7 +66,7 @@ function runEvent(id: text):
 	add all players to bar players of {events::bossbar}
 
 	broadcast ""
-	broadcast "&7&o%{events::event::%{_id}%::description}%" # &d&lPASSIVE EVENT &7- 
+	broadcast "&7&o%{events::event::%{_id}%::start}%" # &d&lPASSIVE EVENT &7- 
 	broadcast ""
 	play sound "block.beacon.activate" to all players
 
@@ -73,7 +78,9 @@ function runEvent(id: text):
 		wait 1 second
 		set bar progress of {events::bossbar} to bar progress of {events::bossbar} - {_step}
 	stopEvent()
-	broadcast "&d&lPASSIVE EVENT &7- &a%{events::event::%{_id}%::name}% has ended!"
+	broadcast ""
+	broadcast "&7&o%{events::event::%{_id}%::end}%" # &d&lPASSIVE EVENT &7- 
+	broadcast ""
 	play sound "block.beacon.deactivate" to all players
 
 function stopEvent():

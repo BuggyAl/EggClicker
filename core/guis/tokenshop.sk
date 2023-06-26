@@ -62,12 +62,17 @@ function tokenBuffIcon(p: player, buff: text) :: item:
 		enchant {_item} with mending
 		return 1 of ({_item} with hidden enchants flag)
 	else:
-		return 1 of {_icon} named {_name} with lore "%{_lore}%" and "&dCost &7- &5%{tokenShop::buffs::%{_buff}%::cost}% Tokens", and "&aClick to purchase!"
+		set {_cost} to {tokenShop::buffs::%{_buff}%::cost}
+		if {events::currentEvent} is "cybermonday":
+			set {_cost} to {_cost} / 2
+		return 1 of {_icon} named {_name} with lore "%{_lore}%" and "&dCost &7- &5%{_cost}% Tokens", and "&aClick to purchase!"
 
 function useTokenBuff(p: player, id: text):
 	set {_uuid} to uuid of {_p}
 	{player::%{_uuid}%::buffs::%{_id}%} is not true
 	set {_cost} to {tokenShop::buffs::%{_id}%::cost}
+	if {events::currentEvent} is "cybermonday":
+		set {_cost} to {_cost} / 2
 	if {player::%{_uuid}%::tokens} >= {_cost}:
 		remove {_cost} from {player::%{_uuid}%::tokens}
 		set {player::%{_uuid}%::buffs::%{_id}%} to true
@@ -86,10 +91,13 @@ function suffixIcon(p: player, suffix: text) :: item:
 		else:
 			return 1 of paper named "%{_name}%&aSuffix" with lore "&eClick to select!"
 	else:
-		if {player::%{_uuid}%::tokens} >= 5000:
-			return 1 of paper named "%{_name}%&eSuffix &8(&75000&8)" with lore "&eClick to purchase!"
+		set {_cost} to 5000
+		if {events::currentEvent} is "cybermonday":
+			set {_cost} to {_cost} / 2
+		if {player::%{_uuid}%::tokens} >= {_cost}:
+			return 1 of paper named "%{_name}%&eSuffix &8(&7%{_cost}%&8)" with lore "&eClick to purchase!"
 		else:
-			return 1 of paper named "%{_name}%&cSuffix &8(&75000&8)" with lore "&cNot enough tokens!"
+			return 1 of paper named "%{_name}%&cSuffix &8(&7%{_cost}%&8)" with lore "&cNot enough tokens!"
 
 function useSuffix(p: player, suffix: text):
 	set {_uuid} to uuid of {_p}
@@ -104,8 +112,11 @@ function useSuffix(p: player, suffix: text):
 			play sound "item.armor.equip_iron" at pitch 0.75 to {_p}
 		loadTokenShop({_p})
 	else:
-		if {player::%{_uuid}%::tokens} >= 5000:
-			remove 5000 from {player::%{_uuid}%::tokens}
+		set {_cost} to 5000
+		if {events::currentEvent} is "cybermonday":
+			set {_cost} to {_cost} / 2
+		if {player::%{_uuid}%::tokens} >= {_cost}:
+			remove {_cost} from {player::%{_uuid}%::tokens}
 			set {player::%{_uuid}%::suffixes::%{_suffix}%} to true
 			set {player::%{_uuid}%::suffix} to {_suffix}
 			send "&aYou purchased the &e%{suffixes::%{_suffix}%}%&a suffix!" to {_p}

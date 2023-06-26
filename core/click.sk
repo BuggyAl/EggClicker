@@ -30,6 +30,8 @@ function roomToID(region: region) :: text: # gets the room id from the region na
 function click(p: player, room: text, amount: number) :: int: # handles the click
 	set {_uuid} to uuid of {_p}
 
+	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
+
 	set {_eggBoost} to 0
 	if {player::%{_uuid}%::buffs::omlettes} is true:
 		add 10 to {_eggBoost}
@@ -37,21 +39,20 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 		add 10 to {_eggBoost}
 	if {player::%{_uuid}%::buffs::eggFriedRice} is true:
 		add 10 to {_eggBoost}
-	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
 
 	# EGG BOOST
-	set {_extraEggs} to ceil(({_eggboost} / 100) * {_eggs})
-	add {_extraEggs} to {_eggs}
+	add ceil(({_eggboost} / 100) * {_eggs}) to {_eggs}
 
 	# EGGSTRAVAGANZA
 	if {events::currentEvent} is "eggstravaganza":
+		set {_eggs} to round({_eggs} * 1.5)
+	# TEAMWORK MAKES THE DREAMWORK
+	else if {events::currentEvent} is "teamwork":
+		size of (players in radius 5 of {_p}) is greater than 1
 		set {_eggs} to round({_eggs} * 1.25)
 
 	add {_eggs} to {player::%{_uuid}%::eggs}
-	if {_eggs} is 1:
-		send action bar "&e+1 Egg &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
-	else:
-		send action bar "&e+%formatNum({_eggs})% Eggs &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
+	send action bar "&e+%formatNum({_eggs})% Egg(s) &8(&7%{player::%{_uuid}%::eggs}%&8)" to {_p}
 
 	set {_tokenChance} to 1
 	if {player::%{_uuid}%::buffs::tokenator} is true:
@@ -59,7 +60,14 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	
 	# TOKEN FRENZY
 	if {events::currentEvent} is "tokenfrenzy":
-		set {_tokenChance} to {_tokenChance} * 1.25
+		set {_tokenChance} to {_tokenChance} * 1.5
+	# TEAMWORK MAKES THE DREAMWORK
+	else if {events::currentEvent} is "teamwork":
+		size of (players in radius 5 of {_p}) is greater than 1
+		set {_tokenChance} to {_tokenChance} * 1.25	
+
+	chance of 1/10000:
+		triggerPassiveEvent()
 
 	chance of ({_amount} * {_tokenChance})%:
 		set {_tokens} to 1
@@ -68,7 +76,7 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 		add {_tokens} to {player::%{_uuid}%::tokens}
 		add {_tokens} to {analytics::tokens} # ANALYTICS
 
-	chance of 1/2500:
+	chance of 1/20000:
 		{player::%{_uuid}%::buffs::tokenBundles} is true
 		set {_tokenBundle} to random integer between 25 and 100
 		add {_tokenBundle} to {player::%{_uuid}%::tokens}
@@ -90,7 +98,6 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	add 1 to {player::%{_uuid}%::clicks} 
 	add 1 to {server::totalClicks}
 	add 1 to {analytics::clicks} # ANALYTICS
-	add 1 to {analytics::totalClicks} # ANALYTICS 
 	add {_eggs} to {analytics::eggs} # ANALYTICS
 	return {_eggs}
 
@@ -105,6 +112,7 @@ on right click: # handles insta click
 	set {_clickValue} to tag "instaClickValue" of nbt compound of player's tool
 	set {_best} to getRoomAtPlayer(player)
 	if {_best} is set:
+		add 1 to {analytics::instaClicks} # ANALYTICS
 		set {_eggs} to click(player, {_best}, {_clickValue})
 		remove 1 of player's tool from player's tool
 		if {_eggs} is 1:
