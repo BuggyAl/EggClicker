@@ -6,7 +6,10 @@ command /prestige:
 		prestige(player)
 
 function prestigePrice(p: player) :: number:
-	return 180000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
+	set {_cost} to 180000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
+	if {events::currentEvent} is "cybermonday":
+		set {_cost} to {_cost} / 2
+	return {_cost}
 	
 function prestige(p: player):
 	set {_uuid} to uuid of {_p}

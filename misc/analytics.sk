@@ -25,6 +25,7 @@ on skript start:
 	set {analytics::eggs} to 0
 	set {analytics::tokens} to 0
 	set {analytics::prestiges} to 0
+	set {analytics::instaClicks} to 0
 	set {analytics::firstJoins} to 0
 	set {analytics::joins} to 0
 	set {analytics::quits} to 0

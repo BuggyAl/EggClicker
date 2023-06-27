@@ -112,7 +112,7 @@ command /setstat [<text>] [<number>]:
 		else:
 			send "&cYou must specify a stat!" to player
 
-command /toggleclickbypass:
+command /bypassclicks:
 	permission: op
 	trigger:
 		if {player::%player's uuid%::clickBypass} is true:
