@@ -1,11 +1,18 @@
 on skript start:
+	reloadAssets()
+
+every 15 minutes:
+	reloadAssets()
+
+function reloadAssets():
+	send "[EggClicker] Reloading assets!" to console
 	loadCollectorItems()
 	reloadTokenBuffs()
 	reloadSuffixes()
 	reloadEvents()
 
-every 15 minutes:
-	loadCollectorItems()
-	reloadTokenBuffs()
-	reloadSuffixes()
-	reloadEvents()
+command /reloadassets:
+	permission: op
+	trigger:
+		reloadAssets()
+		send "&aAssets reloaded!"
