@@ -6,6 +6,8 @@ every 15 minutes:
 
 function reloadAssets():
 	send "[EggClicker] Reloading assets!" to console
+	if {server::totalClicks} is not set:
+		set {server::totalClicks} to 0
 	loadCollectorItems()
 	reloadTokenBuffs()
 	reloadSuffixes()

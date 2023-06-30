@@ -4,12 +4,12 @@ on right click on entity:
 	# 	sendCollectorMessage(player, "Come back later and I may have something for you...")
 	# 	stop
 	set {_uuid} to uuid of player
-	{player::%{_uuid}%::inConversation} is false
-	set {player::%{_uuid}%::inConversation} to true
+	{-player::%{_uuid}%::inConversation} is false
+	set {-player::%{_uuid}%::inConversation} to true
 	if {player::%{_uuid}%::prestige} < 1:
 		sendCollectorMessage(player, "Come back once you are more experienced...")
 		play sound "entity.villager.no" at pitch 0.75 to player
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 		stop
 	if {player::%{_uuid}%::collectorProgress} is not set:
 		set {player::%{_uuid}%::collectorProgress} to 1
@@ -26,10 +26,10 @@ on right click on entity:
 		collectorGoldenClock(player)
 	else if {_progress} is 5:
 		sendCollectorMessage(player, "Go back in time and find that &6Golden Egg&f!")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else if {_progress} is 6:
 		sendCollectorMessage(player, "Go back in time and find that &6Golden Egg&f!")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else if {_progress} is 7:
 		collectorFinalHunt(player)
 	else if {_progress} is 8:
@@ -39,10 +39,10 @@ on right click on entity:
 	else if {_progress} is 10:
 		sendCollectorMessage(player, "I don't have anything in my shop right now!")
 		# loadCollectorShop(player)
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else:
 		sendCollectorMessage(player, "...")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 
 command /disableconverstion:
 	trigger:
@@ -78,56 +78,56 @@ function collectorIntroduction(p: player):
 	sendCollectorMessage({_p}, "Please bring me &a5 &dMagic Dust &fto start.")
 	set {player::%{_uuid}%::collectorProgress} to 2
 	set {player::%{_uuid}%::dustTimer} to now
-	set {player::%{_uuid}%::inConversation} to false
+	set {-player::%{_uuid}%::inConversation} to false
 
 function collectorMagicDust(p: player):
 	set {_uuid} to uuid of {_p}
-	if inventory of {_p} contains 5 of {collectorItems::magicDust}:
-		remove 5 of {collectorItems::magicDust} from inventory of {_p}
+	if inventory of {_p} contains 5 of {-collectoritems::magicDust}:
+		remove 5 of {-collectoritems::magicDust} from inventory of {_p}
 		set {player::%{_uuid}%::collectorProgress} to 3
 		sendCollectorMessage({_p}, "Wow! You found the &dMagic Dust&f!")
 		wait 2.5 seconds
 		sendCollectorMessage({_p}, "Impressive, but the next material is harder.")
 		wait 2.5 seconds
 		sendCollectorMessage({_p}, "Please find me an &6Empty Scroll &fto continue.")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else:
 		if difference between now and {player::%{_uuid}%::dustTimer} is less than 2 days:
 			sendCollectorMessage({_p}, "Remember, I need &a5 &dMagic Dust &fto start. I am currently reasearching ways to obtain some. Come back later!")
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 		else:
 			sendCollectorMessage({_p}, "During my research, I found a myth that fairies enjoy pretty flowers.")
 			wait 3 seconds
 			sendCollectorMessage({_p}, "Myths these days... Fairies aren't real!")
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 
 function collectorEmptyScroll(p: player):
 	set {_uuid} to uuid of {_p}
-	if inventory of {_p} contains 1 of {collectorItems::emptyScroll}:
-		remove 1 of {collectorItems::emptyScroll} from inventory of {_p}
+	if inventory of {_p} contains 1 of {-collectoritems::emptyScroll}:
+		remove 1 of {-collectoritems::emptyScroll} from inventory of {_p}
 		set {player::%{_uuid}%::collectorProgress} to 4
 		sendCollectorMessage({_p}, "Good job on finding the &eEmpty Scroll&f!")
 		wait 2 seconds
 		sendCollectorMessage({_p}, "The last material I need is very difficult to obtain.")
 		wait 3.5 seconds
 		sendCollectorMessage({_p}, "Please bring me a &6Golden Clock&f, and I will help you find the &6Golden Egg&f!")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else:
 		if (random integer between 1 and 100) is 69:
 			sendCollectorMessage({_p}, "Hmm... try checking the &2bookshelves &fbefore you leave the library.")
 			wait 2 seconds
 			sendCollectorMessage({_p}, "That room is very is messy and an &eEmpty Scroll &fwould be easy to miss!")
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 		else:
 			sendCollectorMessage({_p}, "Please bring me an &eEmpty Scroll&r!")
 			wait 2 seconds
 			sendCollectorMessage({_p}, "I still can't beleive that &dfairies &fexist out there...")
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 
 function collectorGoldenClock(p: player):
 	set {_uuid} to uuid of {_p}
-	if inventory of {_p} contains 1 of {collectorItems::goldenClock}:
-		remove 1 of {collectorItems::goldenClock} from inventory of {_p}
+	if inventory of {_p} contains 1 of {-collectoritems::goldenClock}:
+		remove 1 of {-collectoritems::goldenClock} from inventory of {_p}
 		set {player::%{_uuid}%::collectorProgress} to 5
 		sendCollectorMessage({_p}, "You actually found the &6Golden Clock&f?!?")
 		wait 2 seconds
@@ -138,14 +138,14 @@ function collectorGoldenClock(p: player):
 		play sound "block.anvil.use" to {_p}
 		wait 1 seconds
 		sendCollectorMessage({_p}, "Tada! The &bTime Scroll&f!")
-		give {_p} 1 of {collectorItems::timeScroll}
+		give {_p} 1 of {-collectoritems::timeScroll}
 		wait 2 seconds
 		sendCollectorMessage({_p}, "This scroll will allow you to travel through time.")
 		wait 3 seconds
 		sendCollectorMessage({_p}, "Use it to find my past self and they should help you find the &6Golden Egg&f!")
 		wait 4 seconds
 		sendCollectorMessage({_p}, "Good luck!")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else:
 		if {player::%{_uuid}%::eggs} >= {player::%{_uuid}%::prestige} * 1000000000:
 			sendCollectorMessage({_p}, "I found the &eKing's Will &fwhile looking for a book.")
@@ -159,13 +159,13 @@ function collectorGoldenClock(p: player):
 			send "&7&oA billion times your dedication needed to unlock," to {_p}
 			send "&7&oThe prize inside the piles of gold that you need to scour.%nl%" to {_p}
 			play sound "ambient.cave" at volume 2.5 and pitch 0.5 to {_p}
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 		else:
 			if (random integer between 1 and 2) is 1:
 				sendCollectorMessage({_p}, "Please bring me a &6Golden Clock&f!")
 			else:
 				sendCollectorMessage({_p}, "Someone needs to clean up that library...")
-			set {player::%{_uuid}%::inConversation} to false
+			set {-player::%{_uuid}%::inConversation} to false
 
 function collectorFinalHunt(p: player):
 	set {_uuid} to uuid of {_p}
@@ -174,12 +174,12 @@ function collectorFinalHunt(p: player):
 	sendCollectorMessage({_p}, "No?")
 	wait 3 seconds
 	sendCollectorMessage({_p}, "Please find it!")
-	set {player::%{_uuid}%::inConversation} to false
+	set {-player::%{_uuid}%::inConversation} to false
 
 function collectorFinale(p: player):
 	set {_uuid} to uuid of {_p}
-	if inventory of {_p} contains 1 of {collectorItems::goldenEgg}:
-		remove 1 of {collectorItems::goldenEgg} from inventory of {_p}
+	if inventory of {_p} contains 1 of {-collectoritems::goldenEgg}:
+		remove 1 of {-collectoritems::goldenEgg} from inventory of {_p}
 		set {player::%{_uuid}%::collectorProgress} to 10
 		sendCollectorMessage({_p}, "Wow.")
 		wait 3 seconds
@@ -191,16 +191,16 @@ function collectorFinale(p: player):
 		givePlayerEggHat({_p})
 		wait 5 seconds
 		sendCollectorMessage({_p}, "Oh, I nearly forgot! Feel free to click on me and access my shop at any time!")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	else:
 		sendCollectorMessage({_p}, "Did you find the egg?")
-		set {player::%{_uuid}%::inConversation} to false
+		set {-player::%{_uuid}%::inConversation} to false
 	
 function givePlayerEggHat(p: player):
 	if {collectorData::huntsCompleted} is not set:
 		set {collectorData::huntsCompleted} to 0
 	add 1 to {collectorData::huntsCompleted}
-	set {_eggHat} to 1 of {collectorItems::eggHat} with lore "&7&oA trophy of dedication for finding a long lost egg...", "", "&7From: The Collector", "&7To: %{_p}%", "", "&8Edition ##%{collectorData::huntsCompleted}%", and "&8%now formatted as "MM/dd/yyyy"%"
+	set {_eggHat} to 1 of {-collectoritems::eggHat} with lore "&7&oA trophy of dedication for finding a long lost egg...", "", "&7From: The Collector", "&7To: %{_p}%", "", "&8Edition ##%{collectorData::huntsCompleted}%", and "&8%now formatted as "MM/dd/yyyy"%"
 	give {_p} 1 of {_eggHat} 
 
 command /sethuntscompleted <int>:
@@ -214,5 +214,5 @@ command /getegghat <integer> <offline player>:
 	trigger:
 		if {collectorData::huntsCompleted} is not set:
 			set {collectorData::huntsCompleted} to 0
-		set {_eggHat} to 1 of {collectorItems::eggHat} with lore "&7&oA trophy of dedication for finding a long lost egg...", "", "&7From: The Collector", "&7To: %arg-2%", "", "&8Edition ##%arg-1%", and "&8%now formatted as "MM/dd/yyyy"%"
+		set {_eggHat} to 1 of {-collectoritems::eggHat} with lore "&7&oA trophy of dedication for finding a long lost egg...", "", "&7From: The Collector", "&7To: %arg-2%", "", "&8Edition ##%arg-1%", and "&8%now formatted as "MM/dd/yyyy"%"
 		give player 1 of {_eggHat}

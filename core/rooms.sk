@@ -1,16 +1,16 @@
 function registerRoom(id: text, name: text, progression: int, icon: item, tag: text, prestigeReq: int):
-	clear {rooms::%{_id}%::*}
-	set {rooms::%{_id}%::name} to {_name}
-	set {rooms::%{_id}%::progression} to {_progression}
-	set {rooms::%{_id}%::prestigeReq} to {_prestigeReq}
-	set {rooms::%{_id}%::icon} to {_icon}
-	set {rooms::%{_id}%::tag} to {_tag}
-	set {rooms::%{_id}%::cost} to roomPrice({_progression})
-	set {rooms::%{_id}%::eggs} to roomEggs({_progression})
+	clear {-rooms::%{_id}%::*}
+	set {-rooms::%{_id}%::name} to {_name}
+	set {-rooms::%{_id}%::progression} to {_progression}
+	set {-rooms::%{_id}%::prestigeReq} to {_prestigeReq}
+	set {-rooms::%{_id}%::icon} to {_icon}
+	set {-rooms::%{_id}%::tag} to {_tag}
+	set {-rooms::%{_id}%::cost} to roomPrice({_progression})
+	set {-rooms::%{_id}%::eggs} to roomEggs({_progression})
 
 function addExtension(extension: text, room: text):
-	if {rooms::%{_room}%::*} exists:
-		add {_extension} to {rooms::%{_room}%::extensions::*}
+	if {-rooms::%{_room}%::*} exists:
+		add {_extension} to {-rooms::%{_room}%::extensions::*}
 
 function roomPrice(progression: integer) :: number:
 	return 140 * (2.5 ^ {_progression})
@@ -59,15 +59,15 @@ function loadRooms():
 
 function getHighestRoom() :: text:
 	set {_highest} to 0
-	loop indices of {rooms::*}:
-		{rooms::%loop-value%::progression} > {_highest}
-		set {_highest} to {rooms::%loop-value%::progression}
+	loop indices of {-rooms::*}:
+		{-rooms::%loop-value%::progression} > {_highest}
+		set {_highest} to {-rooms::%loop-value%::progression}
 	set {_highestRoom} to progressionToID({_highest})
 	return {_highestRoom}
 
 function progressionToID(progression: integer) :: text:
-	loop indices of {rooms::*}:
-		{rooms::%loop-value%::progression} is {_progression}
+	loop indices of {-rooms::*}:
+		{-rooms::%loop-value%::progression} is {_progression}
 		return loop-value
 
 command /reloadrooms:
@@ -80,7 +80,7 @@ on region enter:
 	{player::%player's uuid%::roomBypass} is not true
 	"%event-region%" starts with "room-"
 	set {_id} to roomToID(event-region)
-	{player::%player's uuid%::progression} < {rooms::%{_id}%::progression}
+	{player::%player's uuid%::progression} < {-rooms::%{_id}%::progression}
 	cancel event
 	send action bar "&cYou have not unlocked this room! Purchase it in &4/shop&c!" to player
 	play sound "block.note_block.bass" at pitch 0.5 to player
