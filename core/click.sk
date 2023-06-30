@@ -30,7 +30,11 @@ function roomToID(region: region) :: text: # gets the room id from the region na
 function click(p: player, room: text, amount: number) :: int: # handles the click
 	set {_uuid} to uuid of {_p}
 
-	set {_eggs} to round({rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
+	if difference between now and {-player::%{_uuid}%::lastAFKCheck} >= 5 minutes:
+		afkCheck({_p})
+		stop
+
+	set {_eggs} to round({-rooms::%{_room}%::eggs} * {player::%{_uuid}%::multiplier} * {_amount})
 
 	set {_eggBoost} to 0
 	if {player::%{_uuid}%::buffs::omlettes} is true:

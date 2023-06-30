@@ -1,0 +1,18 @@
+function afkCheck(p: player):
+    set {_uuid} to uuid of {_p}
+    set {-player::%{_uuid}%::lastAFKCheck} to now
+    if {-player::%{_uuid}%::lastAFKLocation} is location of {_p}:
+        loadGUI({_p}, "afkCheck", 1, "AFK Check")
+        loop integers between 0 and 8:
+            setGUISlot({_p}, "afkCheck", loop-value, red stained glass pane named "&c&lAFK Check" with lore "&7&oExit this GUI to continue playing the game!")
+        openGUI({_p}, "afkCheck")
+    else:
+        set {player::%{_uuid}%::lastLocation} to location of {_p}
+
+on inventory click:
+    if event-inventory = (metadata tag "afkCheck" of player):
+        cancel event
+            
+on join:
+    set {-player::%player's uuid%::lastAFKCheck} to now
+    set {-player::%player's uuid%::lastAFKLocation} to location of player
