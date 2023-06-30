@@ -47,12 +47,12 @@
 # # 	if {player::%{_uuid}%::tokenBuffs::%{_id}%} is not set:
 # # 		set {player::%{_uuid}%::tokenBuffs::%{_id}%} to 0
 # # 	set {_tier} to {player::%{_uuid}%::tokenBuffs::%{_id}%}
-# # 	set {_lore} to "%{tokenShop::buffs::%{_id}%::lore}%", "", "&7Cost - "
-# # 	set {_item} to 1 of {tokenShop::buffs::%{_id}%::icon} named "%{tokenShop::buffs::%{_id}%::name}% %{_tier}%"  
+# # 	set {_lore} to "%{-tokenShop::buffs::%{_id}%::lore}%", "", "&7Cost - "
+# # 	set {_item} to 1 of {-tokenShop::buffs::%{_id}%::icon} named "%{-tokenShop::buffs::%{_id}%::name}% %{_tier}%"  
 
 # function suffixIcon(p: player, suffix: text) :: item:
 # 	set {_uuid} to uuid of {_p}
-# 	set {_name} to {suffixes::%{_suffix}%}
+# 	set {_name} to {-suffixes::%{_suffix}%}
 # 	if {player::%{_uuid}%::suffixes::%{_suffix}%} is true:
 # 		if {player::%{_uuid}%::suffix} is {_suffix}:
 # 			return 1 of paper named "%{_name}%&aSuffix" with lore "&eClick to deselect!"
@@ -73,7 +73,7 @@
 # 			play sound "item.armor.equip_iron" to {_p}
 # 		else:
 # 			set {player::%{_uuid}%::suffix} to {_suffix}
-# 			send "&aYou have selected the &e%{suffixes::%{_suffix}%}%&asuffix!" to {_p}
+# 			send "&aYou have selected the &e%{-suffixes::%{_suffix}%}%&asuffix!" to {_p}
 # 			play sound "item.armor.equip_iron" at pitch 0.75 to {_p}
 # 		loadTokenShop({_p})
 # 	else:
@@ -81,7 +81,7 @@
 # 			remove 5000 from {player::%{_uuid}%::tokens}
 # 			set {player::%{_uuid}%::suffixes::%{_suffix}%} to true
 # 			set {player::%{_uuid}%::suffix} to {_suffix}
-# 			send "&aYou purchased the &e%{suffixes::%{_suffix}%}%&a suffix!" to {_p}
+# 			send "&aYou purchased the &e%{-suffixes::%{_suffix}%}%&a suffix!" to {_p}
 # 			play sound "entity.player.levelup" to {_p}
 # 			loadTokenShop({_p})
 # 		else:
@@ -96,11 +96,11 @@
 # # 	registerTokenBuff("lucky", 10, big dripleaf, "&eLucky", "&7Increase luck-based occurances by &c0.1-1%%")
 
 # # function registerTokenBuff(id: text, max: integer, icon: item, name: text, lore: text):
-# # 	clear {tokenShop::buffs::%{_id}%::*}
-# # 	set {tokenShop::buffs::%{_id}%::icon} to {_icon}
-# # 	set {tokenShop::buffs::%{_id}%::name} to {_name}
-# # 	set {tokenShop::buffs::%{_id}%::lore} to {_lore}
-# # 	set {tokenShop::buffs::%{_id}%::max} to {_max}
+# # 	clear {-tokenShop::buffs::%{_id}%::*}
+# # 	set {-tokenShop::buffs::%{_id}%::icon} to {_icon}
+# # 	set {-tokenShop::buffs::%{_id}%::name} to {_name}
+# # 	set {-tokenShop::buffs::%{_id}%::lore} to {_lore}
+# # 	set {-tokenShop::buffs::%{_id}%::max} to {_max}
 
 # on inventory click:
 # 	if event-inventory = (metadata tag "tokenShop" of player):

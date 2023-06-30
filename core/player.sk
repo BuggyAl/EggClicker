@@ -2,7 +2,7 @@ on join:
 	if {player::%player's uuid%::hasReset} is not true:
 		resetPlayer(player)
 		set {player::%player's uuid%::hasReset} to true
-	set {player::%player's uuid%::inConversation} to false
+	set {-player::%player's uuid%::inConversation} to false
 	execute player command "/spawn"
 
 on first join:
@@ -16,7 +16,7 @@ function resetPlayer(p: player):
 	set {player::%{_uuid}%::clicks} to 0
 	set {player::%{_uuid}%::prestige} to 0
 	set {player::%{_uuid}%::progression} to 0
-	set {player::%{_uuid}%::collectorProgression} to 0
+	set {player::%{_uuid}%::collectorProgress} to 0
 	set {player::%{_uuid}%::suffix} to "none"
 	loop {player::%{_uuid}%::buffs::*}:
 		set {player::%{_uuid}%::buffs::%loop-index%} to false
@@ -54,7 +54,7 @@ command /playerdebug [<offline player>]:
 		send "&eClicks: &f%{player::%{_uuid}%::clicks}%"
 		send "&ePrestige: &f%{player::%{_uuid}%::prestige}%"
 		send "&eProgression: &f%{player::%{_uuid}%::progression}%"
-		send "&eCollector Progression: &f%{player::%{_uuid}%::collectorProgression}%"
+		send "&eCollector Progression: &f%{player::%{_uuid}%::collectorProgress}%"
 		send "&eSuffix: &f%{player::%{_uuid}%::suffix}%"
 		send "&eBuffs: &f%{player::%{_uuid}%::buffs::*}%"
 		send "&eSuffixes: &f%{player::%{_uuid}%::suffixes::*}%"
@@ -64,10 +64,10 @@ command /playerdebug [<offline player>]:
 function getHighestPlayerRoom(p: player) :: text:
 	set {_uuid} to uuid of {_p}
 	set {_highest} to 0
-	loop indices of {rooms::*}:
-		{rooms::%loop-value%::progression} > {_highest}
-		{player::%{_uuid}%::prestige} >= {rooms::%loop-value%::prestigeReq}
-		set {_highest} to {rooms::%loop-value%::progression}
+	loop indices of {-rooms::*}:
+		{-rooms::%loop-value%::progression} > {_highest}
+		{player::%{_uuid}%::prestige} >= {-rooms::%loop-value%::prestigeReq}
+		set {_highest} to {-rooms::%loop-value%::progression}
 	set {_highestRoom} to progressionToID({_highest})
 	return {_highestRoom}
 

@@ -10,15 +10,15 @@ function getRoomAtPlayer(p: player) :: text: # gets the HIGHEST UNLOCKED room at
 	loop {_regions::*}:
 		"%loop-value%" starts with "room-"
 		set {_id} to roomToID(loop-value)
-		if indices of {rooms::*} does not contain {_id}:
-			loop indices of {rooms::*}:
-				{rooms::%loop-value-2%::extensions::*} contains {_id}
+		if indices of {-rooms::*} does not contain {_id}:
+			loop indices of {-rooms::*}:
+				{-rooms::%loop-value-2%::extensions::*} contains {_id}
 				set {_id} to loop-value-2
-		({player::%{_uuid}%::progression} >= {rooms::%{_id}%::progression}) or ({player::%{_uuid}%::clickBypass}) is true
+		({player::%{_uuid}%::progression} >= {-rooms::%{_id}%::progression}) or ({player::%{_uuid}%::clickBypass}) is true
 		if {_best} is not set:
 			set {_best} to {_id}
 		else:
-			{rooms::%{_id}%::progression} > {rooms::%{_best}%::progression}
+			{-rooms::%{_id}%::progression} > {-rooms::%{_best}%::progression}
 			set {_best} to {_id}
 	return {_best}
 
@@ -48,10 +48,10 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 	add ceil(({_eggboost} / 100) * {_eggs}) to {_eggs}
 
 	# EGGSTRAVAGANZA
-	if {events::currentEvent} is "eggstravaganza":
+	if {-events::currentEvent} is "eggstravaganza":
 		set {_eggs} to round({_eggs} * 1.5)
 	# TEAMWORK MAKES THE DREAMWORK
-	else if {events::currentEvent} is "teamwork":
+	else if {-events::currentEvent} is "teamwork":
 		size of (players in radius 5 of {_p}) is greater than 1
 		set {_eggs} to round({_eggs} * 1.25)
 
@@ -63,10 +63,10 @@ function click(p: player, room: text, amount: number) :: int: # handles the clic
 		set {_tokenChance} to 5
 	
 	# TOKEN FRENZY
-	if {events::currentEvent} is "tokenfrenzy":
+	if {-events::currentEvent} is "tokenfrenzy":
 		set {_tokenChance} to {_tokenChance} * 1.5
 	# TEAMWORK MAKES THE DREAMWORK
-	else if {events::currentEvent} is "teamwork":
+	else if {-events::currentEvent} is "teamwork":
 		size of (players in radius 5 of {_p}) is greater than 1
 		set {_tokenChance} to {_tokenChance} * 1.25	
 
@@ -124,7 +124,7 @@ on right click: # handles insta click
 		else:
 			send title "&e&lInsta-Click" with subtitle "&e+&6%{_eggs}% &eEggs" to player for 3 seconds
 	else:
-		send "&cYou cannot use this item right now!" to player
+		send "&cYou cannot use this item here!" to player
 
 command /getinstaclick [<int>]: # gives the player an insta click item
 	permission: op

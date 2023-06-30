@@ -34,32 +34,32 @@ function loadRoomShop(p: player):
 
 function roomIcon(p: player, id: text) :: item:
 	set {_uuid} to uuid of {_p}
-	set {_icon} to {rooms::%{_id}%::icon}
-	if {player::%{_uuid}%::prestige} < {rooms::%{_id}%::prestigeReq}:
+	set {_icon} to {-rooms::%{_id}%::icon}
+	if {player::%{_uuid}%::prestige} < {-rooms::%{_id}%::prestigeReq}:
 		return 1 of air
-	else if {player::%{_uuid}%::progression} >= {rooms::%{_id}%::progression}:
-		set {_item} to {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%" and "&a&lUNLOCKED"
+	else if {player::%{_uuid}%::progression} >= {-rooms::%{_id}%::progression}:
+		set {_item} to {_icon} named "&b%{-rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({-rooms::%{_id}%::eggs})%" and "&a&lUNLOCKED"
 		enchant {_item} with mending
 		return 1 of ({_item} with hidden enchants flag)
-	else if ({player::%{_uuid}%::progression} + 1) is {rooms::%{_id}%::progression}:
-		set {_cost} to round({rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
+	else if ({player::%{_uuid}%::progression} + 1) is {-rooms::%{_id}%::progression}:
+		set {_cost} to round({-rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
 		if {player::%{_uuid}%::buffs::discount} is true:
 			set {_discount} to (5 / 100) * {_cost}
 			remove {_discount} from {_cost}
-		if {events::currentEvent} is "cybermonday":
+		if {-events::currentEvent} is "cybermonday":
 			set {_cost} to round({_cost} / 2)
-		return 1 of {_icon} named "&b%{rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({rooms::%{_id}%::eggs})%", "&dCost &7- &5%formatNum({_cost})% Eggs", and "&aClick to purchase!"
+		return 1 of {_icon} named "&b%{-rooms::%{_id}%::name}%" with lore "&dEggs Per Click &7- &5%formatNum({-rooms::%{_id}%::eggs})%", "&dCost &7- &5%formatNum({_cost})% Eggs", and "&aClick to purchase!"
 	else:
 		return 1 gray dye named "&c???" with lore "&7&oUnlock the previous room the view this one!"
 
 function buyRoom(p: player, id: text):
 	set {_uuid} to uuid of {_p}
-	{player::%{_uuid}%::progression} is ({rooms::%{_id}%::progression} - 1)
-	set {_cost} to round({rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
+	{player::%{_uuid}%::progression} is ({-rooms::%{_id}%::progression} - 1)
+	set {_cost} to round({-rooms::%{_id}%::cost} * (1.025 ^ {player::%{_uuid}%::prestige}))
 	if {player::%{_uuid}%::buffs::discount} is true:
 		set {_discount} to (5 / 100) * {_cost}
 		remove {_discount} from {_cost}
-	if {events::currentEvent} is "cybermonday":
+	if {-events::currentEvent} is "cybermonday":
 		set {_cost} to round({_cost} / 2)
 	if {player::%{_uuid}%::eggs} >= {_cost}:
 		remove {_cost} from {player::%{_uuid}%::eggs}
