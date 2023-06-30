@@ -30,7 +30,7 @@ function roomToID(region: region) :: text: # gets the room id from the region na
 function click(p: player, room: text, amount: number) :: int: # handles the click
 	set {_uuid} to uuid of {_p}
 
-	if difference between now and {player::%{_uuid}%::lastCaptcha} >= 10 minutes:
+	if difference between now and {-player::%{_uuid}%::lastCaptcha} >= 10 minutes:
 		loadCaptcha({_p})
 		stop
 
