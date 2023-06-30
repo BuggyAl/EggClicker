@@ -14,8 +14,8 @@ on quit:
 on chat:
 	set {_uuid} to player's uuid
 	set {_prestige} to {player::%{_uuid}%::prestige}
-	set {_roomTag} to {rooms::%progressionToID({player::%{_uuid}%::progression})%::tag}
-	set {_suffix} to {suffixes::%{player::%{_uuid}%::suffix}%}
+	set {_roomTag} to {-rooms::%progressionToID({player::%{_uuid}%::progression})%::tag}
+	set {_suffix} to {-suffixes::%{player::%{_uuid}%::suffix}%}
 
 	if player has permission "chat.stats":
 		replace all "[eggs]" with "&e%formatNum({player::%player's uuid%::eggs})% Eggs&7" in message
@@ -42,20 +42,20 @@ command /reloadsuffixes:
 	permission message: &cYou cannot use this command!
 	trigger:
 		reloadSuffixes()
-		send "&aSuccessfully loaded &e%size of {suffixes::*}% &asuffixes!"
+		send "&aSuccessfully loaded &e%size of {-suffixes::*}% &asuffixes!"
 
 function reloadSuffixes():
-	clear {suffixes::*}
-	set {suffixes::none} to ""
-	set {suffixes::chicken} to "&7[&cChicken&7] "
-	set {suffixes::gamer} to "&7[&eGamer&7] " 
-	set {suffixes::hacker} to "&7[&aHacker&7] "
-	set {suffixes::swedish} to "&7[&2Swedish&7] "
-	set {suffixes::drip} to "&7[&bDrip&7] "
-	set {suffixes::pro} to "&7[&3Pro&7] "
-	set {suffixes::noob} to "&7[&9Noob&7] "
-	set {suffixes::nerd} to "&7[&5Nerd&7] "
-	set {suffixes::fairy} to "&7[&dFairy&7] "
+	clear {-suffixes::*}
+	set {-suffixes::none} to ""
+	set {-suffixes::chicken} to "&7[&cChicken&7] "
+	set {-suffixes::gamer} to "&7[&eGamer&7] " 
+	set {-suffixes::hacker} to "&7[&aHacker&7] "
+	set {-suffixes::swedish} to "&7[&2Swedish&7] "
+	set {-suffixes::drip} to "&7[&bDrip&7] "
+	set {-suffixes::pro} to "&7[&3Pro&7] "
+	set {-suffixes::noob} to "&7[&9Noob&7] "
+	set {-suffixes::nerd} to "&7[&5Nerd&7] "
+	set {-suffixes::fairy} to "&7[&dFairy&7] "
 
 command /discord:
 	trigger:

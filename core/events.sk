@@ -7,14 +7,14 @@
 # Witching Hour (ability to rob other players)
 
 function registerEvent(id: text, name: text, start: text, end: text):
-	clear {events::event::%{_id}%::*}
-	set {events::event::%{_id}%::name} to {_name}
-	set {events::event::%{_id}%::start} to {_start}
-	set {events::event::%{_id}%::end} to {_end}
+	clear {-events::event::%{_id}%::*}
+	set {-events::event::%{_id}%::name} to {_name}
+	set {-events::event::%{_id}%::start} to {_start}
+	set {-events::event::%{_id}%::end} to {_end}
 
 function reloadEvents():
 	stopEvent()
-	clear {events::event::*}
+	clear {-events::event::*}
 	registerEvent("teamwork", "Teamwork Makes the Dreamwork", "You feel the urge to be near other players and NPCs...", "You start to feel lonely...")
 #	registerEvent("bossfight", "Clicker Boss")
 	registerEvent("eggstravaganza", "Eggstravaganza", "Eggs begin to appear around you...", "The eggs disappear...")
@@ -34,7 +34,7 @@ command /forceevent [<text>]:
 	permission: op
 	trigger:
 		if arg-1 is set:
-			if {events::event::%arg-1%::*} does not exist:
+			if {-events::event::%arg-1%::*} does not exist:
 				send "&cThat event does not exist!"
 				stop
 			stopEvent()
@@ -43,49 +43,49 @@ command /forceevent [<text>]:
 		else:
 			stopEvent()
 			wait 1 second
-			runEvent(random text out of indices of {events::event::*})
+			runEvent(random text out of indices of {-events::event::*})
 
 function triggerPassiveEvent():
-	{events::currentEvent} is "none"
-	runEvent(random text out of indices of {events::event::*})
+	{-events::currentEvent} is "none"
+	runEvent(random text out of indices of {-events::event::*})
 
 function runEvent(id: text):
-	set {events::currentEvent} to {_id}
+	set {-events::currentEvent} to {_id}
 	set {_seconds} to 900 # 
 	set {_duration} to "%{_seconds}% seconds" parsed as timespan
-	set {events::start} to now
+	set {-events::start} to now
 
-	set {events::bossbar} to boss bar named "eventBossbar"
+	set {-events::bossbar} to boss bar named "eventBossbar"
 	add all players to bar players of {event::bossbar}
-	set bar color of {events::bossbar} to yellow
-	set bar style of {events::bossbar} to segmented 20
-	set bar progress of {events::bossbar} to 100
+	set bar color of {-events::bossbar} to yellow
+	set bar style of {-events::bossbar} to segmented 20
+	set bar progress of {-events::bossbar} to 100
 	set {_step} to 100 / {_seconds}
-	set {_timeElapsed} to difference between now and {events::start}
-	set bar title of {events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{events::event::%{_id}%::name}% &7(&f%difference between {_duration} and {_timeElapsed}%&7)"
-	add all players to bar players of {events::bossbar}
+	set {_timeElapsed} to difference between now and {-events::start}
+	set bar title of {-events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{-events::event::%{_id}%::name}% &7(&f%difference between {_duration} and {_timeElapsed}%&7)"
+	add all players to bar players of {-events::bossbar}
 
 	broadcast ""
-	broadcast "&7&o%{events::event::%{_id}%::start}%" # &d&lPASSIVE EVENT &7- 
+	broadcast "&7&o%{-events::event::%{_id}%::start}%" # &d&lPASSIVE EVENT &7- 
 	broadcast ""
 	play sound "block.beacon.activate" to all players
 
-	while difference between now and {events::start} < {_duration}:
-		if {events::currentEvent} is not {_id}:
+	while difference between now and {-events::start} < {_duration}:
+		if {-events::currentEvent} is not {_id}:
 			exit loop
-		set {_timeElapsed} to difference between now and {events::start}
-		set bar title of {events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{events::event::%{_id}%::name}% &7(&f%difference between {_duration} and {_timeElapsed}%&7)"
+		set {_timeElapsed} to difference between now and {-events::start}
+		set bar title of {-events::bossbar} to "&d&lPASSIVE EVENT &7- &a%{-events::event::%{_id}%::name}% &7(&f%difference between {_duration} and {_timeElapsed}%&7)"
 		wait 1 second
-		set bar progress of {events::bossbar} to bar progress of {events::bossbar} - {_step}
+		set bar progress of {-events::bossbar} to bar progress of {-events::bossbar} - {_step}
 	stopEvent()
 	broadcast ""
-	broadcast "&7&o%{events::event::%{_id}%::end}%" # &d&lPASSIVE EVENT &7- 
+	broadcast "&7&o%{-events::event::%{_id}%::end}%" # &d&lPASSIVE EVENT &7- 
 	broadcast ""
 	play sound "block.beacon.deactivate" to all players
 
 function stopEvent():
-	remove all players from bar players of {events::bossbar}
-	set {events::currentEvent} to "none"
+	remove all players from bar players of {-events::bossbar}
+	set {-events::currentEvent} to "none"
 
 command /stopevent:
 	permission: op

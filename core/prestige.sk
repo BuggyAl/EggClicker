@@ -7,7 +7,7 @@ command /prestige:
 
 function prestigePrice(p: player) :: number:
 	set {_cost} to 180000000 * (1.01 ^ {prestige::%uuid of {_p}%::prestige})
-	if {events::currentEvent} is "cybermonday":
+	if {-events::currentEvent} is "cybermonday":
 		set {_cost} to {_cost} / 2
 	return {_cost}
 	
@@ -17,7 +17,7 @@ function prestige(p: player):
 		send action bar "&cYou have reached the maximum prestige level!" to {_p}
 		play sound "entity.villager.no" to {_p}
 		stop
-	if {player::%{_uuid}%::progression} < {rooms::%getHighestPlayerRoom({_p})%::progression}:
+	if {player::%{_uuid}%::progression} < {-rooms::%getHighestPlayerRoom({_p})%::progression}:
 		send action bar "&cYou must complete all rooms to prestige!" to {_p}
 		play sound "entity.villager.no" to {_p}
 		stop
@@ -46,7 +46,7 @@ function prestigeIcon(p: player) :: item:
 	set {_uuid} to uuid of {_p}
 	if {player::%{_uuid}%::prestige} >= {@maxPrestige}:
 		return 1 of beacon named "&a&lPrestige &b({@maxPrestige})" with lore "&7&oYou have reached the max prestige!" 
-	else if {player::%{_uuid}%::progression} is {rooms::%getHighestPlayerRoom({_p})%::progression}:
+	else if {player::%{_uuid}%::progression} is {-rooms::%getHighestPlayerRoom({_p})%::progression}:
 		return 1 of beacon named "&a&lPrestige &7(%{player::%{_uuid}%::prestige}% &7→ %{player::%{_uuid}%::prestige} + 1%&7)" with lore "&dCost &7- &5%formatNum(prestigePrice({_p}))% Eggs", and "&aClick to purchase!"
 	else:
 		return 1 of beacon named "&c&lPrestige &7(%{player::%{_uuid}%::prestige}% &7→ %{player::%{_uuid}%::prestige} + 1%&7)" with lore "&cYou must unlock the previous room first!"
