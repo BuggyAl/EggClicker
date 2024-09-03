@@ -1,6 +1,8 @@
 # <!> This repository is no longer being updated. <!>
 # EggClicker [9.0.0-beta1]
 
+EggClicker [S8] © 2022 by BuggyAl is licensed under CC BY-NC-SA 4.0 
+
 Welcome to the EggClicker repository! This repository hosts the Skript code for EggClicker.minehut.gg!
 
 ## Recent Updates
